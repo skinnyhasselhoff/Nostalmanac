@@ -104,4 +104,9 @@ export class NostalAudio {
     if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
     this.noise(this.ctx.currentTime, 0.03, 0.022, 3400);
   }
+
+  staticBurst() {
+    if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
+    this.noise(this.ctx.currentTime, 0.12, 0.05, 2400);
+  }
 }

@@ -7,8 +7,9 @@
   <meta name="description" content="Tap through the 1990s.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://en.wikipedia.org">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
   <div id="stage">
@@ -18,7 +19,11 @@
       <div class="world" data-world="gotham"></div>
       <div class="world" data-world="matrix"></div>
       <div class="world" data-world="bayside"></div>
+      <div class="world" data-world="mtv"></div>
       <div class="world" data-world="studio"></div>
+      <div class="world" data-world="court"></div>
+      <div class="world" data-world="news"></div>
+      <div class="world" data-world="flash"></div>
     </div>
     <canvas id="fxCanvas"></canvas>
     <div class="glass"></div>
@@ -59,6 +64,18 @@
         </div>
       </div>
 
+      <div class="obj tvset" data-kind="tv">
+        <div class="tv-bezel">
+          <div class="tv-screen">
+            <span class="tiny">STEREO</span>
+            <b class="obj-title"></b>
+          </div>
+        </div>
+        <div class="tv-base">
+          <i></i><i></i>
+        </div>
+      </div>
+
       <div class="obj tama" data-kind="cartoon">
         <div class="tama-ring"></div>
         <div class="tama-lcd">
@@ -80,9 +97,21 @@
 
       <div class="obj can" data-kind="food">
         <div class="can-lid"></div>
-        <span class="can-brand">SURGE</span>
+        <span class="can-brand">SNACK</span>
         <b class="obj-title"></b>
-        <span class="tiny">FEED THE RUSH</span>
+        <span class="tiny">TASTE THE 90s</span>
+      </div>
+
+      <div class="obj ticket" data-kind="sport">
+        <span class="tiny">ADMIT ONE</span>
+        <b class="obj-title"></b>
+        <span class="tiny">NOISE · LIGHTS · GAME</span>
+      </div>
+
+      <div class="obj zine" data-kind="person">
+        <span class="tiny">PEOPLE</span>
+        <b class="obj-title"></b>
+        <span class="tiny">THE 90s ISSUE</span>
       </div>
 
       <div class="obj brick" data-kind="tech">
@@ -96,6 +125,12 @@
           <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
         </div>
       </div>
+
+      <div class="obj paper" data-kind="event">
+        <span class="tiny">EXTRA · EXTRA</span>
+        <b class="obj-title"></b>
+        <span class="tiny">ALL THE NEWS THAT FITS</span>
+      </div>
     </div>
 
     <button type="button" class="hitbox left" id="prev" aria-label="Previous"></button>
@@ -105,9 +140,18 @@
       <p id="tag">1991 · GAME</p>
       <h1 id="title">Sonic the Hedgehog</h1>
       <p id="meta">Genesis</p>
+      <div class="links">
+        <a id="ytLink" href="https://www.youtube.com/results?search_query=Sonic+the+Hedgehog" target="_blank" rel="noopener">YouTube</a>
+        <a id="wikiLink" href="https://en.wikipedia.org/wiki/Sonic_the_Hedgehog" target="_blank" rel="noopener">Wikipedia</a>
+      </div>
       <p id="pos">1 / 1</p>
       <p class="hint">Tap the right side · swipe up for more</p>
     </footer>
+  </div>
+
+  <div id="wipe" aria-hidden="true">
+    <canvas id="wipeFx"></canvas>
+    <div class="wipe-fill"></div>
   </div>
 
   <div id="connect">
@@ -133,6 +177,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=11"></script>
+  <script type="module" src="js/app.js?v=14"></script>
 </body>
 </html>

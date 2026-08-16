@@ -48,6 +48,10 @@ export class WorldFX {
     else if (this.world === 'gotham') this.drawBats(t);
     else if (this.world === 'nick') this.drawSplat(t);
     else if (this.world === 'bayside') this.drawSparkle(t);
+    else if (this.world === 'mtv') this.drawSparkle(t);
+    else if (this.world === 'court') this.drawSparkle(t);
+    else if (this.world === 'flash') this.drawFlash(t);
+    else if (this.world === 'news') this.drawBats(t);
   }
 
   drawMatrix() {
@@ -133,5 +137,54 @@ export class WorldFX {
       const s = 2 + (i % 3);
       ctx.fillRect(x, y, s, s);
     }
+  }
+
+  drawFlash(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 4; i++) {
+      const pulse = (Math.sin(t * 6 + i) + 1) / 2;
+      ctx.fillStyle = `rgba(255,255,255,${0.04 + pulse * 0.08})`;
+      ctx.beginPath();
+      ctx.arc((0.2 + i * 0.22) * w, (0.22 + (i % 2) * 0.18) * h, 30 + pulse * 20, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+export class WipeFX {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.until = 0;
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  }
+
+  resize() {
+    this.nw = 160;
+    this.nh = 90;
+    this.canvas.width = this.nw;
+    this.canvas.height = this.nh;
+    this.ctx.imageSmoothingEnabled = false;
+  }
+
+  burst(ms = 480) {
+    this.until = performance.now() + ms;
+  }
+
+  tick() {
+    const { ctx, nw, nh } = this;
+    if (performance.now() > this.until) {
+      ctx.clearRect(0, 0, nw, nh);
+      return;
+    }
+    const img = ctx.createImageData(nw, nh);
+    const d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const v = Math.random() * 255;
+      d[i] = d[i + 1] = d[i + 2] = v;
+      d[i + 3] = 230;
+    }
+    ctx.putImageData(img, 0, 0);
   }
 }
