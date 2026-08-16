@@ -80,7 +80,11 @@ async function summaryFor(title, signal) {
 }
 
 function relevant(hit, item) {
-  const hitL = String(hit || '').toLowerCase();
+  const hitL = String(hit || '').toLowerCase().replace(/\s*\(.*\)\s*/g, ' ').replace(/\s+/g, ' ').trim();
+  const titleL = item.title.toLowerCase().trim();
+  if (['movie', 'tv', 'game', 'cartoon'].includes(item.cat)) {
+    return hitL === titleL || hitL === `${titleL} film` || hitL === `${titleL} video game` || hitL.startsWith(`${titleL}:`);
+  }
   const words = item.title.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2);
   if (words.length) return words.some((w) => hitL.includes(w));
   const meta = item.meta.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 3);

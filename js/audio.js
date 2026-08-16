@@ -1,4 +1,4 @@
-/** Short modem sting on enter. Then silence. Never loops. Never drones. */
+/** Modem sting on enter + short wipe stingers. Music lives in TuneBed, not here. */
 
 export class NostalAudio {
   constructor() {
@@ -106,8 +106,69 @@ export class NostalAudio {
   }
 
   staticBurst() {
+    this.wipe('static', true);
+  }
+
+  wipe(type, genreChange) {
     if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
     const t = this.ctx.currentTime;
+    if (!genreChange) {
+      this.noise(t, 0.1, 0.035, 2600);
+      return;
+    }
+    if (type === 'slime') {
+      this.noise(t, 0.22, 0.05, 900);
+      this.tone(180, t, 0.18, 'sine', 0.03);
+      this.tone(90, t + 0.08, 0.2, 'sine', 0.02);
+      return;
+    }
+    if (type === 'checker') {
+      [392, 494, 587, 784].forEach((f, i) => this.tone(f, t + i * 0.05, 0.07, 'square', 0.018));
+      this.noise(t, 0.12, 0.03, 1800);
+      return;
+    }
+    if (type === 'leader') {
+      this.tone(1000, t, 0.08, 'sine', 0.04);
+      this.tone(1000, t + 0.22, 0.08, 'sine', 0.04);
+      this.tone(1000, t + 0.44, 0.12, 'sine', 0.045);
+      this.noise(t, 0.5, 0.02, 600);
+      return;
+    }
+    if (type === 'neon') {
+      this.tone(220, t, 0.18, 'sawtooth', 0.03);
+      this.tone(880, t + 0.04, 0.12, 'square', 0.016);
+      this.noise(t, 0.16, 0.04, 3200);
+      return;
+    }
+    if (type === 'paparazzi') {
+      this.noise(t, 0.04, 0.08, 4000);
+      this.noise(t + 0.12, 0.04, 0.07, 4200);
+      this.noise(t + 0.26, 0.05, 0.08, 3800);
+      this.tone(1800, t, 0.03, 'square', 0.02);
+      return;
+    }
+    if (type === 'glitch') {
+      this.noise(t, 0.2, 0.055, 5200);
+      this.tone(80, t, 0.1, 'square', 0.03);
+      this.tone(1400, t + 0.08, 0.04, 'square', 0.02);
+      return;
+    }
+    if (type === 'splash') {
+      this.noise(t, 0.18, 0.05, 1400);
+      this.tone(240, t, 0.12, 'sine', 0.03);
+      return;
+    }
+    if (type === 'sitcom') {
+      this.tone(523, t, 0.08, 'triangle', 0.03);
+      this.tone(659, t + 0.07, 0.1, 'triangle', 0.03);
+      this.noise(t, 0.14, 0.03, 2000);
+      return;
+    }
+    if (type === 'stadium') {
+      this.noise(t, 0.22, 0.045, 800);
+      this.tone(196, t, 0.16, 'sawtooth', 0.025);
+      return;
+    }
     this.noise(t, 0.24, 0.072, 2400);
     this.noise(t + 0.04, 0.16, 0.045, 5200);
     this.tone(58, t, 0.08, 'sawtooth', 0.02);

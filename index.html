@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://en.wikipedia.org">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="preconnect" href="https://itunes.apple.com">
+  <link rel="stylesheet" href="css/style.css?v=19">
 </head>
 <body>
   <div id="stage">
@@ -27,11 +28,12 @@
     </div>
     <canvas id="fxCanvas"></canvas>
     <div class="glass"></div>
+    <div id="pixels" aria-hidden="true"></div>
     <div id="grain" aria-hidden="true"></div>
 
     <header class="top">
       <strong>NOSTALMANAC</strong>
-      <span id="ch">CH 91</span>
+      <span id="ch">CH 33</span>
       <span class="top-btns">
         <button type="button" id="btnSearch">Search</button>
         <button type="button" id="btnMute">Sound</button>
@@ -65,13 +67,15 @@
       </div>
 
       <div class="obj vhs" data-kind="movie">
-        <div class="vhs-win">
-          <i class="reel"></i>
-          <i class="reel"></i>
-        </div>
-        <div class="vhs-sticker">
-          <span class="tiny">VHS · BE KIND REWIND</span>
+        <div class="clam-spine"></div>
+        <div class="clam-box">
+          <div class="clam-win">
+            <i class="reel"></i>
+            <i class="reel"></i>
+          </div>
+          <span class="clam-brand">VIDEO</span>
           <b class="obj-title"></b>
+          <span class="tiny">BE KIND REWIND · PG</span>
         </div>
       </div>
 
@@ -135,17 +139,21 @@
       </div>
 
       <div class="obj zine" data-kind="person">
+        <div class="zine-stack"></div>
         <div class="zine-pages"></div>
         <div class="zine-spine"></div>
         <div class="zine-cover">
+          <span class="zine-date">AUGUST 1996</span>
           <div class="zine-logo">PEOPLE</div>
           <div class="zine-photo">
+            <i class="halo"></i>
             <i class="hair"></i>
             <i class="face"></i>
             <i class="shoulders"></i>
           </div>
+          <span class="zine-kicker">EXCLUSIVE</span>
           <b class="obj-title"></b>
-          <span class="zine-kicker">THE 90s ISSUE</span>
+          <span class="zine-issue">THE 90s ISSUE · $2.99</span>
           <span class="zine-bar"></span>
         </div>
         <div class="zine-sheen"></div>
@@ -181,6 +189,7 @@
         <a id="ytLink" href="https://www.youtube.com/results?search_query=Sonic+the+Hedgehog" target="_blank" rel="noopener">YouTube</a>
         <a id="wikiLink" href="https://en.wikipedia.org/wiki/Sonic_the_Hedgehog" target="_blank" rel="noopener">Wikipedia</a>
       </div>
+      <p id="nowplay" hidden></p>
       <p id="pos">1 / 1</p>
       <p class="hint">Tap the right side · swipe up for more</p>
     </footer>
@@ -191,8 +200,13 @@
     <div class="bars"></div>
     <div class="wipe-roll"></div>
     <div class="wipe-flash"></div>
-    <b id="wipeCh">CH 91</b>
-    <span id="wipeNet">STEREO</span>
+    <div class="wipe-goo"></div>
+    <div class="wipe-check"></div>
+    <div class="wipe-leader"><span></span></div>
+    <div class="wipe-iris"></div>
+    <b id="wipeFrom">CH 33</b>
+    <b id="wipeCh">CH 07</b>
+    <span id="wipeNet">HBO</span>
   </div>
 
   <div id="connect">
@@ -218,6 +232,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=16"></script>
+  <script type="module" src="js/app.js?v=19"></script>
 </body>
 </html>
