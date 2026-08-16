@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Nostalmanac</title>
+  <meta name="description" content="Tap through the 1990s.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=12">
+</head>
+<body>
+  <div id="stage">
+    <div id="worlds" aria-hidden="true">
+      <div class="world is-on" data-world="sonic"></div>
+      <div class="world" data-world="nick"></div>
+      <div class="world" data-world="gotham"></div>
+      <div class="world" data-world="matrix"></div>
+      <div class="world" data-world="bayside"></div>
+      <div class="world" data-world="studio"></div>
+    </div>
+    <canvas id="fxCanvas"></canvas>
+    <div class="glass"></div>
+
+    <header class="top">
+      <strong>NOSTALMANAC</strong>
+      <span id="ch">CH 91</span>
+      <span class="top-btns">
+        <button type="button" id="btnSearch">Search</button>
+        <button type="button" id="btnMute">Sound</button>
+      </span>
+    </header>
+
+    <div id="hero" data-show="game">
+      <div class="obj gb is-on" data-kind="game">
+        <div class="gb-screen-wrap">
+          <div class="gb-lcd">
+            <span class="tiny">NINTENDO</span>
+            <b class="lcd-play">▶ PLAY</b>
+          </div>
+        </div>
+        <p class="gb-mark">GAME BOY</p>
+        <div class="gb-row">
+          <div class="dpad"></div>
+          <div class="ab"><i></i><i></i></div>
+        </div>
+        <div class="gb-speaker"></div>
+      </div>
+
+      <div class="obj vhs" data-kind="movie">
+        <div class="vhs-win">
+          <i class="reel"></i>
+          <i class="reel"></i>
+        </div>
+        <div class="vhs-sticker">
+          <span class="tiny">VHS · BE KIND REWIND</span>
+          <b class="obj-title"></b>
+        </div>
+      </div>
+
+      <div class="obj tama" data-kind="cartoon">
+        <div class="tama-ring"></div>
+        <div class="tama-lcd">
+          <span class="tiny">TAMAGOTCHI</span>
+          <div class="pet" aria-hidden="true"></div>
+          <b class="obj-title"></b>
+        </div>
+        <div class="tama-btns"><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="obj disc" data-kind="music">
+        <div class="cd"></div>
+        <div class="disc-lcd">
+          <span class="tiny">SONY DISCMAN</span>
+          <b class="obj-title"></b>
+        </div>
+        <div class="play"></div>
+      </div>
+
+      <div class="obj can" data-kind="food">
+        <div class="can-lid"></div>
+        <span class="can-brand">SURGE</span>
+        <b class="obj-title"></b>
+        <span class="tiny">FEED THE RUSH</span>
+      </div>
+
+      <div class="obj brick" data-kind="tech">
+        <div class="nokia-ant"></div>
+        <div class="nokia-ear"></div>
+        <div class="brick-screen">
+          <span class="tiny">NOKIA</span>
+          <b class="obj-title"></b>
+        </div>
+        <div class="nokia-pad">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="hitbox left" id="prev" aria-label="Previous"></button>
+    <button type="button" class="hitbox right" id="next" aria-label="Next"></button>
+
+    <footer class="copy">
+      <p id="tag">1991 · GAME</p>
+      <h1 id="title">Sonic the Hedgehog</h1>
+      <p id="meta">Genesis</p>
+      <p id="pos">1 / 1</p>
+      <p class="hint">Tap the right side · swipe up for more</p>
+    </footer>
+  </div>
+
+  <div id="connect">
+    <canvas id="bootFx"></canvas>
+    <div class="connect-card">
+      <p>THE 90s ARE CALLING</p>
+      <h1>Nostalmanac</h1>
+      <b>Tap anywhere to enter</b>
+    </div>
+  </div>
+
+  <div id="drawer" hidden inert>
+    <div class="sheet">
+      <div class="sheet-head">
+        <strong>Search the 90s</strong>
+        <button type="button" id="btnClose">Done</button>
+      </div>
+      <input id="search" type="search" placeholder="Sonic, Friends, Surge…" autocomplete="off">
+      <div class="chips" id="years"></div>
+      <div class="chips" id="cats"></div>
+      <p class="drawer-count" id="dbCount"></p>
+      <ul class="hits" id="results"></ul>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js?v=11"></script>
+</body>
+</html>
