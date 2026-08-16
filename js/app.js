@@ -3,6 +3,7 @@ import { NostalAudio } from './audio.js';
 import { WorldFX, WipeFX } from './worlds.js';
 import { describe, youtubeUrl, fallbackBlurb } from './wiki.js';
 import { TuneBed } from './tunes.js';
+import { portrait } from './art.js';
 
 const NICKISH = /nick|toon|animaniacs|rugrats|ren & stimpy|doug|cartoon|fox kids|saturday morning|disney afternoon|warner|simpsons|batman: the animated|gargoyles|reboot|aeon flux/i;
 const PHONE = /nokia|motorola|startac|star tac|microtac|blackberry|pager|communicator|cell phone|flip phone|mobile phone/i;
@@ -78,7 +79,7 @@ const ytLink = document.getElementById('ytLink');
 const wikiLink = document.getElementById('wikiLink');
 const metaEl = document.getElementById('meta');
 
-function clip(s, n = 36) {
+function clip(s, n = 28) {
   const t = String(s || '');
   return t.length > n ? `${t.slice(0, n - 1)}…` : t;
 }
@@ -116,33 +117,91 @@ const DIAL = {
   news: { ch: '02', net: 'CNN' },
 };
 
-function adPrice(title) {
-  let h = 0;
-  for (const c of String(title)) h = (h * 33 + c.charCodeAt(0)) | 0;
-  const n = Math.abs(h);
-  const dollars = 4 + (n % 46);
-  const cents = ['99', '97', '95', '49'][n % 4];
-  return `$${dollars}.${cents}`;
+function platformFor(item) {
+  const m = `${item.meta} ${item.note} ${item.title}`;
+  if (/dreamcast/i.test(m)) return 'DREAMCAST';
+  if (/n64|nintendo 64/i.test(m)) return 'N64';
+  if (/playstation|ps1|\bpsx\b/i.test(m)) return 'PS1';
+  if (/saturn/i.test(m)) return 'SATURN';
+  if (/snes|super nintendo/i.test(m)) return 'SNES';
+  if (/game boy/i.test(m)) return 'GAME BOY';
+  if (/game gear/i.test(m)) return 'GAME GEAR';
+  if (/genesis|mega drive/i.test(m)) return 'GENESIS';
+  if (/sega cd|mega cd/i.test(m)) return 'SEGA CD';
+  if (/32x/i.test(m)) return '32X';
+  if (/neo geo/i.test(m)) return 'NEO GEO';
+  if (/jaguar/i.test(m)) return 'JAGUAR';
+  if (/turbo|pc engine/i.test(m)) return 'TG-16';
+  if (/arcade/i.test(m)) return 'ARCADE';
+  if (/\bpc\b|dos|windows/i.test(m)) return 'PC';
+  if (/\bnes\b/i.test(m)) return 'NES';
+  return '16-BIT';
 }
 
-function dressAd(item, world) {
-  const store = document.getElementById('adStore');
-  const price = document.getElementById('adPrice');
-  const fine = document.getElementById('adFine');
-  const clip = document.querySelector('.ad-clip');
-  if (!store || !clip) return;
-  clip.dataset.store = world;
-  if (world === 'circular') {
-    store.innerHTML = 'TOYS <i>R</i> US';
-    fine.textContent = 'GEOFFREY SAYS HURRY · AISLE 9';
-  } else if (world === 'grocery') {
-    store.textContent = 'WEEKLY SPECIALS';
-    fine.textContent = 'LIMIT 2 · WITH COUPON · SEE STORE';
-  } else {
-    store.textContent = 'CIRCUIT CITY';
-    fine.textContent = 'PRICE MATCH · WHILE SUPPLIES LAST';
+function vhsLook(item) {
+  const b = `${item.title} ${item.note} ${item.meta}`;
+  if (/disney|lion king|aladdin|beauty and the beast|little mermaid|toy story|mulan|pocahontas|hercules|tarzan|a bug.?s life|hunchback|peter pan|cinderella|snow white|sleeping beauty|fantasia|bambi|dumbo|101 dalmatians|the jungle book/i.test(b)) {
+    return { label: 'disney', banner: "WALT DISNEY'S MASTERPIECE", studio: 'WALT DISNEY HOME VIDEO', spine: 'DISNEY', rating: 'G' };
   }
-  price.textContent = adPrice(item.title);
+  if (/scream|nightmare|friday the|blair witch|silence of the lambs|se7en|\bseven\b|exorcist|halloween|candyman|the craft/i.test(b)) {
+    return { label: 'horror', banner: 'SPECIAL EDITION', studio: 'HOME VIDEO', spine: 'THRILLER', rating: 'R' };
+  }
+  if (PALACE.test(b)) {
+    return { label: 'prestige', banner: 'AWARD WINNER', studio: 'HOME VIDEO', spine: 'PRESTIGE', rating: 'R' };
+  }
+  if (/star wars|star trek|matrix|independence day|terminator|back to the future|men in black|total recall|gattaca|fifth element|alien/i.test(b)) {
+    return { label: 'scifi', banner: 'FUTURE SHOCK', studio: 'HOME VIDEO', spine: 'SCI-FI', rating: 'PG-13' };
+  }
+  if (/die hard|lethal weapon|speed|twister|mission.?impossible|face.?off|con air|the rock|bad boys|true lies/i.test(b)) {
+    return { label: 'action', banner: 'BLOCKBUSTER HIT', studio: 'HOME VIDEO', spine: 'ACTION', rating: 'PG-13' };
+  }
+  if (/comedy|dumb and|ace ventura|billy madison|happy gilmore|austin powers|american pie|there.?s something|clueless|wedding singer/i.test(b)) {
+    return { label: 'comedy', banner: 'HIT COMEDY', studio: 'HOME VIDEO', spine: 'COMEDY', rating: 'PG-13' };
+  }
+  return { label: 'hit', banner: 'NOW ON VIDEO', studio: 'HOME VIDEO', spine: 'VIDEO', rating: 'PG' };
+}
+
+function dressShot(item, world) {
+  const kicker = document.getElementById('shotKicker');
+  const tag = document.getElementById('shotTag');
+  const card = document.querySelector('.shot-card');
+  if (!kicker || !tag) return;
+  if (card) card.dataset.store = world;
+  kicker.textContent = `NEW FOR ${item.year}`;
+  if (world === 'grocery') tag.textContent = 'TASTE THE 90s';
+  else if (world === 'circuit') tag.textContent = 'NOW IN STORES';
+  else tag.textContent = 'THE TOY AISLE';
+}
+
+function dressVhs(item) {
+  const look = vhsLook(item);
+  const clam = document.getElementById('vhsClam');
+  if (clam) clam.dataset.label = look.label;
+  const banner = document.getElementById('vhsBanner');
+  const studio = document.getElementById('vhsStudio');
+  const rating = document.getElementById('vhsRating');
+  const spine = document.getElementById('vhsSpine');
+  if (banner) banner.textContent = look.banner;
+  if (studio) studio.textContent = look.studio;
+  if (rating) rating.textContent = look.rating;
+  if (spine) spine.textContent = look.spine;
+}
+
+function setFaces(url) {
+  document.querySelectorAll('.face-img').forEach((img) => {
+    const host = img.closest('.obj');
+    img.onload = () => host?.classList.add('has-art');
+    img.onerror = () => {
+      img.removeAttribute('src');
+      host?.classList.remove('has-art');
+    };
+    if (!url) {
+      img.removeAttribute('src');
+      host?.classList.remove('has-art');
+      return;
+    }
+    img.src = url;
+  });
 }
 
 function dialFor(item) {
@@ -199,8 +258,12 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
   });
   const dateEl = document.querySelector('.zine-date');
   if (dateEl) dateEl.textContent = `${MONTHS[item.year % 12]} ${item.year}`;
+  const plat = document.getElementById('gamePlat');
+  if (plat) plat.textContent = platformFor(item);
   setWorld(theme.world);
-  if (theme.kind === 'ad') dressAd(item, theme.world);
+  if (theme.kind === 'ad') dressShot(item, theme.world);
+  if (theme.kind === 'movie') dressVhs(item);
+  setFaces('');
   const ch = document.getElementById('ch');
   const nextCh = `CH ${dial.ch}`;
   if (ch.textContent !== nextCh) {
@@ -215,20 +278,25 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
   document.getElementById('pos').textContent = `${index + 1} / ${pool.length}`;
   ytLink.href = youtubeUrl(item);
   wikiLink.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(item.title)}`;
-  loadWiki(item);
+  loadCard(item);
   if (entered) tunes.play(item);
 }
 
-function loadWiki(item) {
+function loadCard(item) {
   wikiAbort?.abort();
   wikiAbort = new AbortController();
   const token = ++wikiToken;
-  describe(item, wikiAbort.signal).then((info) => {
+  const signal = wikiAbort.signal;
+  describe(item, signal).then(async (info) => {
     if (token !== wikiToken) return;
     metaEl.textContent = info.text;
     if (info.wiki) wikiLink.href = info.wiki;
+    if (info.image) setFaces(info.image);
+    const url = await portrait(item, info.image, signal);
+    if (token !== wikiToken) return;
+    if (url) setFaces(url);
   }).catch((err) => {
-    if (err.name === 'AbortError') return;
+    if (err?.name === 'AbortError') return;
   });
 }
 
@@ -250,8 +318,7 @@ function step(dir) {
 }
 
 function startDeck() {
-  const sonic = ITEMS.find((it) => it.title === 'Sonic the Hedgehog' && /genesis/i.test(it.meta));
-  pool = mixDeck(ITEMS, sonic);
+  pool = shuffle(ITEMS);
   show(0);
 }
 
@@ -333,7 +400,13 @@ initDrawer({
 startDeck();
 
 connect.addEventListener('click', async () => {
-  try { await audio.dialUp(); } catch {}
+  const status = document.getElementById('bootStatus');
+  const fill = document.getElementById('bootFill');
+  connect.classList.add('booting');
+  if (fill) fill.style.width = '100%';
+  try {
+    await audio.dialUp((s) => { if (status) status.textContent = s; });
+  } catch {}
   audio.silence();
   entered = true;
   connect.classList.add('gone');

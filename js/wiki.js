@@ -58,12 +58,16 @@ function summaryUrl(title) {
   return `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, '_'))}?redirect=true`;
 }
 
-function clip(text, n = 280) {
+function clip(text, n = 420) {
   const t = String(text || '').replace(/\s+/g, ' ').trim();
   if (t.length <= n) return t;
   const cut = t.slice(0, n);
   const sp = cut.lastIndexOf(' ');
   return `${cut.slice(0, sp > 80 ? sp : n)}…`;
+}
+
+function wikiPic(data) {
+  return data.originalimage?.source || data.thumbnail?.source || '';
 }
 
 async function summaryFor(title, signal) {
@@ -75,6 +79,7 @@ async function summaryFor(title, signal) {
   if (!extract || /^.*may refer to/i.test(extract)) return null;
   return {
     text: extract,
+    image: wikiPic(data),
     wiki: data.content_urls?.desktop?.url || `https://en.wikipedia.org/wiki/${encodeURIComponent(data.title)}`,
   };
 }
@@ -92,6 +97,7 @@ function relevant(hit, item) {
 }
 
 export async function describe(item, signal) {
+  if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
   const key = `${item.cat}|${item.year}|${item.title}`;
   if (cache.has(key)) return cache.get(key);
 
@@ -119,7 +125,7 @@ export async function describe(item, signal) {
     }
   }
 
-  const fallback = { text: fallbackBlurb(item), wiki: `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(item.title)}` };
+  const fallback = { text: fallbackBlurb(item), image: '', wiki: `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(item.title)}` };
   cache.set(key, fallback);
   return fallback;
 }

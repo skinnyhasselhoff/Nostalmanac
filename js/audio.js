@@ -36,6 +36,7 @@ export class NostalAudio {
 
   silence() {
     this.stopAll();
+    try { speechSynthesis.cancel(); } catch {}
     if (this.master && this.ctx && this.ctx.state !== 'closed') {
       this.master.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
     }
@@ -81,22 +82,86 @@ export class NostalAudio {
     this.nodes.push(src, bp, g);
   }
 
-  async dialUp() {
-    await this.unlock();
-    if (this.muted) return;
-    const t = this.ctx.currentTime;
-    this.tone(350, t, 0.22, 'sine', 0.035);
-    this.tone(440, t, 0.22, 'sine', 0.035);
-    const keys = [[941, 1336], [697, 1209], [697, 1477], [770, 1336]];
-    keys.forEach((p, i) => {
-      this.tone(p[0], t + 0.28 + i * 0.1, 0.06, 'sine', 0.04);
-      this.tone(p[1], t + 0.28 + i * 0.1, 0.06, 'sine', 0.04);
+  handshake(when, dur = 1.15) {
+    if (!this.ctx || this.muted) return;
+    const steps = 28;
+    for (let i = 0; i < steps; i++) {
+      const f = 380 + ((i * 137) % 1700);
+      this.tone(f, when + i * (dur / steps), dur / steps + 0.02, i % 2 ? 'square' : 'sawtooth', 0.016);
+    }
+    this.noise(when, dur, 0.038, 2400);
+    this.noise(when + 0.2, dur - 0.2, 0.022, 4200);
+  }
+
+  chime(when) {
+    this.tone(784, when, 0.14, 'sine', 0.07);
+    this.tone(1175, when + 0.12, 0.22, 'sine', 0.055);
+    this.tone(1568, when + 0.12, 0.18, 'triangle', 0.02);
+  }
+
+  async speakNostalgia() {
+    if (this.muted || typeof speechSynthesis === 'undefined') return;
+    try { speechSynthesis.cancel(); } catch {}
+    const waitVoices = () => new Promise((resolve) => {
+      const ready = speechSynthesis.getVoices();
+      if (ready.length) return resolve(ready);
+      const t = setTimeout(() => resolve(speechSynthesis.getVoices()), 600);
+      speechSynthesis.addEventListener('voiceschanged', () => {
+        clearTimeout(t);
+        resolve(speechSynthesis.getVoices());
+      }, { once: true });
     });
-    this.noise(t + 0.75, 0.55, 0.055, 1800);
-    this.tone(1650, t + 0.8, 0.16, 'square', 0.016);
-    this.tone(2100, t + 1.05, 0.12, 'square', 0.014);
-    this.tone(880, t + 1.4, 0.07, 'sine', 0.03);
-    await new Promise((r) => setTimeout(r, 1600));
+    const voices = await waitVoices();
+    const prefer = [/david/i, /mark/i, /alex/i, /daniel/i, /guy/i, /fred/i, /microsoft.*english/i, /google us/i];
+    let voice = null;
+    for (const re of prefer) {
+      voice = voices.find((v) => re.test(v.name) && /^en/i.test(v.lang));
+      if (voice) break;
+    }
+    if (!voice) voice = voices.find((v) => /^en[-_]?US/i.test(v.lang)) || voices.find((v) => /^en/i.test(v.lang));
+    const u = new SpeechSynthesisUtterance("You've got nostalgia.");
+    u.rate = 0.9;
+    u.pitch = 0.78;
+    u.volume = 0.92;
+    if (voice) u.voice = voice;
+    await new Promise((resolve) => {
+      u.onend = resolve;
+      u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(resolve, 2800);
+    });
+  }
+
+  async dialUp(onStatus) {
+    await this.unlock();
+    const say = (s) => { try { onStatus?.(s); } catch {} };
+    if (this.muted) {
+      say('Connected.');
+      return;
+    }
+    const t = this.ctx.currentTime;
+    say('Dialing…');
+    this.tone(350, t, 0.38, 'sine', 0.04);
+    this.tone(440, t, 0.38, 'sine', 0.04);
+    const keys = [[941, 1336], [697, 1209], [697, 1477], [770, 1336], [852, 1336], [770, 1477], [941, 1209]];
+    keys.forEach((p, i) => {
+      this.tone(p[0], t + 0.48 + i * 0.09, 0.07, 'sine', 0.045);
+      this.tone(p[1], t + 0.48 + i * 0.09, 0.07, 'sine', 0.045);
+    });
+    this.tone(440, t + 1.2, 0.38, 'sine', 0.03);
+    this.tone(480, t + 1.2, 0.38, 'sine', 0.03);
+    this.tone(440, t + 1.78, 0.32, 'sine', 0.028);
+    this.tone(480, t + 1.78, 0.32, 'sine', 0.028);
+    say('Handshake…');
+    this.tone(2100, t + 2.2, 0.42, 'sine', 0.035);
+    this.handshake(t + 2.62, 1.2);
+    this.tone(1650, t + 3.85, 0.16, 'square', 0.014);
+    this.tone(2100, t + 4.05, 0.12, 'square', 0.012);
+    await new Promise((r) => setTimeout(r, 4300));
+    say('Connected.');
+    this.chime(this.ctx.currentTime);
+    await new Promise((r) => setTimeout(r, 420));
+    await this.speakNostalgia();
     this.silence();
   }
 

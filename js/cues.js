@@ -185,6 +185,10 @@ export function queriesFor(item) {
       return [`${title} original soundtrack`, `${title} video game soundtrack`];
     case 'sport':
       return [`${title} anthem`, `${title} theme`];
+    case 'toy':
+    case 'food':
+    case 'tech':
+      return [`${title} commercial jingle`, `${title} theme song`, title];
     default:
       return [];
   }
