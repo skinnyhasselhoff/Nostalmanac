@@ -2,6 +2,7 @@
   --font: 'Outfit', system-ui, sans-serif;
   --display: 'Archivo Black', sans-serif;
   --lcd: 'VT323', monospace;
+  --circus: 'Bangers', impact, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -410,6 +411,279 @@ html, body {
   transform-origin: center bottom;
 }
 
+/* Blockbuster aisle — Friday-night tapes */
+.world[data-world="video"] {
+  background:
+    radial-gradient(ellipse at 50% 0, #2a3a88 0 18%, transparent 48%),
+    linear-gradient(#0a1438 0 16%, #121c48 16%);
+}
+.world[data-world="video"] .l1 {
+  left: 6%; right: 6%; top: 8%; height: 18px;
+  background: linear-gradient(#ffe14a, #c9a020);
+  box-shadow: 0 12px 28px rgba(255, 225, 74, .28);
+  opacity: .85;
+}
+.world[data-world="video"] .l2 {
+  left: -8%; right: -8%; top: 18%; height: 52%;
+  background:
+    repeating-linear-gradient(90deg,
+      #1a3a88 0 12px, #ffe14a 12px 16px, #c0142c 16px 20px,
+      #0d245c 20px 32px, #2de0c8 32px 36px, #1a3a88 36px 48px);
+  box-shadow: inset 0 20px 40px rgba(0,0,0,.45);
+  transform: perspective(820px) rotateX(8deg);
+  transform-origin: center top;
+}
+.world[data-world="video"] .l3 {
+  left: 18%; right: 18%; bottom: 22%; height: 36px;
+  background: #ffe14a;
+  box-shadow: 0 8px 0 #1a3a88;
+  opacity: .92;
+}
+.world[data-world="video"] .l3::after {
+  content: 'BE KIND  REWIND';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 800 .78rem var(--display);
+  letter-spacing: .18em;
+  color: #1a3a88;
+}
+.world[data-world="video"] .l4 {
+  left: -12%; right: -12%; bottom: -18%; height: 36%;
+  background: repeating-linear-gradient(90deg, #1a2848 0 28px, #121c38 28px 30px);
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: center bottom;
+}
+
+/* Friends — purple apartment */
+.world[data-world="friends"] {
+  background:
+    radial-gradient(ellipse at 78% 12%, #fff6 0 8%, transparent 28%),
+    linear-gradient(#5a3a78 0 18%, #b48cc8 18% 62%, #8a6848 62%);
+}
+.world[data-world="friends"] .l1 {
+  left: 8%; top: 16%; width: 28%; height: 48%;
+  background: #c45a20;
+  border: 10px solid #8a3a10;
+  box-shadow: 12px 18px 0 rgba(40,20,10,.25);
+}
+.world[data-world="friends"] .l1::after {
+  content: '';
+  position: absolute;
+  left: 42%; top: 46%;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #2a1810;
+  box-shadow: 0 0 0 6px #e8c090;
+}
+.world[data-world="friends"] .l2 {
+  right: 10%; top: 20%; width: 22%; height: 28%;
+  background:
+    linear-gradient(#f4e7b4, #e8d48a);
+  box-shadow: 8px 10px 0 #4a2a58, inset 0 0 0 8px #fff8;
+  transform: rotate(4deg);
+}
+.world[data-world="friends"] .l3 {
+  left: 38%; right: 28%; top: 22%; height: 18%;
+  background: #6a8ad0;
+  box-shadow: 6px 8px 0 #3a2050;
+  transform: rotate(-3deg);
+}
+.world[data-world="friends"] .l4 {
+  left: -10%; right: -10%; bottom: -16%; height: 38%;
+  background: repeating-linear-gradient(90deg, #c4a07a 0 36px, #b89068 36px 38px);
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: center bottom;
+}
+
+/* Monk's diner */
+.world[data-world="monks"] {
+  background:
+    radial-gradient(ellipse at 50% 0, #fff 0 10%, transparent 30%),
+    linear-gradient(#d8f0e8 0 22%, #7ab8a8 22% 58%, #2a2018 58%);
+}
+.world[data-world="monks"] .l1 {
+  left: 6%; right: 6%; top: 18%; height: 14px;
+  background: linear-gradient(#c0c8d0, #889098);
+  box-shadow: 0 18px 0 #1a1814;
+}
+.world[data-world="monks"] .l2 {
+  left: 10%; right: 10%; top: 34%; height: 28%;
+  background: repeating-linear-gradient(90deg, #c45a48 0 70px, #f4e7b4 70px 78px);
+  border-radius: 0 0 40% 40% / 0 0 18% 18%;
+  box-shadow: 0 16px 0 #1a1410;
+}
+.world[data-world="monks"] .l3 {
+  left: 18%; width: 54px; height: 54px; top: 28%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 36%, #fff, #c45a28 42%, #6a2810 72%);
+  box-shadow: 8px 10px 0 rgba(20,10,0,.2);
+  opacity: .85;
+}
+.world[data-world="monks"] .l4 {
+  left: -12%; right: -12%; bottom: -14%; height: 40%;
+  background: repeating-conic-gradient(#1a1a1a 0% 25%, #f4e7b4 0% 50%) 50% 0 / 44px 44px;
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: center bottom;
+}
+
+/* 90210 peach palms */
+.world[data-world="zip"] {
+  background:
+    radial-gradient(ellipse at 82% 8%, #fff6d8 0 10%, transparent 32%),
+    linear-gradient(#7ad0ff 0 36%, #f6c8a0 36% 40%, #e8a878 40%);
+}
+.world[data-world="zip"] .l1 {
+  right: 8%; top: 18%; width: 70px; height: 42%;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 8%, #1a8a48 0 70%, transparent 71%),
+    linear-gradient(#8a5a28, #8a5a28) 50% 100% / 8px 70% no-repeat;
+  opacity: .9;
+}
+.world[data-world="zip"] .l2 {
+  left: 12%; top: 22%; width: 56px; height: 36%;
+  background:
+    radial-gradient(ellipse 90% 38% at 50% 6%, #0a6a38 0 68%, transparent 69%),
+    linear-gradient(#6a4818, #6a4818) 50% 100% / 7px 72% no-repeat;
+}
+.world[data-world="zip"] .l3 {
+  left: 22%; right: 28%; top: 28%; height: 32%;
+  background: linear-gradient(#f4e8dc, #e8d0c0);
+  clip-path: polygon(50% 0, 100% 28%, 100% 100%, 0 100%, 0 28%);
+  box-shadow: 0 20px 30px rgba(80,40,10,.25);
+}
+.world[data-world="zip"] .l4 {
+  left: -10%; right: -10%; bottom: -16%; height: 36%;
+  background: repeating-linear-gradient(90deg, #e8c090 0 40px, #d8b078 40px 42px);
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: center bottom;
+}
+
+/* Bel-Air gates */
+.world[data-world="belair"] {
+  background:
+    radial-gradient(ellipse at 70% 6%, #fff8d8 0 12%, transparent 36%),
+    linear-gradient(#5ec8ff 0 34%, #3a9a48 34% 38%, #2a7a38 38%);
+}
+.world[data-world="belair"] .l1 {
+  left: 18%; right: 18%; top: 16%; height: 38%;
+  background: linear-gradient(#f4f0e8, #e0d8cc);
+  clip-path: polygon(8% 28%, 50% 0, 92% 28%, 92% 100%, 8% 100%);
+  box-shadow: 0 24px 40px rgba(0,40,10,.28);
+}
+.world[data-world="belair"] .l2 {
+  left: 8%; right: 8%; top: 48%; height: 28%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 18px, #111 18px 22px),
+    linear-gradient(#111, #111) 0 0 / 100% 8px no-repeat,
+    linear-gradient(#111, #111) 0 100% / 100% 10px no-repeat;
+  opacity: .92;
+}
+.world[data-world="belair"] .l3 {
+  left: 10%; top: 20%; width: 48px; height: 34%;
+  background:
+    radial-gradient(ellipse 90% 36% at 50% 4%, #0a6a28 0 70%, transparent 71%),
+    linear-gradient(#5a3a18, #5a3a18) 50% 100% / 7px 70% no-repeat;
+}
+.world[data-world="belair"] .l4 {
+  left: -10%; right: -10%; bottom: -16%; height: 34%;
+  background: repeating-linear-gradient(#2a8a40 0 12px, #228038 12px 24px);
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: center bottom;
+}
+
+/* Toys R Us circular */
+.world[data-world="circular"] {
+  background:
+    radial-gradient(ellipse at 50% 8%, #fff 0 8%, transparent 28%),
+    linear-gradient(#ffe14a 0 72%, #c0142c 72%);
+}
+.world[data-world="circular"] .l1 {
+  left: 6%; right: 6%; top: 10%; height: 70px;
+  background: #c0142c;
+  box-shadow: 0 10px 0 #8a1020;
+}
+.world[data-world="circular"] .l2 {
+  inset: 22% 10% 28%;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 28px, rgba(192,20,44,.12) 28px 29px),
+    #fff6d0;
+  box-shadow: 0 18px 0 rgba(80,0,0,.15);
+  transform: rotate(-1.5deg);
+}
+.world[data-world="circular"] .l3 {
+  right: 8%; top: 16%; width: 90px; height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 36%, #ff5a20, #c0142c);
+  box-shadow: 8px 10px 0 rgba(80,0,0,.2);
+  opacity: .9;
+}
+.world[data-world="circular"] .l4 {
+  left: -8%; right: -8%; bottom: -12%; height: 28%;
+  background: repeating-linear-gradient(90deg, #c0142c 0 18px, #a01024 18px 20px);
+}
+
+/* Grocery insert */
+.world[data-world="grocery"] {
+  background:
+    linear-gradient(#f2ead8 0 18%, #e8dcc4 18%);
+}
+.world[data-world="grocery"] .l1 {
+  left: 0; right: 0; top: 8%; height: 54px;
+  background: repeating-linear-gradient(90deg, #c0142c 0 40%, #1a3a88 40% 70%, #2a8a38 70% 100%);
+}
+.world[data-world="grocery"] .l2 {
+  inset: 20% 8% 24%;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(20,20,20,.08) 22px 23px),
+    #f8f0dc;
+  box-shadow: 0 0 0 1px #c4b898;
+}
+.world[data-world="grocery"] .l3 {
+  left: 10%; top: 14%; width: 70px; height: 70px;
+  border-radius: 50%;
+  border: 6px dashed #c0142c;
+  opacity: .55;
+}
+.world[data-world="grocery"] .l4 {
+  left: 0; right: 0; bottom: 10%; height: 22px;
+  background: repeating-linear-gradient(90deg, #1a1a1a 0 8px, transparent 8px 16px);
+  opacity: .35;
+}
+
+/* Circuit City / RadioShack flyer */
+.world[data-world="circuit"] {
+  background:
+    radial-gradient(ellipse at 80% 10%, #fff 0 8%, transparent 26%),
+    linear-gradient(#c0142c 0 16%, #1a1a1a 16% 22%, #f4e8dc 22%);
+}
+.world[data-world="circuit"] .l1 {
+  left: 8%; right: 8%; top: 20%; height: 48px;
+  background: #1a1a1a;
+  box-shadow: 0 6px 0 #c0142c;
+}
+.world[data-world="circuit"] .l2 {
+  inset: 28% 10% 26%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 32%, rgba(192,20,44,.1) 32% 33%),
+    #fff;
+  transform: rotate(1deg);
+  box-shadow: 10px 14px 0 rgba(0,0,0,.18);
+}
+.world[data-world="circuit"] .l3 {
+  right: 12%; top: 24%; width: 80px; height: 80px;
+  background: #ffe14a;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  opacity: .9;
+}
+.world[data-world="circuit"] .l4 {
+  left: -10%; right: -10%; bottom: -14%; height: 30%;
+  background: repeating-linear-gradient(90deg, #c0142c 0 16px, #8a1020 16px 18px);
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: center bottom;
+}
+
 @keyframes drift {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(2.4%); }
@@ -501,6 +775,8 @@ html, body {
 .obj.is-on.ticket { display: flex !important; }
 .obj.is-on.zine { display: flex !important; }
 .obj.is-on.brick { display: flex !important; }
+.obj.is-on.disk { display: flex !important; }
+.obj.is-on.ad { display: flex !important; }
 .obj.is-on.paper { display: flex !important; }
 .obj.is-on { animation: popin .42s ease, float 3.4s ease-in-out .42s infinite; position: relative; z-index: 1; }
 
@@ -1034,52 +1310,191 @@ html, body {
   margin-top: 8px;
 }
 
-/* Nokia 3310 */
+/* Zack Morris gag brick */
 .brick {
-  width: min(168px, 48vw);
-  background: linear-gradient(#6d7a72, #3e4742);
-  border-radius: 18px 18px 28px 28px;
-  padding: 14px 14px 16px;
-  box-shadow: 0 34px 50px rgba(0,0,0,.48), inset 0 2px 0 #cfd8d0;
+  width: min(188px, 52vw);
+  background: linear-gradient(#f4ead4, #d4c4a4);
+  border-radius: 22px 22px 32px 32px;
+  padding: 18px 16px 16px;
+  box-shadow: 0 34px 50px rgba(0,0,0,.48), inset 0 3px 0 #fff8;
   flex-direction: column;
   align-items: center;
   position: relative;
 }
-.nokia-ant {
+.zack-ant {
   position: absolute;
-  top: -22px; right: 22px;
-  width: 8px; height: 26px;
-  background: #2a2a2a;
-  border-radius: 4px;
+  top: -148px;
+  right: 22px;
+  width: 14px;
+  height: 148px;
+  background: linear-gradient(#d8d2c4, #8a8678);
+  border-radius: 7px 7px 2px 2px;
+  box-shadow: 2px 0 0 #6a665c;
 }
-.nokia-ear {
-  width: 42%; height: 8px;
-  background: #222;
-  border-radius: 6px;
-  margin-bottom: 8px;
+.zack-whip {
+  position: absolute;
+  top: -88px;
+  left: 4px;
+  width: 6px;
+  height: 88px;
+  background: linear-gradient(#9a9688, #4a4840);
+  border-radius: 3px;
+}
+.zack-tip {
+  position: absolute;
+  top: -104px;
+  left: -5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 32%, #fff, #c8c4b8 54%, #6a6860);
+  box-shadow: 0 2px 0 #3a3830;
+}
+.zack-ear {
+  width: 48%;
+  height: 10px;
+  background: #2a2418;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 .brick-screen {
   width: 100%;
   background: #7aa33a;
   color: #142806;
-  padding: 10px;
-  min-height: 78px;
-  border-radius: 4px;
-  box-shadow: inset 0 0 0 3px #2a3a14;
+  padding: 12px 10px;
+  min-height: 86px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 4px #2a3a14, inset 0 8px 12px rgba(0,0,0,.12);
 }
-.nokia-pad {
+.zack-pad {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 12px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 8px;
 }
-.nokia-pad i {
-  height: 18px;
-  border-radius: 8px;
-  background: #2a2e2c;
-  display: block;
-  box-shadow: 0 2px 0 #111;
+.zack-pad i {
+  height: 26px;
+  border-radius: 10px;
+  background: linear-gradient(#3a342c, #1a1814);
+  color: #f4ead4;
+  display: grid;
+  place-items: center;
+  font: 700 .72rem var(--font);
+  box-shadow: 0 3px 0 #0a0806;
+}
+
+/* AOL trial CD */
+.disk {
+  width: min(220px, 58vw);
+  height: min(220px, 58vw);
+  border-radius: 50%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  background:
+    repeating-conic-gradient(#1a3a88 0% 8%, #c0142c 0% 16%),
+    radial-gradient(circle at 50% 50%, #1a1a22, #0a0a10);
+  box-shadow: 0 34px 50px rgba(0,0,0,.5), inset 0 0 0 10px #111;
+  color: #fff;
+  position: relative;
+}
+.aol-ring {
+  position: absolute;
+  inset: 28%;
+  border-radius: 50%;
+  background: #0a0a10;
+  box-shadow: inset 0 0 0 14px #2a2a32;
+}
+.disk .tiny { position: relative; z-index: 1; color: #ffe14a; }
+.disk .obj-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--lcd);
+  font-size: 1.05rem;
+  max-width: 70%;
+}
+
+/* Sunday circular clipping */
+.ad {
+  width: min(280px, 78vw);
+  position: relative;
+}
+.ad-clip {
+  background: #fff6d0;
+  color: #111;
+  padding: 18px 16px 14px;
+  border: 3px solid #111;
+  box-shadow: 10px 14px 0 rgba(0,0,0,.28);
+  transform: rotate(-2deg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+.ad-clip[data-store="grocery"] {
+  background: #f8f0dc;
+  transform: rotate(1deg);
+}
+.ad-clip[data-store="circuit"] {
+  background: #fff;
+  border-color: #c0142c;
+  transform: rotate(2deg);
+}
+.ad-store {
+  font-family: var(--circus);
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  letter-spacing: .04em;
+  color: #c0142c;
+  line-height: 1;
+}
+.ad-store i {
+  display: inline-block;
+  transform: scaleX(-1);
+  color: #1a3a88;
+  font-style: normal;
+}
+.ad-clip[data-store="grocery"] .ad-store { color: #1a3a88; }
+.ad-clip[data-store="circuit"] .ad-store { color: #c0142c; font-family: var(--display); font-size: 1.15rem; letter-spacing: .12em; }
+.ad-burst {
+  position: absolute;
+  right: -8px;
+  top: -12px;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  background: #c0142c;
+  color: #ffe14a;
+  font: 800 .78rem var(--display);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  transform: rotate(12deg);
+}
+.ad .obj-title {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  color: #111;
+  white-space: normal;
+}
+.ad-price {
+  font-family: var(--circus);
+  font-size: 2.2rem;
+  color: #c0142c;
+  line-height: 1;
+}
+.ad-fine {
+  font-size: .62rem;
+  letter-spacing: .08em;
+  opacity: .7;
+}
+.ad-coupon {
+  margin-top: 4px;
+  border: 2px dashed #111;
+  padding: 4px 8px;
+  font: 800 .68rem var(--font);
+  letter-spacing: .14em;
 }
 
 /* Sports ticket */
@@ -1446,7 +1861,7 @@ html, body {
   background-repeat: no-repeat;
 }
 #wipe.on .bars { animation: barsFlash .58s ease forwards; }
-.wipe-goo, .wipe-check, .wipe-leader, .wipe-iris {
+.wipe-goo, .wipe-check, .wipe-leader, .wipe-iris, .wipe-tape {
   position: absolute;
   inset: 0;
   z-index: 4;
@@ -1489,11 +1904,17 @@ html, body {
   background: radial-gradient(circle, transparent 18%, #000 19%);
 }
 #wipe[data-wipe="sitcom"].on .wipe-iris { animation: irisOut .72s ease forwards; }
+.wipe-tape {
+  background:
+    repeating-linear-gradient(90deg, #1a3a88 0 12.5%, #ffe14a 0 25%, #c0142c 0 37.5%, #1a3a88 0 50%, #2de0c8 0 62.5%, #ffe14a 0 75%, #1a3a88 0 87.5%, #0a1438 0 100%);
+}
+#wipe[data-wipe="tape"].on .wipe-tape { animation: checkZoom .72s ease forwards; }
 #wipe[data-wipe="slime"] .bars,
 #wipe[data-wipe="checker"] .bars,
 #wipe[data-wipe="leader"] .bars,
 #wipe[data-wipe="paparazzi"] .bars,
 #wipe[data-wipe="sitcom"] .bars,
+#wipe[data-wipe="tape"] .bars,
 #wipe[data-wipe="same"] .bars { animation: none !important; opacity: 0; }
 #wipe[data-wipe="paparazzi"].on .wipe-flash { animation: papa .72s ease forwards; }
 #wipeFrom {
@@ -1672,7 +2093,9 @@ html, body {
   .tvset { width: 380px; }
   .tama { width: 200px; height: 252px; }
   .walkman { width: 340px; }
-  .brick { width: 180px; }
+  .brick { width: 196px; }
+  .ad { width: 300px; }
+  .disk { width: 240px; height: 240px; }
   .ticket { width: 320px; }
   .zine { width: 258px; height: 360px; }
 }

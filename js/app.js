@@ -5,27 +5,39 @@ import { describe, youtubeUrl, fallbackBlurb } from './wiki.js';
 import { TuneBed } from './tunes.js';
 
 const NICKISH = /nick|toon|animaniacs|rugrats|ren & stimpy|doug|cartoon|fox kids|saturday morning|disney afternoon|warner|simpsons|batman: the animated|gargoyles|reboot|aeon flux/i;
+const PHONE = /nokia|motorola|startac|star tac|microtac|blackberry|pager|communicator|cell phone|flip phone|mobile phone/i;
+const PALACE = /best picture|oscar|academy award|palme|schindler|unforgiven|silence of the lambs|dances with wolves|forrest gump|braveheart|english patient|shakespeare in love|american beauty|saving private ryan|philadelphia|leaving las vegas|goodfellas|fargo|life is beautiful|the insider|thin red line|boys don.?t cry|awakenings|howards end|dead man walking|secrets & lies|l\.a\. confidential|as good as it gets|good will hunting|the green mile|titanic/i;
 
 function themeFor(item) {
   const blob = `${item.title} ${item.meta} ${item.note}`;
-  if (item.cat === 'tv' && NICKISH.test(blob)) {
-    return { kind: 'tv', world: 'nick', wipe: 'slime' };
+  if (item.cat === 'tv') {
+    if (NICKISH.test(blob)) return { kind: 'tv', world: 'nick', wipe: 'slime' };
+    if (/^friends$/i.test(item.title)) return { kind: 'tv', world: 'friends', wipe: 'sitcom' };
+    if (/seinfeld/i.test(item.title)) return { kind: 'tv', world: 'monks', wipe: 'sitcom' };
+    if (/90210|beverly hills/i.test(item.title)) return { kind: 'tv', world: 'zip', wipe: 'sitcom' };
+    if (/fresh prince|bel-air|bel air/i.test(item.title)) return { kind: 'tv', world: 'belair', wipe: 'sitcom' };
+    return { kind: 'tv', world: 'bayside', wipe: 'sitcom' };
+  }
+  if (item.cat === 'movie') {
+    if (PALACE.test(blob)) return { kind: 'movie', world: 'gotham', wipe: 'leader' };
+    return { kind: 'movie', world: 'video', wipe: 'tape' };
+  }
+  if (item.cat === 'tech') {
+    if (PHONE.test(blob)) return { kind: 'tech', world: 'bayside', wipe: 'sitcom' };
+    return { kind: 'ad', world: 'circuit', wipe: 'splash' };
   }
   const map = {
     game: { kind: 'game', world: 'sonic', wipe: 'checker' },
-    movie: { kind: 'movie', world: 'gotham', wipe: 'leader' },
-    tv: { kind: 'tv', world: 'bayside', wipe: 'sitcom' },
     cartoon: { kind: 'cartoon', world: 'nick', wipe: 'slime' },
-    toy: { kind: 'cartoon', world: 'nick', wipe: 'slime' },
+    toy: { kind: 'ad', world: 'circular', wipe: 'splash' },
     music: { kind: 'music', world: 'mtv', wipe: 'neon' },
-    food: { kind: 'food', world: 'studio', wipe: 'splash' },
+    food: { kind: 'ad', world: 'grocery', wipe: 'splash' },
     sport: { kind: 'sport', world: 'court', wipe: 'stadium' },
     person: { kind: 'person', world: 'flash', wipe: 'paparazzi' },
-    tech: { kind: 'tech', world: 'matrix', wipe: 'glitch' },
-    web: { kind: 'tech', world: 'matrix', wipe: 'glitch' },
+    web: { kind: 'web', world: 'matrix', wipe: 'glitch' },
     event: { kind: 'event', world: 'news', wipe: 'static' },
   };
-  return map[item.cat] || map.tech;
+  return map[item.cat] || map.web;
 }
 
 function shuffle(list) {
@@ -88,14 +100,50 @@ const DIAL = {
   sonic: { ch: '33', net: 'SEGA' },
   nick: { ch: '03', net: 'NICK' },
   gotham: { ch: '07', net: 'HBO' },
+  video: { ch: '36', net: 'VIDS' },
   bayside: { ch: '04', net: 'NBC' },
+  friends: { ch: '04', net: 'NBC' },
+  monks: { ch: '04', net: 'NBC' },
+  zip: { ch: '11', net: 'FOX' },
+  belair: { ch: '04', net: 'NBC' },
   mtv: { ch: '10', net: 'MTV' },
-  studio: { ch: '18', net: 'ADS' },
+  circular: { ch: '24', net: 'TOYS' },
+  grocery: { ch: '18', net: 'FOOD' },
+  circuit: { ch: '44', net: 'CITY' },
   court: { ch: '12', net: 'ESPN' },
   flash: { ch: '08', net: 'E!' },
   matrix: { ch: '99', net: 'WEB' },
   news: { ch: '02', net: 'CNN' },
 };
+
+function adPrice(title) {
+  let h = 0;
+  for (const c of String(title)) h = (h * 33 + c.charCodeAt(0)) | 0;
+  const n = Math.abs(h);
+  const dollars = 4 + (n % 46);
+  const cents = ['99', '97', '95', '49'][n % 4];
+  return `$${dollars}.${cents}`;
+}
+
+function dressAd(item, world) {
+  const store = document.getElementById('adStore');
+  const price = document.getElementById('adPrice');
+  const fine = document.getElementById('adFine');
+  const clip = document.querySelector('.ad-clip');
+  if (!store || !clip) return;
+  clip.dataset.store = world;
+  if (world === 'circular') {
+    store.innerHTML = 'TOYS <i>R</i> US';
+    fine.textContent = 'GEOFFREY SAYS HURRY · AISLE 9';
+  } else if (world === 'grocery') {
+    store.textContent = 'WEEKLY SPECIALS';
+    fine.textContent = 'LIMIT 2 · WITH COUPON · SEE STORE';
+  } else {
+    store.textContent = 'CIRCUIT CITY';
+    fine.textContent = 'PRICE MATCH · WHILE SUPPLIES LAST';
+  }
+  price.textContent = adPrice(item.title);
+}
 
 function dialFor(item) {
   return DIAL[themeFor(item).world] || DIAL.matrix;
@@ -152,6 +200,7 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
   const dateEl = document.querySelector('.zine-date');
   if (dateEl) dateEl.textContent = `${MONTHS[item.year % 12]} ${item.year}`;
   setWorld(theme.world);
+  if (theme.kind === 'ad') dressAd(item, theme.world);
   const ch = document.getElementById('ch');
   const nextCh = `CH ${dial.ch}`;
   if (ch.textContent !== nextCh) {

@@ -1,50 +1,18 @@
-/** Quiet Apple Music previews for the current card. Real songs, never loud. */
+/** Quiet Apple Music previews. Wrong song = silence. */
+
+import { queriesFor, pickTrack, labelFor } from './cues.js';
 
 const cache = new Map();
-
-function queryFor(item) {
-  const title = item.title;
-  const meta = item.meta || '';
-  switch (item.cat) {
-    case 'music':
-      return `${title} ${meta}`;
-    case 'movie':
-      return `${title} soundtrack theme`;
-    case 'tv':
-    case 'cartoon':
-      return `${title} theme song`;
-    case 'game':
-      return `${title} video game soundtrack`;
-    case 'person':
-      return `${title} 1990s`;
-    case 'sport':
-      return `${title} anthem`;
-    case 'toy':
-      return `${title} theme`;
-    default:
-      return `${title} 90s`;
-  }
-}
-
-function pickTrack(results, item) {
-  const hits = (results || []).filter((t) => t.previewUrl);
-  if (!hits.length) return null;
-  const words = String(item.title).toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2);
-  const scored = hits.map((t) => {
-    const blob = `${t.trackName} ${t.artistName} ${t.collectionName}`.toLowerCase();
-    const score = words.reduce((n, w) => n + (blob.includes(w) ? 1 : 0), 0);
-    return { t, score };
-  });
-  scored.sort((a, b) => b.score - a.score);
-  return scored[0].t;
-}
 
 export class TuneBed {
   constructor() {
     this.el = new Audio();
     this.el.preload = 'auto';
     this.el.loop = true;
+    this.el.hidden = true;
+    this.el.setAttribute('playsinline', '');
     this.el.crossOrigin = 'anonymous';
+    document.body.appendChild(this.el);
     this.volume = 0.12;
     this.el.volume = this.volume;
     this.muted = false;
@@ -93,7 +61,7 @@ export class TuneBed {
     }
     this.el.src = track.previewUrl;
     this.el.volume = this.volume;
-    this.label = `${track.trackName} · ${track.artistName}`;
+    this.label = labelFor(track, item);
     this.onLabel(this.label);
     try {
       await this.el.play();
@@ -103,20 +71,29 @@ export class TuneBed {
   }
 
   async lookup(item) {
-    const key = `${item.cat}|${item.title}|${item.meta}`;
+    const key = `${item.cat}|${item.title}|${item.meta}|${item.note}`;
     if (cache.has(key)) return cache.get(key);
-    const q = queryFor(item);
-    try {
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=5`;
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      const data = await res.json();
-      const track = pickTrack(data.results, item);
-      cache.set(key, track);
-      return track;
-    } catch {
+    const queries = queriesFor(item);
+    if (!queries.length) {
       cache.set(key, null);
       return null;
     }
+    for (const q of queries) {
+      try {
+        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=8`;
+        const res = await fetch(url);
+        if (!res.ok) continue;
+        const data = await res.json();
+        const track = pickTrack(data.results, item);
+        if (track) {
+          cache.set(key, track);
+          return track;
+        }
+      } catch {
+        /* try the next query */
+      }
+    }
+    cache.set(key, null);
+    return null;
   }
 }

@@ -134,6 +134,12 @@ export class NostalAudio {
       this.noise(t, 0.5, 0.02, 600);
       return;
     }
+    if (type === 'tape') {
+      this.tone(240, t, 0.1, 'square', 0.02);
+      this.noise(t, 0.18, 0.04, 900);
+      this.tone(180, t + 0.08, 0.14, 'sawtooth', 0.016);
+      return;
+    }
     if (type === 'neon') {
       this.tone(220, t, 0.18, 'sawtooth', 0.03);
       this.tone(880, t + 0.04, 0.12, 'square', 0.016);

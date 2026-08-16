@@ -48,9 +48,17 @@ export class WorldFX {
     else if (this.world === 'gotham') this.drawCinema(t);
     else if (this.world === 'nick') this.drawSplat(t);
     else if (this.world === 'bayside') this.drawSparkle(t);
+    else if (this.world === 'friends') this.drawSparkle(t);
+    else if (this.world === 'monks') this.drawSparkle(t);
+    else if (this.world === 'zip') this.drawSparkle(t);
+    else if (this.world === 'belair') this.drawSparkle(t);
     else if (this.world === 'mtv') this.drawNeon(t);
     else if (this.world === 'court') this.drawBall(t);
     else if (this.world === 'studio') this.drawSparkle(t);
+    else if (this.world === 'circular') this.drawSparkle(t);
+    else if (this.world === 'grocery') this.drawSparkle(t);
+    else if (this.world === 'circuit') this.drawSparkle(t);
+    else if (this.world === 'video') this.drawCinema(t);
     else if (this.world === 'flash') this.drawPaparazzi(t);
     else if (this.world === 'news') this.drawBats(t);
   }
@@ -240,6 +248,7 @@ export class WipeFX {
     const mode = this.mode || 'static';
     if (mode === 'leader') this.drawFilm(elapsed);
     else if (mode === 'checker') this.drawChecker(elapsed);
+    else if (mode === 'tape') this.drawChecker(elapsed);
     else if (mode === 'slime') this.drawTintSnow('#9ee000', '#ff7a00');
     else if (mode === 'neon') this.drawTintSnow('#ff2bd6', '#2de0c8');
     else if (mode === 'glitch') this.drawGlitch();

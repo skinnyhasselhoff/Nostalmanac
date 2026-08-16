@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://en.wikipedia.org">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bangers&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://itunes.apple.com">
-  <link rel="stylesheet" href="css/style.css?v=19">
+  <link rel="stylesheet" href="css/style.css?v=20">
 </head>
 <body>
   <div id="stage">
@@ -25,6 +25,14 @@
       <div class="world" data-world="court"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
       <div class="world" data-world="news"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
       <div class="world" data-world="flash"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="video"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="friends"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="monks"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="zip"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="belair"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="circular"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="grocery"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="circuit"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
     </div>
     <canvas id="fxCanvas"></canvas>
     <div class="glass"></div>
@@ -160,14 +168,35 @@
       </div>
 
       <div class="obj brick" data-kind="tech">
-        <div class="nokia-ant"></div>
-        <div class="nokia-ear"></div>
+        <div class="zack-ant">
+          <i class="zack-whip"></i>
+          <i class="zack-tip"></i>
+        </div>
+        <div class="zack-ear"></div>
         <div class="brick-screen">
-          <span class="tiny">NOKIA</span>
+          <span class="tiny">BAYSIDE</span>
           <b class="obj-title"></b>
         </div>
-        <div class="nokia-pad">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <div class="zack-pad">
+          <i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>*</i><i>0</i><i>#</i>
+        </div>
+      </div>
+
+      <div class="obj disk" data-kind="web">
+        <div class="aol-ring"></div>
+        <span class="tiny">100 FREE HOURS</span>
+        <b class="obj-title"></b>
+        <span class="tiny">AOL · TRIAL CD</span>
+      </div>
+
+      <div class="obj ad" data-kind="ad">
+        <div class="ad-clip">
+          <p class="ad-store" id="adStore">TOYS <i>R</i> US</p>
+          <span class="ad-burst">SALE</span>
+          <b class="obj-title"></b>
+          <b class="ad-price" id="adPrice">$19.99</b>
+          <p class="ad-fine" id="adFine">WHILE SUPPLIES LAST</p>
+          <span class="ad-coupon">CLIP &amp; SAVE</span>
         </div>
       </div>
 
@@ -204,6 +233,7 @@
     <div class="wipe-check"></div>
     <div class="wipe-leader"><span></span></div>
     <div class="wipe-iris"></div>
+    <div class="wipe-tape"></div>
     <b id="wipeFrom">CH 33</b>
     <b id="wipeCh">CH 07</b>
     <span id="wipeNet">HBO</span>
@@ -232,6 +262,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=19"></script>
+  <script type="module" src="js/app.js?v=20"></script>
 </body>
 </html>
