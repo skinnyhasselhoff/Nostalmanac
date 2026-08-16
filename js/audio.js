@@ -107,6 +107,10 @@ export class NostalAudio {
 
   staticBurst() {
     if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
-    this.noise(this.ctx.currentTime, 0.12, 0.05, 2400);
+    const t = this.ctx.currentTime;
+    this.noise(t, 0.24, 0.072, 2400);
+    this.noise(t + 0.04, 0.16, 0.045, 5200);
+    this.tone(58, t, 0.08, 'sawtooth', 0.02);
+    this.tone(1400, t + 0.02, 0.05, 'square', 0.012);
   }
 }

@@ -48,8 +48,9 @@ export class WorldFX {
     else if (this.world === 'gotham') this.drawBats(t);
     else if (this.world === 'nick') this.drawSplat(t);
     else if (this.world === 'bayside') this.drawSparkle(t);
-    else if (this.world === 'mtv') this.drawSparkle(t);
-    else if (this.world === 'court') this.drawSparkle(t);
+    else if (this.world === 'mtv') this.drawNeon(t);
+    else if (this.world === 'court') this.drawBall(t);
+    else if (this.world === 'studio') this.drawSparkle(t);
     else if (this.world === 'flash') this.drawFlash(t);
     else if (this.world === 'news') this.drawBats(t);
   }
@@ -117,13 +118,16 @@ export class WorldFX {
 
   drawSplat(t) {
     const { ctx, w, h } = this;
-    const colors = ['#ffe14a', '#b6ff3a', '#5ad0ff', '#fff'];
-    for (let i = 0; i < 10; i++) {
-      const x = (0.12 + (i % 5) * 0.19) * w;
-      const y = (0.18 + Math.floor(i / 5) * 0.52) * h + Math.sin(t + i) * 10;
+    const colors = ['#b6ff3a', '#9ee000', '#ffe14a', '#7cff3a'];
+    for (let i = 0; i < 9; i++) {
+      const x = (0.08 + i * 0.11) * w;
+      const fall = ((t * 55 + i * 70) % (h * 0.72));
       ctx.fillStyle = colors[i % colors.length];
       ctx.beginPath();
-      ctx.arc(x, y, 7 + (i % 3) * 3, 0, Math.PI * 2);
+      ctx.ellipse(x, fall, 10 + (i % 3) * 4, 18 + (i % 4) * 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, fall + 16, 7 + (i % 2) * 3, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -131,12 +135,37 @@ export class WorldFX {
   drawSparkle(t) {
     const { ctx, w, h } = this;
     ctx.fillStyle = 'rgba(255,255,255,.85)';
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 14; i++) {
       const x = ((i * 0.17 + t * 0.04) % 1) * w;
-      const y = (0.2 + (i % 4) * 0.15) * h;
+      const y = (0.18 + (i % 5) * 0.12) * h;
       const s = 2 + (i % 3);
       ctx.fillRect(x, y, s, s);
     }
+  }
+
+  drawNeon(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 12; i++) {
+      const barH = (0.12 + Math.abs(Math.sin(t * 4 + i)) * 0.28) * h;
+      ctx.fillStyle = i % 2 ? '#ff2bd6' : '#2de0c8';
+      ctx.globalAlpha = 0.45;
+      ctx.fillRect(w * 0.12 + i * 18, h * 0.62 - barH, 10, barH);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  drawBall(t) {
+    const { ctx, w, h } = this;
+    const y = 0.42 * h + Math.abs(Math.sin(t * 3)) * 0.18 * h;
+    ctx.fillStyle = '#c45a28';
+    ctx.beginPath();
+    ctx.arc(0.78 * w, y, 16, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0.78 * w, y, 16, 0, Math.PI * 2);
+    ctx.stroke();
   }
 
   drawFlash(t) {
@@ -156,6 +185,7 @@ export class WipeFX {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.until = 0;
+    this.dur = 560;
     this.resize();
     window.addEventListener('resize', () => this.resize());
   }
@@ -168,22 +198,72 @@ export class WipeFX {
     this.ctx.imageSmoothingEnabled = false;
   }
 
-  burst(ms = 480) {
+  burst(ms = 560) {
+    this.dur = ms;
     this.until = performance.now() + ms;
   }
 
   tick() {
     const { ctx, nw, nh } = this;
-    if (performance.now() > this.until) {
+    const left = this.until - performance.now();
+    if (left <= 0) {
       ctx.clearRect(0, 0, nw, nh);
       return;
     }
+    const elapsed = this.dur - left;
+    if (elapsed < 100) this.drawBars();
+    else this.drawSnow();
+  }
+
+  drawBars() {
+    const { ctx, nw, nh } = this;
+    const cols = ['#ffffff', '#ffe14a', '#2de0c8', '#3ecb5a', '#ff4fd8', '#cc0000', '#3a4adf', '#111111'];
+    const bw = nw / cols.length;
+    cols.forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(i * bw, 0, bw + 1, nh * 0.72);
+    });
+    const low = ['#002244', '#ffffff', '#4a0080', '#111111', '#111111', '#222222', '#111111', '#000000'];
+    low.forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(i * bw, nh * 0.72, bw + 1, nh * 0.28);
+    });
+  }
+
+  drawSnow() {
+    const { ctx, nw, nh } = this;
     const img = ctx.createImageData(nw, nh);
     const d = img.data;
     for (let i = 0; i < d.length; i += 4) {
-      const v = Math.random() * 255;
-      d[i] = d[i + 1] = d[i + 2] = v;
+      if (Math.random() > 0.6) {
+        d[i] = Math.random() * 255;
+        d[i + 1] = Math.random() * 255;
+        d[i + 2] = Math.random() * 255;
+      } else {
+        const v = Math.random() * 255;
+        d[i] = d[i + 1] = d[i + 2] = v;
+      }
       d[i + 3] = 230;
+    }
+    for (let k = 0; k < 5; k++) {
+      const y = ((performance.now() / 14 + k * 17) % nh) | 0;
+      for (let x = 0; x < nw; x++) {
+        const i = (y * nw + x) * 4;
+        d[i] = d[i + 1] = d[i + 2] = 255;
+        d[i + 3] = 255;
+      }
+    }
+    for (let t = 0; t < 4; t++) {
+      const y = (Math.random() * nh) | 0;
+      const shift = ((Math.random() * 20) | 0) - 10;
+      for (let x = 0; x < nw; x++) {
+        const sx = (x + shift + nw) % nw;
+        const di = (y * nw + x) * 4;
+        const si = (y * nw + sx) * 4;
+        d[di] = d[si];
+        d[di + 1] = d[si + 1];
+        d[di + 2] = d[si + 2];
+      }
     }
     ctx.putImageData(img, 0, 0);
   }

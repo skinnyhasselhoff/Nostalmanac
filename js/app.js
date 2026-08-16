@@ -82,12 +82,25 @@ function setWorld(name) {
   fx.setWorld(name);
 }
 
-function playWipe(type) {
+const NETS = {
+  slime: 'NICK',
+  checker: 'SEGA',
+  static: 'CNN',
+  neon: 'MTV',
+  splash: 'ADS',
+  flash: 'E!',
+  glitch: 'WEB',
+};
+
+function playWipe(type, year) {
   wipe.className = '';
+  wipe.dataset.wipe = type || 'static';
+  document.getElementById('wipeCh').textContent = `CH ${String(year).slice(2)}`;
+  document.getElementById('wipeNet').textContent = NETS[type] || 'STEREO';
   void wipe.offsetWidth;
-  wipe.className = `on ${type}`;
-  if (type === 'static') wipeFx.burst(500);
-  setTimeout(() => { wipe.className = ''; }, 620);
+  wipe.className = 'on';
+  wipeFx.burst(560);
+  setTimeout(() => { wipe.className = ''; }, 600);
 }
 
 function show(i, { wipeType } = {}) {
@@ -96,7 +109,7 @@ function show(i, { wipeType } = {}) {
   const item = pool[index];
   const theme = themeFor(item);
 
-  if (wipeType) playWipe(wipeType);
+  if (wipeType) playWipe(wipeType, item.year);
 
   hero.dataset.show = theme.kind;
   hero.querySelectorAll('.obj').forEach((el) => {
@@ -142,9 +155,8 @@ function step(dir) {
   const next = pool[(index + dir + pool.length) % pool.length];
   const theme = themeFor(next);
   show(index + dir, { wipeType: theme.wipe });
-  if (theme.wipe === 'static') audio.staticBurst();
-  else audio.tick();
-  setTimeout(() => { lock = false; }, 520);
+  audio.staticBurst();
+  setTimeout(() => { lock = false; }, 610);
 }
 
 function startDeck() {

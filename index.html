@@ -9,24 +9,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://en.wikipedia.org">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=14">
+  <link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
   <div id="stage">
     <div id="worlds" aria-hidden="true">
-      <div class="world is-on" data-world="sonic"></div>
-      <div class="world" data-world="nick"></div>
-      <div class="world" data-world="gotham"></div>
-      <div class="world" data-world="matrix"></div>
-      <div class="world" data-world="bayside"></div>
-      <div class="world" data-world="mtv"></div>
-      <div class="world" data-world="studio"></div>
-      <div class="world" data-world="court"></div>
-      <div class="world" data-world="news"></div>
-      <div class="world" data-world="flash"></div>
+      <div class="world is-on" data-world="sonic"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="nick"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="gotham"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="matrix"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="bayside"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="mtv"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="studio"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="court"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="news"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
+      <div class="world" data-world="flash"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i></div>
     </div>
     <canvas id="fxCanvas"></canvas>
     <div class="glass"></div>
+    <div id="grain" aria-hidden="true"></div>
 
     <header class="top">
       <strong>NOSTALMANAC</strong>
@@ -38,19 +39,29 @@
     </header>
 
     <div id="hero" data-show="game">
-      <div class="obj gb is-on" data-kind="game">
-        <div class="gb-screen-wrap">
-          <div class="gb-lcd">
-            <span class="tiny">NINTENDO</span>
-            <b class="lcd-play">▶ PLAY</b>
+      <div class="obj genesis is-on" data-kind="game">
+        <div class="cart">
+          <span class="cart-notch"></span>
+          <span class="tiny">SEGA</span>
+          <b class="obj-title"></b>
+          <span class="cart-ridges"></span>
+        </div>
+        <div class="gen-body">
+          <div class="gen-top">
+            <div class="gen-slot"></div>
+            <i class="led"></i>
           </div>
+          <p class="gen-mark">SEGA GENESIS</p>
+          <div class="gen-row">
+            <div class="dpad"><i></i></div>
+            <div class="gen-mid">
+              <div class="gen-start"><i></i><i></i></div>
+              <span class="gen-caps">START · MODE</span>
+            </div>
+            <div class="abc"><i>A</i><i>B</i><i>C</i></div>
+          </div>
+          <div class="gen-vents"></div>
         </div>
-        <p class="gb-mark">GAME BOY</p>
-        <div class="gb-row">
-          <div class="dpad"></div>
-          <div class="ab"><i></i><i></i></div>
-        </div>
-        <div class="gb-speaker"></div>
       </div>
 
       <div class="obj vhs" data-kind="movie">
@@ -86,13 +97,28 @@
         <div class="tama-btns"><i></i><i></i><i></i></div>
       </div>
 
-      <div class="obj disc" data-kind="music">
-        <div class="cd"></div>
-        <div class="disc-lcd">
-          <span class="tiny">SONY DISCMAN</span>
-          <b class="obj-title"></b>
+      <div class="obj walkman" data-kind="music">
+        <div class="phones" aria-hidden="true">
+          <div class="ear left"><i></i></div>
+          <div class="band"></div>
+          <div class="ear right"><i></i></div>
+          <div class="cord"></div>
         </div>
-        <div class="play"></div>
+        <div class="disc-body">
+          <div class="disc-lid">
+            <div class="cd"></div>
+          </div>
+          <div class="disc-lcd">
+            <span class="tiny">SONY DISCMAN</span>
+            <b class="obj-title"></b>
+          </div>
+          <div class="disc-controls">
+            <span class="skip"></span>
+            <span class="play"></span>
+            <span class="skip"></span>
+            <span class="knob"></span>
+          </div>
+        </div>
       </div>
 
       <div class="obj can" data-kind="food">
@@ -109,9 +135,20 @@
       </div>
 
       <div class="obj zine" data-kind="person">
-        <span class="tiny">PEOPLE</span>
-        <b class="obj-title"></b>
-        <span class="tiny">THE 90s ISSUE</span>
+        <div class="zine-pages"></div>
+        <div class="zine-spine"></div>
+        <div class="zine-cover">
+          <div class="zine-logo">PEOPLE</div>
+          <div class="zine-photo">
+            <i class="hair"></i>
+            <i class="face"></i>
+            <i class="shoulders"></i>
+          </div>
+          <b class="obj-title"></b>
+          <span class="zine-kicker">THE 90s ISSUE</span>
+          <span class="zine-bar"></span>
+        </div>
+        <div class="zine-sheen"></div>
       </div>
 
       <div class="obj brick" data-kind="tech">
@@ -151,7 +188,11 @@
 
   <div id="wipe" aria-hidden="true">
     <canvas id="wipeFx"></canvas>
-    <div class="wipe-fill"></div>
+    <div class="bars"></div>
+    <div class="wipe-roll"></div>
+    <div class="wipe-flash"></div>
+    <b id="wipeCh">CH 91</b>
+    <span id="wipeNet">STEREO</span>
   </div>
 
   <div id="connect">
@@ -177,6 +218,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=14"></script>
+  <script type="module" src="js/app.js?v=16"></script>
 </body>
 </html>
