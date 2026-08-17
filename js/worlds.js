@@ -45,6 +45,13 @@ export class WorldFX {
     }
     ctx.clearRect(0, 0, w, h);
     if (this.world === 'sonic') this.drawRings(t);
+    else if (this.world === 'snes') this.drawCoins(t);
+    else if (this.world === 'n64') this.drawStars(t);
+    else if (this.world === 'ps1') this.drawFog(t);
+    else if (this.world === 'arcade') this.drawCabinets(t);
+    else if (this.world === 'gb') this.drawPixels(t);
+    else if (this.world === 'pc') this.drawCursor(t);
+    else if (this.world === 'dc') this.drawOrbs(t);
     else if (this.world === 'gotham') this.drawCinema(t);
     else if (this.world === 'nick') this.drawSplat(t);
     else if (this.world === 'bayside') this.drawSparkle(t);
@@ -52,12 +59,13 @@ export class WorldFX {
     else if (this.world === 'monks') this.drawSparkle(t);
     else if (this.world === 'zip') this.drawSparkle(t);
     else if (this.world === 'belair') this.drawSparkle(t);
-    else if (this.world === 'mtv') this.drawNeon(t);
+    else if (this.world === 'mtv') this.drawCarnival(t);
     else if (this.world === 'court') this.drawBall(t);
     else if (this.world === 'studio') this.drawSparkle(t);
+    else if (this.world === 'park') this.drawMidway(t);
     else if (this.world === 'circular') this.drawSparkle(t);
     else if (this.world === 'grocery') this.drawSparkle(t);
-    else if (this.world === 'circuit') this.drawSparkle(t);
+    else if (this.world === 'circuit') this.drawScreens(t);
     else if (this.world === 'video') this.drawCinema(t);
     else if (this.world === 'flash') this.drawPaparazzi(t);
     else if (this.world === 'news') this.drawBats(t);
@@ -162,6 +170,179 @@ export class WorldFX {
     ctx.globalAlpha = 1;
   }
 
+  drawCoins(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 8; i++) {
+      const x = ((i * 0.11 + 0.12) % 1) * w;
+      const y = 0.32 * h + Math.sin(t * 3 + i) * 10;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(0.55 + Math.abs(Math.sin(t * 4 + i)) * 0.45, 1);
+      ctx.fillStyle = '#ffe14a';
+      ctx.strokeStyle = '#c47828';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 10, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  drawStars(t) {
+    const { ctx, w, h } = this;
+    ctx.fillStyle = '#ffe14a';
+    ctx.shadowColor = '#fff6a0';
+    ctx.shadowBlur = 10;
+    for (let i = 0; i < 7; i++) {
+      const x = (0.1 + i * 0.13) * w;
+      const y = (0.16 + Math.sin(t * 2 + i) * 0.06) * h;
+      const r = 7 + (i % 3) * 2;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(t * 0.8 + i);
+      ctx.beginPath();
+      for (let p = 0; p < 5; p++) {
+        const a = (p * Math.PI * 2) / 5 - Math.PI / 2;
+        const b = a + Math.PI / 5;
+        ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+        ctx.lineTo(Math.cos(b) * r * 0.4, Math.sin(b) * r * 0.4);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.shadowBlur = 0;
+  }
+
+  drawFog(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 5; i++) {
+      const x = ((i * 0.22 + t * 0.03) % 1.2 - 0.1) * w;
+      const y = (0.28 + (i % 3) * 0.1) * h;
+      const g = ctx.createRadialGradient(x, y, 10, x, y, 90);
+      g.addColorStop(0, 'rgba(200,220,230,.22)');
+      g.addColorStop(1, 'rgba(200,220,230,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(x, y, 110, 36, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  drawCabinets(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 10; i++) {
+      const pulse = 0.35 + Math.abs(Math.sin(t * 5 + i)) * 0.45;
+      ctx.strokeStyle = i % 2 ? `rgba(255,43,214,${pulse})` : `rgba(0,229,255,${pulse})`;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(w * 0.2 + i * 22, h * 0.22, 14, h * 0.38);
+    }
+  }
+
+  drawPixels(t) {
+    const { ctx, w, h } = this;
+    ctx.fillStyle = '#0f380f';
+    for (let i = 0; i < 16; i++) {
+      const x = ((i * 0.08 + t * 0.02) % 1) * w;
+      const y = (0.2 + (i % 4) * 0.1) * h;
+      ctx.fillRect(x, y, 6, 6);
+    }
+  }
+
+  drawCursor(t) {
+    const { ctx, w, h } = this;
+    if (Math.floor(t * 2) % 2 === 0) {
+      ctx.fillStyle = '#00e5ff';
+      ctx.fillRect(w * 0.14, h * 0.28, 8, 18);
+    }
+    ctx.fillStyle = '#ff2bd6';
+    ctx.globalAlpha = 0.25;
+    ctx.fillRect(0, ((t * 40) % h), w, 3);
+    ctx.globalAlpha = 1;
+  }
+
+  drawOrbs(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 6; i++) {
+      const x = (0.15 + i * 0.14) * w;
+      const y = 0.24 * h + Math.sin(t * 2 + i) * 16;
+      ctx.fillStyle = i % 2 ? '#ff6a18' : '#fff';
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      ctx.arc(x, y, 8 + (i % 3) * 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  drawCarnival(t) {
+    const { ctx, w, h } = this;
+    const colors = ['#ffe14a', '#ff2bd6', '#00e5ff', '#fff'];
+    for (let i = 0; i < 22; i++) {
+      const x = ((i * 0.09 + t * 0.08) % 1) * w;
+      const y = ((i * 0.17 + t * 0.12) % 0.7) * h;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.globalAlpha = 0.7;
+      ctx.fillRect(x, y, 5 + (i % 3), 5 + (i % 3));
+    }
+    ctx.globalAlpha = 1;
+    ctx.save();
+    ctx.translate(w * 0.82, h * 0.18);
+    ctx.rotate(t * 1.4);
+    ctx.strokeStyle = '#ffe14a';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(-18, -18);
+    ctx.lineTo(18, 18);
+    ctx.moveTo(18, -18);
+    ctx.lineTo(-18, 18);
+    ctx.stroke();
+    ctx.restore();
+    if (Math.sin(t * 9) > 0.4) {
+      ctx.strokeStyle = '#00e5ff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.12, h * 0.08);
+      ctx.lineTo(w * 0.22, h * 0.28);
+      ctx.lineTo(w * 0.18, h * 0.18);
+      ctx.lineTo(w * 0.3, h * 0.36);
+      ctx.stroke();
+    }
+  }
+
+  drawMidway(t) {
+    const { ctx, w, h } = this;
+    const colors = ['#ff7a18', '#ffe14a', '#ff2bd6', '#7cff3a'];
+    for (let i = 0; i < 10; i++) {
+      const x = ((i * 0.12 + t * 0.04) % 1) * w;
+      const y = (0.12 + (i % 3) * 0.08) * h + Math.sin(t * 2 + i) * 6;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(192,20,44,.45)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.22);
+    for (let x = 0; x <= w; x += 20) {
+      ctx.lineTo(x, h * 0.22 + Math.sin(x / 40 + t) * 18);
+    }
+    ctx.stroke();
+  }
+
+  drawScreens(t) {
+    const { ctx, w, h } = this;
+    for (let i = 0; i < 8; i++) {
+      const on = Math.sin(t * 6 + i) > 0.2;
+      ctx.fillStyle = on ? (i % 2 ? '#00e5ff' : '#ffe14a') : '#111';
+      ctx.globalAlpha = on ? 0.28 : 0.08;
+      ctx.fillRect(w * 0.12 + (i % 4) * 70, h * 0.22 + Math.floor(i / 4) * 48, 54, 36);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   drawBall(t) {
     const { ctx, w, h } = this;
     const y = 0.42 * h + Math.abs(Math.sin(t * 3)) * 0.18 * h;
@@ -257,7 +438,7 @@ export class WipeFX {
     else if (mode === 'checker') this.drawChecker(elapsed);
     else if (mode === 'tape') this.drawChecker(elapsed);
     else if (mode === 'slime') this.drawSlime(elapsed);
-    else if (mode === 'neon') this.drawTintSnow('#ff2bd6', '#2de0c8');
+    else if (mode === 'neon') this.drawTintSnow('#ffe14a', '#ff2bd6');
     else if (mode === 'glitch') this.drawMatrixWipe();
     else if (mode === 'paparazzi') this.drawWhite(elapsed);
     else if (mode === 'sitcom') {

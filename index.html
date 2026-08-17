@@ -13,12 +13,19 @@
   <link rel="preconnect" href="https://api.tvmaze.com">
   <link rel="preconnect" href="https://static.tvmaze.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bangers&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=23">
+  <link rel="stylesheet" href="css/style.css?v=24">
 </head>
 <body>
   <div id="stage">
     <div id="worlds" aria-hidden="true">
       <div class="world is-on" data-world="sonic"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="snes"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="n64"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="ps1"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="arcade"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="gb"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="pc"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="dc"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="nick"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="gotham"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="matrix"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
@@ -33,9 +40,14 @@
       <div class="world" data-world="monks"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="zip"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="belair"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+      <div class="world" data-world="park"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="circular"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="grocery"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
       <div class="world" data-world="circuit"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
+    </div>
+    <div id="parade" hidden aria-hidden="true">
+      <i class="con c-gb"></i><i class="con c-snes"></i><i class="con c-gen"></i><i class="con c-n64"></i><i class="con c-ps"></i><i class="con c-dc"></i>
+      <i class="con c-gb"></i><i class="con c-snes"></i><i class="con c-gen"></i><i class="con c-n64"></i><i class="con c-ps"></i><i class="con c-dc"></i>
     </div>
     <canvas id="fxCanvas"></canvas>
     <div class="glass"></div>
@@ -293,6 +305,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=23"></script>
+  <script type="module" src="js/app.js?v=24"></script>
 </body>
 </html>

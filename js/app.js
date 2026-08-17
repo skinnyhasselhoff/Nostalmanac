@@ -9,6 +9,21 @@ const NICKISH = /nick|toon|animaniacs|rugrats|ren & stimpy|doug|cartoon|fox kids
 const PHONE = /nokia|motorola|startac|star tac|microtac|blackberry|pager|communicator|cell phone|flip phone|mobile phone/i;
 const PALACE = /best picture|oscar|academy award|palme|schindler|unforgiven|silence of the lambs|dances with wolves|forrest gump|braveheart|english patient|shakespeare in love|american beauty|saving private ryan|philadelphia|leaving las vegas|goodfellas|fargo|life is beautiful|the insider|thin red line|boys don.?t cry|awakenings|howards end|dead man walking|secrets & lies|l\.a\. confidential|as good as it gets|good will hunting|the green mile|titanic/i;
 
+function gameWorld(item) {
+  const p = platformFor(item);
+  if (p === 'ARCADE') return 'arcade';
+  if (p === 'N64') return 'n64';
+  if (p === 'PS1') return 'ps1';
+  if (p === 'PC') return 'pc';
+  if (p === 'DREAMCAST') return 'dc';
+  if (p === 'GAME BOY' || p === 'GAME GEAR') return 'gb';
+  if (p === 'SNES' || p === 'NES') return 'snes';
+  if (p === 'GENESIS' || p === 'SATURN' || p === 'SEGA CD' || p === '32X') return 'sonic';
+  if (p === 'NEO GEO' || p === 'JAGUAR' || p === 'TG-16') return 'arcade';
+  if (/mario|zelda|metroid|donkey kong|kirby|earthbound|chrono|yoshi/i.test(`${item.title} ${item.meta}`)) return 'snes';
+  return 'sonic';
+}
+
 function themeFor(item) {
   const blob = `${item.title} ${item.meta} ${item.note}`;
   if (item.cat === 'tv') {
@@ -27,12 +42,12 @@ function themeFor(item) {
     if (PHONE.test(blob)) return { kind: 'tech', world: 'bayside', wipe: 'sitcom' };
     return { kind: 'ad', world: 'circuit', wipe: 'splash' };
   }
+  if (item.cat === 'game') return { kind: 'game', world: gameWorld(item), wipe: 'checker' };
   const map = {
-    game: { kind: 'game', world: 'sonic', wipe: 'checker' },
     cartoon: { kind: 'cartoon', world: 'nick', wipe: 'slime' },
-    toy: { kind: 'ad', world: 'circular', wipe: 'splash' },
+    toy: { kind: 'ad', world: 'park', wipe: 'splash' },
     music: { kind: 'music', world: 'mtv', wipe: 'neon' },
-    food: { kind: 'ad', world: 'grocery', wipe: 'splash' },
+    food: { kind: 'ad', world: 'park', wipe: 'splash' },
     sport: { kind: 'sport', world: 'court', wipe: 'stadium' },
     person: { kind: 'person', world: 'flash', wipe: 'paparazzi' },
     web: { kind: 'web', world: 'matrix', wipe: 'glitch' },
@@ -88,12 +103,16 @@ function busy() {
   return !entered || drawer.hidden === false;
 }
 
+const GAME_WORLDS = new Set(['sonic', 'snes', 'n64', 'ps1', 'arcade', 'gb', 'pc', 'dc']);
+
 function setWorld(name) {
   if (name === worldName) return;
   worldName = name;
   document.querySelectorAll('#worlds .world').forEach((w) => {
     w.classList.toggle('is-on', w.dataset.world === name);
   });
+  const parade = document.getElementById('parade');
+  if (parade) parade.hidden = !GAME_WORLDS.has(name);
   fx.setWorld(name);
 }
 
@@ -108,13 +127,21 @@ const DIAL = {
   zip: { ch: '11', net: 'FOX' },
   belair: { ch: '04', net: 'NBC' },
   mtv: { ch: '10', net: 'MTV' },
+  park: { ch: '24', net: 'PARK' },
   circular: { ch: '24', net: 'TOYS' },
   grocery: { ch: '18', net: 'FOOD' },
   circuit: { ch: '44', net: 'CITY' },
-  court: { ch: '12', net: 'ESPN' },
+  court: { ch: '12', net: 'NBC' },
   flash: { ch: '08', net: 'E!' },
   matrix: { ch: '99', net: 'WEB' },
   news: { ch: '02', net: 'CNN' },
+  snes: { ch: '32', net: 'NINT' },
+  n64: { ch: '64', net: 'NINT' },
+  ps1: { ch: '01', net: 'SONY' },
+  arcade: { ch: '88', net: 'COIN' },
+  gb: { ch: '16', net: 'BRICK' },
+  pc: { ch: '86', net: 'DOS' },
+  dc: { ch: '09', net: 'SEGA' },
 };
 
 function platformFor(item) {
@@ -168,7 +195,7 @@ function dressShot(item, world) {
   if (!kicker || !tag) return;
   if (card) card.dataset.store = world;
   kicker.textContent = `NEW FOR ${item.year}`;
-  if (world === 'grocery') tag.textContent = 'TASTE THE 90s';
+  if (world === 'park') tag.textContent = item.cat === 'food' ? 'CONCESSION' : 'THE MIDWAY';
   else if (world === 'circuit') tag.textContent = 'NOW IN STORES';
   else tag.textContent = 'THE TOY AISLE';
 }
