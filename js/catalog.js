@@ -67,7 +67,7 @@ export const RAW = `
 1996|music|Intergalactic|Beastie Boys|Robot suit. The last great Beasties flex of the decade.|Intergalactic (song)|Intergalactic Beastie Boys
 1996|fad|Nintendo 64|Nintendo|Four controllers. Analog as a toy. Christmas 1996.|Nintendo 64|Super Mario 64 theme
 1996|fad|Tickle Me Elmo|Tyco|The giggle. The shortage. Parents on the news.|Tickle Me Elmo|Tickle Me Elmo
-1996|fad|Pokémon Red and Blue|Game Boy|Gotta catch 'em all. A brick in your pocket that ate recess.|Pokémon Red and Blue|Pokemon Theme
+1996|game|Pokémon Red and Blue|Game Boy|Gotta catch 'em all. A brick in your pocket that ate recess.|Pokémon Red and Blue|Pokemon Theme
 1997|movie|Men in Black|Columbia|The flashy thing. Will Smith in a black suit.|Men in Black (1997 film)|Men in Black Will Smith
 1997|movie|Titanic|Paramount|The drawing. The door. The song you could not escape.|Titanic (1997 film)|My Heart Will Go On Celine Dion
 1997|movie|Austin Powers|New Line|Yeah baby. The 90s making fun of the 60s.|Austin Powers: International Man of Mystery|Soul Bossa Nova
@@ -78,7 +78,7 @@ export const RAW = `
 1997|music|Semi-Charmed Life|Third Eye Blind|The doo-doo-doo. Dark lyrics, bright 90s.|Semi-Charmed Life|Semi-Charmed Life
 1997|music|Tubthumping|Chumbawamba|I get knocked down. The pub chant that conquered America.|Tubthumping|Tubthumping Chumbawamba
 1997|fad|Tamagotchi|Bandai|Feed it or it dies. Digital guilt on a keychain.|Tamagotchi|Tamagotchi
-1997|fad|GoldenEye 007|N64|Four players. The Facility. Sleepovers ended friendships.|GoldenEye 007 (1997 video game)|GoldenEye 64
+1997|game|GoldenEye 007|N64|Four players. The Facility. Sleepovers ended friendships.|GoldenEye 007 (1997 video game)|GoldenEye 64
 1998|movie|The Truman Show|Paramount|Good morning, and in case I don't see ya.|The Truman Show|The Truman Show
 1998|movie|The Rugrats Movie|Paramount|The babies hit the multiplex. Nick as a feature.|The Rugrats Movie|Rugrats theme
 1998|movie|A Bug's Life|Disney|The circus bugs. Pixar's second swing.|A Bug's Life|A Bug's Life
@@ -90,7 +90,7 @@ export const RAW = `
 1998|music|Iris|Goo Goo Dolls|The 90s slow dance that still works.|Iris (song)|Iris Goo Goo Dolls
 1998|music|All Star|Smash Mouth|Somebody once told me. Then Shrek. Then forever.|All Star (song)|All Star Smash Mouth
 1998|fad|Furby|Tiger|It learned English. It screamed at 3 a.m.|Furby|Furby
-1998|fad|The Legend of Zelda: Ocarina of Time|N64|Hey, listen. The game lists still put first.|The Legend of Zelda: Ocarina of Time|Ocarina of Time theme
+1998|game|The Legend of Zelda: Ocarina of Time|N64|Hey, listen. The game lists still put first.|The Legend of Zelda: Ocarina of Time|Ocarina of Time theme
 1999|movie|The Matrix|Warner|Red pill. Bullet time. The last 90s movie that felt like the future.|The Matrix|Clubbed to Death Matrix
 1999|movie|Toy Story 2|Disney|When she loved me. The sequel that hurt on purpose.|Toy Story 2|When She Loved Me
 1999|movie|The Iron Giant|Warner|You are who you choose to be. Superman as a robot.|The Iron Giant|The Iron Giant
@@ -232,6 +232,53 @@ export const RAW = `
 1997|fad|Spice Girls dolls|Galoob|Girl Power you could pose. Wannabe in plastic.|Spice Girls|Wannabe Spice Girls
 1998|fad|Furbies|Tiger|It learned English. Then it screamed at 3 a.m.|Furby|Furby
 1999|fad|Nokia 3310|Nokia|Snake. The brick. The ringtone you can still hear.|Nokia 3310|Nokia ringtone
+1990|game|Super Mario World|SNES|The cape. Yoshi. The 16-bit living room.|Super Mario World|Super Mario World theme
+1991|game|Sonic the Hedgehog|Genesis|Green Hill Zone. Blast processing as a personality.|Sonic the Hedgehog (1991 video game)|Green Hill Zone Sonic
+1991|game|Street Fighter II|Arcade|Hadoukens in the pizza parlor. The cabinet that ate quarters.|Street Fighter II|Street Fighter II theme
+1992|game|Sonic the Hedgehog 2|Genesis|Chemical Plant. Tails. Two-player.|Sonic the Hedgehog 2|Chemical Plant Zone
+1992|game|Super Mario Kart|SNES|Rainbow Road. The red shell. Four-player chaos.|Super Mario Kart|Super Mario Kart theme
+1992|game|Mortal Kombat|Arcade|Finish him. The blood. The parental panic.|Mortal Kombat|Mortal Kombat theme
+1993|game|NBA Jam|Arcade|He's on fire. Boomshakalaka. The arcade as a stadium.|NBA Jam|NBA Jam arcade
+1993|game|Doom|PC|The shotgun. The hallway. PCs got loud.|Doom (1993 video game)|Doom E1M1
+1993|game|Mortal Kombat II|Arcade|Friendship. Babality. Still finish him.|Mortal Kombat II|Mortal Kombat II
+1993|game|Star Fox|SNES|Do a barrel roll. The Super FX chip flex.|Star Fox|Star Fox theme
+1993|game|The Legend of Zelda: Link's Awakening|Game Boy|The dream island. The Game Boy Zelda that still slaps.|The Legend of Zelda: Link's Awakening|Link's Awakening theme
+1994|game|Donkey Kong Country|SNES|The mine cart. Rare's prerendered flex.|Donkey Kong Country|Donkey Kong Country theme
+1994|game|Super Metroid|SNES|The rain. The morph ball. Still the map people mean.|Super Metroid|Super Metroid theme
+1994|game|Final Fantasy VI|SNES|The opera. Terra. The 16-bit RPG that felt like a movie.|Final Fantasy VI|Final Fantasy VI
+1994|game|EarthBound|SNES|Giygas. Steak. The RPG that looked like a Saturday cartoon.|EarthBound|EarthBound theme
+1994|game|Sonic the Hedgehog 3|Genesis|Ice Cap. Knuckles. The threequel.|Sonic the Hedgehog 3|Ice Cap Zone
+1994|game|Earthworm Jim|Genesis|A worm in a suit. Gross, loud, very 90s.|Earthworm Jim (video game)|Earthworm Jim
+1995|game|Chrono Trigger|SNES|New Game Plus. The millennial fair. Time travel as a toy.|Chrono Trigger|Chrono Trigger theme
+1995|game|Super Mario World 2: Yoshi's Island|SNES|The crayon world. Baby Mario's cry.|Yoshi's Island|Yoshi's Island theme
+1995|game|Donkey Kong Country 2|SNES|Rattle Battle. Dixie. The sequel people still argue is better.|Donkey Kong Country 2: Diddy's Kong Quest|Donkey Kong Country 2
+1995|game|Twisted Metal|PlayStation|The clown. The rooftops. The first PS1 sleepover game.|Twisted Metal (1995 video game)|Twisted Metal
+1996|game|Super Mario 64|N64|The analog stick. Bowser's castle. 3D as a playground.|Super Mario 64|Super Mario 64 theme
+1996|game|Crash Bandicoot|PlayStation|Wumpa fruit. The spin. The mascot war.|Crash Bandicoot (video game)|Crash Bandicoot
+1996|game|Tomb Raider|PlayStation|Lara. The braid. The 90s action figure as a game.|Tomb Raider (1996 video game)|Tomb Raider
+1996|game|Resident Evil|PlayStation|The ink ribbon. The door. Survival horror as a VHS.|Resident Evil (1996 video game)|Resident Evil
+1996|game|Mario Kart 64|N64|Wario Stadium. The blue shell. Four controllers.|Mario Kart 64|Mario Kart 64
+1996|game|Quake|PC|The rocket jump. LAN deathmatch as a sport.|Quake (video game)|Quake
+1996|game|Wave Race 64|N64|The spray. The analog as a jet ski.|Wave Race 64|Wave Race 64
+1997|game|Final Fantasy VII|PlayStation|Aerith. The city. The RPG that sold the PlayStation.|Final Fantasy VII|Final Fantasy VII
+1997|game|Castlevania: Symphony of the Night|PlayStation|What is a man. The castle that folds.|Castlevania: Symphony of the Night|Symphony of the Night
+1997|game|Star Fox 64|N64|Barrel roll again. The rumble pak.|Star Fox 64|Star Fox 64
+1997|game|Gran Turismo|PlayStation|The real driving simulator. The used-car lot.|Gran Turismo (1997 video game)|Gran Turismo
+1997|game|Diddy Kong Racing|N64|The adventure mode. Kart racing with a map.|Diddy Kong Racing|Diddy Kong Racing
+1997|game|Tekken 3|PlayStation|Jin. The arcade perfect.|Tekken 3|Tekken 3
+1998|game|Metal Gear Solid|PlayStation|The codec. The tank. Stealth as a cutscene.|Metal Gear Solid|Metal Gear Solid
+1998|game|Banjo-Kazooie|N64|The backpack. The collectathon that felt like a cartoon.|Banjo-Kazooie|Banjo-Kazooie
+1998|game|Spyro the Dragon|PlayStation|The purple dragon. The glide.|Spyro the Dragon (video game)|Spyro the Dragon
+1998|game|Half-Life|PC|The tram. The crowbar. FPS grows up.|Half-Life (video game)|Half-Life
+1998|game|StarCraft|PC|The Zerg rush. The LAN that ate high school.|StarCraft (video game)|StarCraft
+1998|game|Resident Evil 2|PlayStation|The RPD. Two discs. Leon and Claire.|Resident Evil 2|Resident Evil 2
+1998|game|Mario Party|N64|The mini-games. Friendships ended.|Mario Party (video game)|Mario Party
+1999|game|Super Smash Bros.|N64|The smash. Four characters. The living-room brawl.|Super Smash Bros.|Super Smash Bros
+1999|game|Tony Hawk's Pro Skater|PlayStation|The 900. The warehouse. Skate as a soundtrack.|Tony Hawk's Pro Skater|Tony Hawk's Pro Skater
+1999|game|Silent Hill|PlayStation|The fog. The radio. Horror that stayed with you.|Silent Hill (video game)|Silent Hill
+1999|game|Donkey Kong 64|N64|The expansion pak. Five Kongs. The banana hoard.|Donkey Kong 64|Donkey Kong 64
+1999|game|Pokémon Gold and Silver|Game Boy Color|Two regions. The sequel that felt like growing up.|Pokémon Gold and Silver|Pokemon Gold Silver
+1999|game|Soulcalibur|Dreamcast|The ring. The sword. Arcade perfect on a console.|Soulcalibur|Soulcalibur
 `;
 
 export function parseCatalog(src) {

@@ -1,24 +1,19 @@
 /** One HTML audio element. Unlock on the same tap. Groove always plays. */
 
+import { queriesFor, pickTrack, labelFor } from './cues.js';
+
 const SILENT = 'audio/silence.wav';
 const MOBILE = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
   || (navigator.maxTouchPoints > 1 && matchMedia('(pointer: fine)').matches === false);
 
 const previewCache = new Map();
 
-function scoreTrack(row, item) {
-  const blob = `${row.trackName || ''} ${row.artistName || ''} ${row.collectionName || ''}`.toLowerCase();
-  const title = item.title.toLowerCase();
-  let n = 0;
-  if (blob.includes(title.slice(0, 18))) n += 6;
-  String(item.title).toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2).forEach((w) => {
-    if (blob.includes(w)) n += 1;
-  });
-  if (item.meta && blob.includes(String(item.meta).toLowerCase().slice(0, 14))) n += 3;
-  const year = String(row.releaseDate || '').slice(0, 4);
-  if (year && Math.abs(Number(year) - Number(item.year)) <= 2) n += 2;
-  if (/karaoke|tribute|cover|lullaby|8-bit|kidz bop|mr dooves|piano tribute|tv themes on/i.test(blob)) n -= 8;
-  return n;
+async function itunesSongs(q) {
+  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&country=US&limit=12`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.results || [];
 }
 
 export class Boombox {
@@ -70,11 +65,23 @@ export class Boombox {
     this.bed.loop = true;
     if (!this.bed.src) this.bed.src = SILENT;
     this.bed.play().catch(() => { this.needTap = true; });
-    if (!this.unlocked) {
-      this.unlocked = true;
-      this.startGroove();
+    if (this.unlocked) return;
+    this.unlocked = true;
+    this.logon = document.getElementById('logon');
+    if (this.logon) {
+      this.logon.playsInline = true;
+      this.logon.setAttribute('playsinline', '');
+      this.logon.setAttribute('webkit-playsinline', '');
+      this.logon.muted = false;
+      this.logon.volume = 0.01;
+      this.logon.play().then(() => {
+        this.logon.pause();
+        try { this.logon.currentTime = 0; } catch {}
+        this.logon.volume = 0.95;
+      }).catch(() => {});
     }
-    this.scratch();
+    this.startGroove();
+    this.duckGroove(0.02);
   }
 
   tick() {
@@ -200,20 +207,24 @@ export class Boombox {
   async lookup(item) {
     const key = `${item.year}|${item.title}|${item.cue}`;
     if (previewCache.has(key)) return previewCache.get(key);
-    const q = item.cue || `${item.title} ${item.meta || ''}`;
+    const queries = queriesFor(item).filter(Boolean).slice(0, 3);
+    const pool = [];
     try {
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&country=US&limit=12`;
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      const data = await res.json();
-      const hits = (data.results || []).filter((r) => r.previewUrl);
-      hits.sort((a, b) => scoreTrack(b, item) - scoreTrack(a, item));
-      const best = hits[0] && scoreTrack(hits[0], item) >= 3 ? hits[0] : hits[0] || null;
-      previewCache.set(key, best);
-      return best;
+      for (const q of queries) {
+        const rows = await itunesSongs(q);
+        pool.push(...rows);
+        const picked = pickTrack(pool, item);
+        if (picked) {
+          previewCache.set(key, picked);
+          return picked;
+        }
+      }
     } catch {
+      previewCache.set(key, null);
       return null;
     }
+    previewCache.set(key, null);
+    return null;
   }
 
   async play(item) {
@@ -230,7 +241,7 @@ export class Boombox {
     }
     const same = this.bed.currentSrc === track.previewUrl || this.bed.src === track.previewUrl;
     if (same && !this.bed.paused) {
-      this.label = `${track.artistName} — ${track.trackName}`;
+      this.label = labelFor(track, item);
       this.onLabel(this.label);
       return;
     }
@@ -238,7 +249,7 @@ export class Boombox {
     this.bed.muted = false;
     this.bed.volume = MOBILE ? 0.9 : 0.6;
     this.bed.src = track.previewUrl;
-    this.label = `${track.artistName} — ${track.trackName}`;
+    this.label = labelFor(track, item);
     this.onLabel(this.label);
     this.duckGroove(0.03);
     try {
@@ -249,5 +260,106 @@ export class Boombox {
       this.onLabel('TAP ANYWHERE FOR MUSIC');
       this.duckGroove(0.16);
     }
+  }
+
+  modemTone(freq, when, dur, type = 'sine', vol = 0.05) {
+    if (!this.ctx || this.muted) return;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, when);
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(vol, when + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    o.connect(g).connect(this.master || this.ctx.destination);
+    o.start(when);
+    o.stop(when + dur + 0.03);
+  }
+
+  modemNoise(when, dur, vol, freq) {
+    if (!this.ctx || this.muted) return;
+    const sr = this.ctx.sampleRate;
+    const n = Math.max(1, Math.floor(sr * dur));
+    const buf = this.ctx.createBuffer(1, n, sr);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    const src = this.ctx.createBufferSource();
+    const bp = this.ctx.createBiquadFilter();
+    const g = this.ctx.createGain();
+    src.buffer = buf;
+    bp.type = 'bandpass';
+    bp.frequency.value = freq;
+    bp.Q.value = 0.7;
+    g.gain.setValueAtTime(vol, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    src.connect(bp).connect(g).connect(this.master || this.ctx.destination);
+    src.start(when);
+    src.stop(when + dur);
+  }
+
+  handshake(when, dur = 1.35) {
+    const steps = 42;
+    for (let i = 0; i < steps; i++) {
+      const f = 240 + ((i * 191) % 2600);
+      this.modemTone(f, when + i * (dur / steps), dur / steps + 0.04, i % 3 ? 'square' : 'sawtooth', 0.05);
+    }
+    this.modemNoise(when, dur, 0.09, 1600);
+    this.modemNoise(when + 0.15, dur * 0.8, 0.07, 2800);
+    this.modemTone(2100, when, 0.35, 'sine', 0.055);
+    this.modemTone(1650, when + 0.4, 0.2, 'sine', 0.04);
+  }
+
+  async playLogon() {
+    if (this.muted) return;
+    const el = this.logon;
+    if (el) {
+      el.muted = false;
+      el.volume = 0.95;
+      try { el.currentTime = 0; } catch {}
+      try {
+        await el.play();
+        await new Promise((r) => {
+          el.onended = () => r();
+          setTimeout(r, 2600);
+        });
+        return;
+      } catch {}
+    }
+    if (typeof speechSynthesis === 'undefined') return;
+    try { speechSynthesis.cancel(); } catch {}
+    const u = new SpeechSynthesisUtterance("You've got nostalgia.");
+    u.rate = 1;
+    u.pitch = 0.97;
+    speechSynthesis.speak(u);
+    await new Promise((r) => setTimeout(r, 1800));
+  }
+
+  async dialUp(onStatus) {
+    this.unlock();
+    const say = (s) => { try { onStatus?.(s); } catch {} };
+    if (this.muted) {
+      say('Connected.');
+      return;
+    }
+    this.duckGroove(0.015);
+    const t = this.ctx.currentTime;
+    say('Dialing…');
+    this.modemTone(350, t, 0.32, 'sine', 0.055);
+    this.modemTone(440, t, 0.32, 'sine', 0.055);
+    const keys = [[941, 1336], [697, 1209], [697, 1477], [770, 1336], [852, 1336]];
+    keys.forEach((p, i) => {
+      this.modemTone(p[0], t + 0.36 + i * 0.08, 0.07, 'sine', 0.06);
+      this.modemTone(p[1], t + 0.36 + i * 0.08, 0.07, 'sine', 0.06);
+    });
+    say('Handshake…');
+    this.modemTone(2100, t + 0.85, 0.32, 'sine', 0.05);
+    this.handshake(t + 1.1, 1.4);
+    this.modemNoise(t + 2.3, 0.35, 0.06, 900);
+    await new Promise((r) => setTimeout(r, 2800));
+    say("You've got nostalgia.");
+    this.modemTone(880, this.ctx.currentTime, 0.12, 'sine', 0.04);
+    this.modemTone(1320, this.ctx.currentTime + 0.1, 0.18, 'sine', 0.035);
+    await this.playLogon();
+    say('Connected.');
   }
 }

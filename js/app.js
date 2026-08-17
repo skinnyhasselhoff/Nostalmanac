@@ -4,8 +4,8 @@ import { youtubeUrl } from './wiki.js';
 import { Boombox } from './sound.js';
 
 const $ = (id) => document.getElementById(id);
-const VIBE = { cartoon: 'toon', movie: 'movie', music: 'jam', fad: 'fad' };
-const LABEL = { cartoon: 'CARTOON', movie: 'MOVIE', music: 'SONG', fad: 'FAD' };
+const VIBE = { cartoon: 'toon', movie: 'movie', music: 'jam', game: 'court', fad: 'fad' };
+const LABEL = { cartoon: 'CARTOON', movie: 'MOVIE', music: 'SONG', game: 'GAME', fad: 'FAD' };
 
 const boom = new Boombox();
 let deck = ITEMS.slice();
@@ -15,6 +15,45 @@ let catFilter = '';
 let artTok = 0;
 let wipeLock = false;
 let coolUntil = 0;
+
+function rainMatrix(canvas) {
+  const ctx = canvas.getContext('2d');
+  const kata = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ012345789Z';
+  let drops = [];
+  let font = 16;
+  let live = true;
+  const fit = () => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = innerWidth;
+    const h = innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    font = Math.max(12, Math.floor(w / 42));
+    drops = Array.from({ length: Math.ceil(w / font) }, () => Math.random() * -40);
+  };
+  fit();
+  window.addEventListener('resize', fit);
+  const tick = () => {
+    if (!live) return;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    ctx.font = `${font}px monospace`;
+    drops.forEach((y, i) => {
+      const x = i * font;
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = '#b6ffce';
+      ctx.fillText(kata[Math.floor(Math.random() * kata.length)], x, y * font);
+      ctx.fillStyle = '#00c853';
+      ctx.fillText(kata[Math.floor(Math.random() * kata.length)], x, (y - 1) * font);
+      if (y * font > innerHeight && Math.random() > 0.975) drops[i] = 0;
+      else drops[i] = y + 0.85;
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  };
+  tick();
+  return () => { live = false; };
+}
 
 function wikiSearch(item) {
   const q = item.query || item.title;
@@ -86,7 +125,7 @@ function go(next, fx) {
   if (!deck.length) return;
   i = (next + deck.length) % deck.length;
   const item = deck[i];
-  const kind = fx || (item.cat === 'music' ? 'scratch' : 'static');
+  const kind = fx || (item.cat === 'music' || item.cat === 'game' ? 'scratch' : 'static');
   wipe(kind);
   render(item);
   boom.play(item);
@@ -135,7 +174,7 @@ function boot() {
   const years = $('years');
   years.innerHTML = `<button type="button" data-year="" class="on">ALL</button>`
     + Array.from({ length: 10 }, (_, n) => 1990 + n).map((y) => `<button type="button" data-year="${y}">${y}</button>`).join('');
-  $('cats').innerHTML = [['', 'ALL'], ['cartoon', 'CARTOONS'], ['movie', 'MOVIES'], ['music', 'SONGS'], ['fad', 'FADS']]
+  $('cats').innerHTML = [['', 'ALL'], ['cartoon', 'CARTOONS'], ['movie', 'MOVIES'], ['music', 'SONGS'], ['game', 'GAMES'], ['fad', 'FADS']]
     .map(([id, label], n) => `<button type="button" data-cat="${id}" class="${n === 0 ? 'on' : ''}">${label}</button>`).join('');
 
   years.addEventListener('click', (e) => {
@@ -162,7 +201,7 @@ function boot() {
     const idx = picked ? deck.findIndex((it) => it.title === picked.title && it.cat === picked.cat) : 0;
     i = idx < 0 ? 0 : idx;
     closeDrawer();
-    go(i, picked?.cat === 'music' ? 'scratch' : 'static');
+    go(i, picked?.cat === 'music' || picked?.cat === 'game' ? 'scratch' : 'static');
   });
 
   $('btnSearch').addEventListener('click', openDrawer);
@@ -201,16 +240,21 @@ function boot() {
   }, { passive: true });
 
   let started = false;
-  const start = () => {
+  const stopRain = rainMatrix($('bootFx'));
+  const start = async () => {
     if (started) return;
     started = true;
-    coolUntil = Date.now() + 900;
+    coolUntil = Date.now() + 5000;
     boom.unlock();
-    $('boot').classList.add('out');
+    $('connect').classList.add('booting');
+    await boom.dialUp((s) => { $('bootStatus').textContent = s; });
+    stopRain();
+    $('connect').classList.add('gone');
+    coolUntil = Date.now() + 500;
     go(0, 'scratch');
   };
   ['pointerdown', 'touchstart', 'click'].forEach((ev) => {
-    $('boot').addEventListener(ev, start, { passive: true });
+    $('connect').addEventListener(ev, start, { passive: true });
   });
 }
 
