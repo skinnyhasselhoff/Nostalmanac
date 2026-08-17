@@ -1,26 +1,56 @@
-/** Modem sting on enter + short wipe stingers. Music lives in TuneBed, not here. */
+/** Modem sting, logon line, wipe stingers. Music lives in TuneBed. */
 
 export class NostalAudio {
   constructor() {
     this.ctx = null;
     this.master = null;
+    this.keep = null;
     this.muted = false;
     this.nodes = [];
+    this.logonBuf = null;
+    this.logonDecoded = null;
+    this.logonStarted = false;
+    this.logonEl = new Audio('audio/youve-got-nostalgia.wav');
+    this.logonEl.preload = 'auto';
+    this.logonEl.playsInline = true;
+    this.logonEl.setAttribute('playsinline', '');
+    this.logonEl.setAttribute('webkit-playsinline', '');
+    this.logonEl.hidden = true;
+    document.body.appendChild(this.logonEl);
+    fetch('audio/youve-got-nostalgia.wav')
+      .then((r) => r.arrayBuffer())
+      .then((buf) => { this.logonBuf = buf; })
+      .catch(() => {});
   }
 
-  async unlock() {
+  unlock() {
+    const AC = window.AudioContext || window.webkitAudioContext;
     if (!this.ctx || this.ctx.state === 'closed') {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.ctx = new AC();
       this.master = this.ctx.createGain();
       this.master.gain.value = 1;
       this.master.connect(this.ctx.destination);
     }
-    if (this.ctx.state === 'suspended') await this.ctx.resume();
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    if (!this.keep && this.ctx) {
+      const o = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      o.frequency.value = 40;
+      g.gain.value = 0.00008;
+      o.connect(g).connect(this.ctx.destination);
+      o.start();
+      this.keep = o;
+    }
+    if (this.logonBuf && this.ctx && !this.logonDecoded) {
+      const copy = this.logonBuf.slice(0);
+      this.ctx.decodeAudioData(copy).then((dec) => { this.logonDecoded = dec; }).catch(() => {});
+    }
   }
 
   setMuted(v) {
     this.muted = v;
-    this.silence();
+    this.stopAll();
+    this.stopLogon();
     if (this.master && this.ctx && this.ctx.state !== 'closed') {
       this.master.gain.value = v ? 0 : 1;
     }
@@ -38,9 +68,6 @@ export class NostalAudio {
     this.stopAll();
     this.stopLogon();
     try { speechSynthesis.cancel(); } catch {}
-    if (this.master && this.ctx && this.ctx.state !== 'closed') {
-      this.master.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
-    }
   }
 
   _out() {
@@ -100,80 +127,112 @@ export class NostalAudio {
     this.tone(1568, when + 0.12, 0.18, 'triangle', 0.02);
   }
 
-  async speakNostalgia() {
-    if (this.muted) return;
-    const played = await this.playLogon();
-    if (played) return;
-    if (typeof speechSynthesis === 'undefined') return;
-    try { speechSynthesis.cancel(); } catch {}
-    const waitVoices = () => new Promise((resolve) => {
-      const ready = speechSynthesis.getVoices();
-      if (ready.length) return resolve(ready);
-      const t = setTimeout(() => resolve(speechSynthesis.getVoices()), 600);
-      speechSynthesis.addEventListener('voiceschanged', () => {
-        clearTimeout(t);
-        resolve(speechSynthesis.getVoices());
-      }, { once: true });
-    });
-    const voices = await waitVoices();
-    const prefer = [/mark/i, /guy/i, /davis/i, /andrew/i, /aaron/i, /david/i, /alex/i, /daniel/i, /samantha/i, /google us english/i];
-    let voice = null;
-    for (const re of prefer) {
-      voice = voices.find((v) => re.test(v.name) && /^en/i.test(v.lang));
-      if (voice) break;
+  scratch(when = this.ctx?.currentTime || 0, hits = 3) {
+    if (!this.ctx || this.muted) return;
+    for (let i = 0; i < hits; i++) {
+      const t = when + i * 0.09;
+      const dur = 0.11 + (i % 2) * 0.05;
+      const len = Math.max(1, Math.floor(this.ctx.sampleRate * dur));
+      const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let s = 0; s < len; s++) data[s] = (Math.random() * 2 - 1) * (1 - s / len);
+      const src = this.ctx.createBufferSource();
+      src.buffer = buf;
+      const bp = this.ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.Q.value = 2.4;
+      const startF = i % 2 ? 2400 : 900;
+      const endF = i % 2 ? 280 : 1800;
+      bp.frequency.setValueAtTime(startF, t);
+      bp.frequency.exponentialRampToValueAtTime(Math.max(80, endF), t + dur);
+      const g = this.ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.11, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(bp).connect(g).connect(this._out());
+      src.start(t);
+      src.stop(t + dur + 0.02);
+      this.nodes.push(src, bp, g);
     }
-    if (!voice) voice = voices.find((v) => /^en[-_]?US/i.test(v.lang)) || voices.find((v) => /^en/i.test(v.lang));
-    const say = (text, rate, after) => new Promise((resolve) => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.rate = rate;
-      u.pitch = 0.97;
-      u.volume = 0.95;
-      if (voice) u.voice = voice;
-      u.onend = resolve;
-      u.onerror = resolve;
-      speechSynthesis.speak(u);
-      setTimeout(resolve, after);
-    });
-    await say("You've got nostalgia.", 1, 2800);
   }
 
-  playLogon() {
-    return new Promise((resolve) => {
-      this.stopLogon();
-      const el = new Audio('audio/youve-got-nostalgia.wav');
-      el.preload = 'auto';
-      el.volume = 0.95;
-      el.playbackRate = 1;
-      el.playsInline = true;
-      el.setAttribute('playsinline', '');
-      this.logonEl = el;
-      let settled = false;
-      const done = (ok) => {
-        if (settled) return;
-        settled = true;
-        el.onended = el.onerror = null;
-        resolve(ok);
-      };
-      el.onended = () => done(true);
-      el.onerror = () => done(false);
-      el.play().then(() => {
-        const wait = Number.isFinite(el.duration) && el.duration > 0
-          ? el.duration * 1000 + 180
-          : 2600;
-        setTimeout(() => done(true), wait);
-      }).catch(() => done(false));
-    });
+  staticBurst(when = this.ctx?.currentTime || 0) {
+    this.noise(when, 0.22, 0.08, 3200);
+    this.noise(when, 0.18, 0.05, 800);
+    this.tone(90, when, 0.12, 'sawtooth', 0.02);
+  }
+
+  slimeSplat(when = this.ctx?.currentTime || 0) {
+    this.noise(when, 0.32, 0.07, 500);
+    this.tone(140, when, 0.28, 'sine', 0.05);
+    this.tone(70, when + 0.08, 0.3, 'sine', 0.035);
+    this.noise(when + 0.12, 0.2, 0.04, 1800);
+  }
+
+  startLogonNow() {
+    if (this.muted || this.logonStarted) return;
+    this.logonStarted = true;
+    this.logonEl.muted = false;
+    this.logonEl.volume = 0.95;
+    try { this.logonEl.currentTime = 0; } catch {}
+    const p = this.logonEl.play();
+    if (p && p.catch) {
+      p.catch(() => {
+        if (!this.playDecodedLogon()) this.speakFallback();
+      });
+    }
+  }
+
+  speakFallback() {
+    if (typeof speechSynthesis === 'undefined') return;
+    try { speechSynthesis.cancel(); } catch {}
+    const u = new SpeechSynthesisUtterance("You've got nostalgia.");
+    u.rate = 1;
+    u.pitch = 0.97;
+    u.volume = 1;
+    speechSynthesis.speak(u);
+  }
+
+  playDecodedLogon() {
+    if (this.muted || !this.ctx || !this.logonDecoded) return false;
+    const src = this.ctx.createBufferSource();
+    const g = this.ctx.createGain();
+    g.gain.value = 0.95;
+    src.buffer = this.logonDecoded;
+    src.connect(g).connect(this._out());
+    src.start();
+    this.nodes.push(src, g);
+    return true;
+  }
+
+  async speakNostalgia() {
+    if (this.muted) return;
+    if (this.logonStarted && !this.logonEl.paused) {
+      await new Promise((r) => {
+        this.logonEl.onended = () => r();
+        setTimeout(r, 2400);
+      });
+      return;
+    }
+    if (this.logonBuf && this.ctx && !this.logonDecoded) {
+      try {
+        this.logonDecoded = await this.ctx.decodeAudioData(this.logonBuf.slice(0));
+      } catch {}
+    }
+    if (this.playDecodedLogon()) {
+      await new Promise((r) => setTimeout(r, 2200));
+      return;
+    }
+    this.startLogonNow();
+    await new Promise((r) => setTimeout(r, 2200));
   }
 
   stopLogon() {
-    if (!this.logonEl) return;
-    try { this.logonEl.pause(); } catch {}
-    try { this.logonEl.removeAttribute('src'); this.logonEl.load(); } catch {}
-    this.logonEl = null;
+    try { this.logonEl.pause(); this.logonEl.currentTime = 0; } catch {}
   }
 
   async dialUp(onStatus) {
-    await this.unlock();
+    this.unlock();
     const say = (s) => { try { onStatus?.(s); } catch {} };
     if (this.muted) {
       say('Connected.');
@@ -181,37 +240,22 @@ export class NostalAudio {
     }
     const t = this.ctx.currentTime;
     say('Dialing…');
-    this.tone(350, t, 0.38, 'sine', 0.04);
-    this.tone(440, t, 0.38, 'sine', 0.04);
-    const keys = [[941, 1336], [697, 1209], [697, 1477], [770, 1336], [852, 1336], [770, 1477], [941, 1209]];
+    this.tone(350, t, 0.28, 'sine', 0.045);
+    this.tone(440, t, 0.28, 'sine', 0.045);
+    const keys = [[941, 1336], [697, 1209], [697, 1477], [770, 1336]];
     keys.forEach((p, i) => {
-      this.tone(p[0], t + 0.48 + i * 0.09, 0.07, 'sine', 0.045);
-      this.tone(p[1], t + 0.48 + i * 0.09, 0.07, 'sine', 0.045);
+      this.tone(p[0], t + 0.32 + i * 0.07, 0.06, 'sine', 0.05);
+      this.tone(p[1], t + 0.32 + i * 0.07, 0.06, 'sine', 0.05);
     });
-    this.tone(440, t + 1.2, 0.38, 'sine', 0.03);
-    this.tone(480, t + 1.2, 0.38, 'sine', 0.03);
-    this.tone(440, t + 1.78, 0.32, 'sine', 0.028);
-    this.tone(480, t + 1.78, 0.32, 'sine', 0.028);
     say('Handshake…');
-    this.tone(2100, t + 2.2, 0.42, 'sine', 0.035);
-    this.handshake(t + 2.62, 1.2);
-    this.tone(1650, t + 3.85, 0.16, 'square', 0.014);
-    this.tone(2100, t + 4.05, 0.12, 'square', 0.012);
-    await new Promise((r) => setTimeout(r, 4300));
+    this.tone(2100, t + 0.7, 0.28, 'sine', 0.04);
+    this.handshake(t + 0.95, 0.7);
+    await new Promise((r) => setTimeout(r, 1700));
     say('Connected.');
     this.chime(this.ctx.currentTime);
-    await new Promise((r) => setTimeout(r, 420));
+    await new Promise((r) => setTimeout(r, 280));
     await this.speakNostalgia();
-    this.silence();
-  }
-
-  tick() {
-    if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
-    this.noise(this.ctx.currentTime, 0.03, 0.022, 3400);
-  }
-
-  staticBurst() {
-    this.wipe('static', true);
+    this.stopAll();
   }
 
   whoosh(when, dur = 0.28, vol = 0.05) {
@@ -225,74 +269,59 @@ export class NostalAudio {
     if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
     const t = this.ctx.currentTime;
     if (!genreChange) {
-      this.whoosh(t, 0.18, 0.04);
+      this.staticBurst(t);
       return;
     }
+    this.scratch(t, type === 'neon' || type === 'checker' ? 4 : 2);
     if (type === 'slime') {
-      this.whoosh(t, 0.22, 0.04);
-      this.noise(t, 0.28, 0.055, 700);
-      this.tone(160, t, 0.22, 'sine', 0.035);
-      this.tone(70, t + 0.1, 0.24, 'sine', 0.025);
+      this.slimeSplat(t);
       return;
     }
     if (type === 'checker') {
       this.whoosh(t, 0.2, 0.04);
       this.noise(t, 0.16, 0.04, 2200);
-      this.tone(420, t, 0.05, 'sine', 0.02);
-      this.tone(280, t + 0.08, 0.08, 'sine', 0.018);
       return;
     }
     if (type === 'leader') {
       this.tone(880, t, 0.07, 'sine', 0.035);
       this.tone(880, t + 0.24, 0.07, 'sine', 0.035);
       this.tone(880, t + 0.48, 0.14, 'sine', 0.04);
-      this.whoosh(t + 0.1, 0.35, 0.03);
       return;
     }
     if (type === 'tape') {
       this.tone(90, t, 0.08, 'square', 0.018);
       this.noise(t, 0.22, 0.05, 800);
-      this.tone(70, t + 0.1, 0.18, 'sawtooth', 0.014);
-      this.whoosh(t + 0.12, 0.2, 0.03);
       return;
     }
     if (type === 'neon') {
-      this.tone(110, t, 0.22, 'sine', 0.04);
-      this.tone(220, t + 0.05, 0.16, 'triangle', 0.02);
       this.whoosh(t, 0.24, 0.045);
       return;
     }
     if (type === 'paparazzi') {
       this.noise(t, 0.035, 0.09, 4200);
-      this.tone(1600, t, 0.025, 'square', 0.018);
       this.noise(t + 0.14, 0.035, 0.08, 4000);
       this.noise(t + 0.3, 0.04, 0.09, 3800);
       return;
     }
     if (type === 'glitch') {
       this.handshake(t, 0.35);
-      this.whoosh(t + 0.1, 0.2, 0.04);
       return;
     }
     if (type === 'splash') {
       this.tone(784, t, 0.1, 'sine', 0.03);
       this.tone(1046, t + 0.09, 0.16, 'sine', 0.028);
-      this.whoosh(t, 0.2, 0.035);
       return;
     }
     if (type === 'sitcom') {
       this.tone(392, t, 0.1, 'triangle', 0.03);
       this.tone(523, t + 0.08, 0.14, 'triangle', 0.028);
-      this.whoosh(t, 0.18, 0.03);
       return;
     }
     if (type === 'stadium') {
       this.noise(t, 0.32, 0.055, 600);
       this.tone(98, t, 0.22, 'sawtooth', 0.02);
-      this.whoosh(t, 0.28, 0.04);
       return;
     }
-    this.whoosh(t, 0.26, 0.05);
-    this.noise(t, 0.22, 0.05, 2400);
+    this.staticBurst(t);
   }
 }

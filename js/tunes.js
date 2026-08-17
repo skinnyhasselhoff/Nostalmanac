@@ -1,10 +1,11 @@
-/** Quiet Apple Music previews. Wrong song = silence. Primed on the first tap so phones can play. */
+/** Apple Music previews. Primed in the same tap that enters so phones can play. */
 
 import { queriesFor, pickTrack, labelFor } from './cues.js';
 
 const cache = new Map();
 const SILENT = 'audio/silence.wav';
-const MOBILE = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+const MOBILE = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
+  || (navigator.maxTouchPoints > 1 && !window.matchMedia('(pointer: fine)').matches);
 
 function makePlayer() {
   const el = new Audio();
@@ -22,7 +23,7 @@ export class TuneBed {
   constructor() {
     this.el = makePlayer();
     this.hold = makePlayer();
-    this.volume = MOBILE ? 0.42 : 0.28;
+    this.volume = MOBILE ? 0.55 : 0.32;
     this.el.volume = this.volume;
     this.muted = false;
     this.token = 0;
@@ -30,19 +31,26 @@ export class TuneBed {
     this.onLabel = () => {};
     this.pending = null;
     this.armed = false;
+    this.el.src = SILENT;
+    this.hold.src = SILENT;
   }
 
-  async prime() {
-    if (this.armed) return;
+  prime() {
     this.armed = true;
-    const boot = async (node) => {
-      node.src = SILENT;
-      node.loop = true;
-      node.muted = false;
-      node.volume = 0.01;
-      try { await node.play(); } catch { this.armed = false; }
+    const boot = (node) => {
+      try {
+        if (!node.src) node.src = SILENT;
+        node.loop = true;
+        node.muted = false;
+        node.volume = 0.01;
+        const p = node.play();
+        if (p && p.catch) p.catch(() => { this.armed = false; });
+      } catch {
+        this.armed = false;
+      }
     };
-    await Promise.all([boot(this.hold), boot(this.el)]);
+    boot(this.hold);
+    boot(this.el);
   }
 
   setMuted(v) {
@@ -63,22 +71,20 @@ export class TuneBed {
       this.play(this.pending);
       return;
     }
-    if (!this.el.src || this.el.src.endsWith(SILENT)) return;
+    if (!this.el.src || this.el.src.includes('silence.wav')) return;
     this.el.play().catch(() => {});
   }
 
   kick() {
     if (this.muted) return;
-    if (!this.armed) this.prime();
-    this.hold.play().catch(() => {});
+    this.prime();
     this.resume();
   }
 
   stop() {
     this.token += 1;
     this.pending = null;
-    this.el.removeAttribute('src');
-    this.el.load();
+    this.el.src = SILENT;
     this.label = '';
     this.onLabel('');
   }
@@ -86,8 +92,6 @@ export class TuneBed {
   async play(item) {
     if (this.muted || !item) return;
     this.pending = item;
-    this.label = '';
-    this.onLabel('');
     const token = ++this.token;
     const track = await this.lookup(item);
     if (token !== this.token) return;
@@ -97,7 +101,9 @@ export class TuneBed {
       this.onLabel('');
       return;
     }
-    if (this.el.src === track.previewUrl && !this.el.paused) {
+    const same = this.el.src === track.previewUrl || this.el.src.endsWith(track.previewUrl);
+    if (same && !this.el.paused) {
+      this.label = labelFor(track, item);
       this.onLabel(this.label);
       return;
     }

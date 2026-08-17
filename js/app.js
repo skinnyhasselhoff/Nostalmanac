@@ -42,7 +42,7 @@ function themeFor(item) {
     if (PHONE.test(blob)) return { kind: 'tech', world: 'bayside', wipe: 'sitcom' };
     return { kind: 'ad', world: 'circuit', wipe: 'splash' };
   }
-  if (item.cat === 'game') return { kind: 'game', world: gameWorld(item), wipe: 'checker' };
+  if (item.cat === 'game') return { kind: 'game', world: gameWorld(item), wipe: 'static' };
   const map = {
     cartoon: { kind: 'cartoon', world: 'nick', wipe: 'slime' },
     toy: { kind: 'ad', world: 'park', wipe: 'splash' },
@@ -56,10 +56,9 @@ function themeFor(item) {
   return map[item.cat] || map.web;
 }
 
-const TUBE = new Set(['movie', 'game', 'tv', 'cartoon']);
-
 function faceKind(kind) {
-  return TUBE.has(kind) ? 'tv' : kind;
+  if (kind === 'cartoon') return 'tv';
+  return kind;
 }
 
 function shuffle(list) {
@@ -138,8 +137,6 @@ function setWorld(name) {
   });
   const parade = document.getElementById('parade');
   if (parade) parade.hidden = !GAME_WORLDS.has(name);
-  const standees = document.getElementById('standees');
-  if (standees) standees.dataset.world = name;
   fx.setWorld(name);
 }
 
@@ -493,29 +490,36 @@ initDrawer({
 
 startDeck();
 
-connect.addEventListener('click', async () => {
+let booting = false;
+function bootIn() {
+  if (entered || booting) return;
+  booting = true;
+  audio.unlock();
+  tunes.prime();
+  audio.startLogonNow();
   const status = document.getElementById('bootStatus');
   const fill = document.getElementById('bootFill');
   connect.classList.add('booting');
   if (fill) fill.style.width = '100%';
-  try { await tunes.prime(); } catch {}
-  try {
-    await audio.dialUp((s) => { if (status) status.textContent = s; });
-  } catch {}
-  audio.silence();
-  entered = true;
-  connect.classList.add('gone');
-  connect.hidden = true;
-  bootFx.setWorld('');
-  tunes.play(pool[index]);
-}, { once: true });
+  audio.dialUp((s) => { if (status) status.textContent = s; }).catch(() => {}).finally(() => {
+    audio.stopAll();
+    entered = true;
+    connect.classList.add('gone');
+    connect.hidden = true;
+    bootFx.setWorld('');
+    tunes.play(pool[index]);
+  });
+}
+connect.addEventListener('pointerdown', bootIn);
+connect.addEventListener('click', bootIn);
 
 const kickAudio = () => {
+  audio.unlock();
   if (!entered || tunes.muted) return;
   tunes.kick();
 };
 window.addEventListener('pointerdown', kickAudio, { passive: true });
-window.addEventListener('touchend', kickAudio, { passive: true });
+window.addEventListener('touchstart', kickAudio, { passive: true });
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
@@ -542,13 +546,15 @@ tunes.onLabel = (label) => {
 };
 
 const worldsEl = document.getElementById('worlds');
+const FINE = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 function parallax(x, y) {
+  if (!FINE) return;
   const nx = x / innerWidth - 0.5;
   const ny = y / innerHeight - 0.5;
   hero.style.transform = `rotateY(${nx * 8}deg) rotateX(${-ny * 5}deg)`;
   worldsEl.style.transform = `translate(${nx * -18}px, ${ny * -12}px) scale(1.05)`;
   const rig = document.querySelector('.obj.is-on .rig');
-  if (rig) rig.style.transform = `rotateY(${-18 + nx * 22}deg) rotateX(${7 - ny * 10}deg)`;
+  if (rig) rig.style.transform = `rotateY(${-12 + nx * 16}deg) rotateX(${6 - ny * 8}deg)`;
 }
 window.addEventListener('pointermove', (e) => {
   if (busy()) return;

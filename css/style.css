@@ -117,40 +117,20 @@ html, body {
   opacity: 0;
   transition: opacity .75s ease;
   overflow: hidden;
-  background: #111 center / cover no-repeat;
   transform-origin: 50% 42%;
 }
-.world.is-on { opacity: 1; animation: ken 32s ease-in-out infinite alternate; filter: saturate(1.2) contrast(1.06) brightness(1.05); }
-.world .l, .world .sign { display: none !important; }
-.world::before {
-  content: '';
+.world.is-on { opacity: 1; animation: ken 28s ease-in-out infinite alternate; }
+.world .l {
   position: absolute;
-  inset: 0;
-  z-index: 2;
   pointer-events: none;
-  mix-blend-mode: soft-light;
-  background:
-    radial-gradient(ellipse at 18% 6%, rgba(255, 214, 90, .55), transparent 46%),
-    radial-gradient(ellipse at 84% 92%, rgba(255, 90, 150, .28), transparent 48%);
-  animation: gradePulse 8s ease-in-out infinite alternate;
 }
 @keyframes ken {
-  from { transform: scale(1.06) translate3d(-1.4%, 0, 0); }
-  to { transform: scale(1.14) translate3d(1.4%, 0.8%, 0); }
+  from { transform: scale(1.04) translate3d(-1%, 0, 0); }
+  to { transform: scale(1.1) translate3d(1%, 0.6%, 0); }
 }
-@keyframes gradePulse {
-  from { opacity: .45; }
-  to { opacity: .8; }
-}
-.glass, #pixels, #grain, #chroma, #track, #parade { display: none !important; }
-#fxCanvas { opacity: 1; pointer-events: none; z-index: 1; mix-blend-mode: screen; }
-#standees {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  overflow: hidden;
-}
+.glass, #pixels, #grain, #chroma, #track { display: none !important; }
+#fxCanvas { opacity: 1; pointer-events: none; z-index: 1; }
+#standees { display: none !important; }
 #standees .motes {
   position: absolute;
   inset: -20%;
@@ -1522,33 +1502,6 @@ html, body {
   50% { transform: translateX(3%) rotate(2deg); }
 }
 
-.world[data-world="sonic"] { background: url('../img/worlds/sonic.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="snes"] { background: url('../img/worlds/snes.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="n64"] { background: url('../img/worlds/n64.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="ps1"] { background: url('../img/worlds/ps1.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="arcade"] { background: url('../img/worlds/arcade.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="gb"] { background: url('../img/worlds/gb.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="pc"] { background: url('../img/worlds/pc.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="dc"] { background: url('../img/worlds/dc.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="nick"] { background: url('../img/worlds/nick.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="gotham"] { background: url('../img/worlds/gotham.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="matrix"] { background: url('../img/worlds/matrix.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="bayside"] { background: url('../img/worlds/bayside.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="mtv"] { background: url('../img/worlds/mtv.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="studio"] { background: url('../img/worlds/studio.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="court"] { background: url('../img/worlds/court.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="news"] { background: url('../img/worlds/news.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="flash"] { background: url('../img/worlds/flash.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="video"] { background: url('../img/worlds/video.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="friends"] { background: url('../img/worlds/friends.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="monks"] { background: url('../img/worlds/monks.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="zip"] { background: url('../img/worlds/zip.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="belair"] { background: url('../img/worlds/belair.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="park"] { background: url('../img/worlds/park.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="circular"] { background: url('../img/worlds/park.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="grocery"] { background: url('../img/worlds/park.jpg') center / cover no-repeat #123 !important; }
-.world[data-world="circuit"] { background: url('../img/worlds/circuit.jpg') center / cover no-repeat #123 !important; }
-
 .top {
   position: absolute;
   z-index: 8;
@@ -1632,7 +1585,7 @@ html, body {
 .obj.is-on { animation: popin .5s ease, float 4s ease-in-out .5s infinite; position: relative; z-index: 1; }
 .rig {
   transform-style: preserve-3d;
-  transform: rotateY(-22deg) rotateX(8deg);
+  transform: rotateY(-10deg) rotateX(6deg);
   transition: transform .18s ease-out;
 }
 
@@ -1649,7 +1602,8 @@ html, body {
   display: none;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -1676,8 +1630,8 @@ html, body {
 /* Generic 90s game box */
 .cartbox { filter: drop-shadow(0 38px 44px rgba(0,0,0,.6)); }
 .box3d {
-  width: min(320px, 78vw);
-  height: min(460px, 62vh);
+  width: min(380px, 86vw);
+  height: min(520px, 58vh);
   position: relative;
   transform-style: preserve-3d;
 }
@@ -1697,7 +1651,10 @@ html, body {
   overflow: hidden;
   transform: translateZ(18px);
 }
-.box-front .face-img { inset: 0; }
+.box-front .face-img {
+  inset: 8px 8px 28px;
+  background: #0b0b12;
+}
 .box-sheen {
   position: absolute;
   inset: 0;
@@ -1909,7 +1866,7 @@ html, body {
 
 /* CRT television */
 .tvset {
-  width: min(440px, 88vw);
+  width: min(520px, 92vw);
   flex-direction: column;
   align-items: center;
 }
@@ -1931,11 +1888,13 @@ html, body {
   position: relative;
   background: radial-gradient(circle at 50% 40%, #1a1a18, #050504);
   color: #c8ffd4;
-  min-height: 250px;
+  aspect-ratio: 4 / 3;
+  min-height: 200px;
   padding: 0;
   overflow: hidden;
 }
 .tv-glass .face-img {
+  object-fit: contain;
   filter: contrast(1.12) saturate(1.08) brightness(1.02);
 }
 .tv-scan {
@@ -3067,9 +3026,10 @@ html, body {
 #wipe[data-wipe="same"] #wipeNet { opacity: 0; }
 
 @keyframes gooFall {
-  0% { opacity: 1; transform: translateY(-90%); }
-  55% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(35%); }
+  0% { opacity: 1; transform: translateY(-110%) scaleX(1.1); }
+  40% { opacity: 1; transform: translateY(-8%) scaleX(1); }
+  70% { opacity: 1; transform: translateY(8%); }
+  100% { opacity: 0; transform: translateY(42%); }
 }
 @keyframes checkZoom {
   0% { opacity: 1; transform: scale(1); }
@@ -3163,7 +3123,8 @@ html, body {
 .drawer-count { font-size: .75rem; opacity: .5; margin: 8px 0; }
 
 @media (min-width: 800px) {
-  .tvset { width: min(520px, 46vw); }
+  .tvset { width: min(560px, 48vw); }
+  .box3d { width: min(420px, 38vw); height: min(580px, 64vh); }
   .tama { width: 230px; height: 286px; }
   .jewel { width: min(360px, 32vw); height: min(360px, 46vh); }
   .brick { width: 220px; }
@@ -3199,7 +3160,7 @@ html, body {
   }
   #hero::after { width: 48%; bottom: 8%; }
   .rig { transform: rotateY(-12deg) rotateX(5deg); }
-  .box3d { width: min(460px, 36vw); height: min(660px, 76vh); }
+  .box3d { width: min(480px, 42vw); height: min(640px, 70vh); }
   .clam { width: min(400px, 30vw); height: min(610px, 72vh); }
   .tvset { width: min(620px, 48vw); }
   .jewel { width: min(420px, 34vw); height: min(420px, 52vh); }
@@ -3217,11 +3178,13 @@ html, body {
 }
 
 @media (max-width: 700px) {
-  #standees .board {
-    width: min(92px, 20vw);
-    height: min(170px, 34vh);
-    bottom: 22%;
+  .box3d {
+    width: min(310px, 88vw);
+    height: min(440px, 50vh);
   }
+  .tvset { width: min(360px, 94vw); }
+  .rig { transform: rotateY(-6deg) rotateX(4deg); }
+  #hero { height: 54%; top: 11%; }
   #meta {
     -webkit-line-clamp: 5;
     font-size: .88rem;
@@ -3231,6 +3194,4 @@ html, body {
     font-size: .78rem;
     opacity: .95;
   }
-  .world.is-on { filter: saturate(1.24) contrast(1.08) brightness(1.06); }
-  #fxCanvas { mix-blend-mode: screen; opacity: .9; }
 }
