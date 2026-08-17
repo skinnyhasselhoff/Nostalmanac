@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://en.wikipedia.org">
   <link rel="preconnect" href="https://api.tvmaze.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bangers&family=Outfit:wght@600;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=35">
+  <link rel="stylesheet" href="css/style.css?v=36">
 </head>
 <body data-vibe="toon">
   <audio id="bed" playsinline webkit-playsinline loop preload="auto" src="audio/silence.wav"></audio>
@@ -20,44 +20,63 @@
 
   <div id="worlds" aria-hidden="true">
     <div class="world is-on" data-vibe="toon">
-      <i class="crt-glass"></i>
-      <i class="crt-scan"></i>
-      <i class="crt-rgb"></i>
-      <svg class="crt-snow" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <filter id="snow">
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch">
-            <animate attributeName="seed" values="0;20;7;31;4;18;0" dur="0.28s" repeatCount="indefinite"/>
-          </feTurbulence>
-          <feColorMatrix type="saturate" values="0"/>
-        </filter>
-        <rect width="100%" height="100%" filter="url(#snow)"/>
-      </svg>
+      <i class="tv-room"></i>
       <b class="sign">SATURDAY MORNING</b>
     </div>
     <div class="world" data-vibe="movie">
       <i class="curtain left"></i>
       <i class="curtain right"></i>
       <i class="neon-row"></i>
+      <i class="bulbs"></i>
       <i class="aisle"></i>
       <i class="seats"></i>
       <b class="sign">NOW SHOWING</b>
     </div>
     <div class="world" data-vibe="jam">
+      <i class="lockers"></i>
       <i class="palm l"></i><i class="palm r"></i>
       <i class="squig a"></i><i class="squig b"></i><i class="squig c"></i>
       <i class="geo tri"></i><i class="geo dot"></i><i class="geo zap"></i>
       <b class="sign">BAYSIDE HIGH</b>
     </div>
-    <div class="world" data-vibe="court">
-      <i class="crowd"></i>
-      <i class="court-floor"></i>
-      <i class="flame l"></i><i class="flame r"></i>
-      <b class="sign">HE'S ON FIRE</b>
+    <div class="world" data-vibe="cart">
+      <i class="den-wood"></i>
+      <i class="den-tv"></i>
+      <i class="console">
+        <i class="deck"></i>
+        <i class="slot"></i>
+        <i class="cartridge"><b>90s</b></i>
+        <i class="led"></i>
+      </i>
+      <b class="sign">INSERT CART</b>
     </div>
     <div class="world" data-vibe="fad">
-      <i class="star a"></i><i class="star b"></i><i class="star c"></i><i class="star d"></i>
-      <b class="sign">THE TOY AISLE</b>
+      <i class="xmas-window"></i>
+      <i class="hearth"></i>
+      <i class="tree"></i>
+      <i class="xmas-lights"></i>
+      <i class="gift a"></i><i class="gift b"></i><i class="gift c"></i>
+      <i class="paper"></i>
+      <b class="sign">TO: YOU</b>
     </div>
+  </div>
+
+  <div id="fx" aria-hidden="true">
+    <i class="fx-scan"></i>
+    <i class="fx-rgb"></i>
+    <i class="fx-vignette"></i>
+    <i class="fx-grain"></i>
+    <svg class="fx-snow" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <filter id="snow">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch">
+          <animate attributeName="seed" values="0;17;9;28;3;21;0" dur="0.32s" repeatCount="indefinite"/>
+        </feTurbulence>
+        <feColorMatrix type="saturate" values="0"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#snow)"/>
+    </svg>
+    <i class="drip a"></i><i class="drip b"></i><i class="drip c"></i>
+    <i class="goo a"></i><i class="goo b"></i><i class="goo c"></i>
   </div>
 
   <header class="top">
@@ -91,8 +110,9 @@
 
   <div id="wipe" aria-hidden="true">
     <canvas id="wipeFx"></canvas>
+    <div class="wipe-slime"></div>
     <div class="scratch-disc"></div>
-    <b id="wipeWord">STATIC</b>
+    <b id="wipeWord">SHHH</b>
   </div>
 
   <div id="connect">
@@ -122,6 +142,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=35"></script>
+  <script type="module" src="js/app.js?v=36"></script>
 </body>
 </html>

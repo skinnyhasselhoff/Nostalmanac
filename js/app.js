@@ -4,7 +4,7 @@ import { youtubeUrl } from './wiki.js';
 import { Boombox } from './sound.js';
 
 const $ = (id) => document.getElementById(id);
-const VIBE = { cartoon: 'toon', movie: 'movie', music: 'jam', game: 'court', fad: 'fad' };
+const VIBE = { cartoon: 'toon', movie: 'movie', music: 'jam', game: 'cart', fad: 'fad' };
 const LABEL = { cartoon: 'CARTOON', movie: 'MOVIE', music: 'SONG', game: 'GAME', fad: 'FAD' };
 
 const boom = new Boombox();
@@ -84,19 +84,19 @@ function wipe(kind) {
   const canvas = $('wipeFx');
   const word = $('wipeWord');
   el.className = '';
-  el.classList.add('go', kind);
+  el.classList.add('go', kind, 'slime');
   word.textContent = kind === 'scratch' ? 'SKRRRT' : 'SHHH';
   const ctx = canvas.getContext('2d', { alpha: false });
-  const w = canvas.width = Math.min(160, innerWidth / 4);
-  const h = canvas.height = Math.min(90, innerHeight / 4);
+  const w = canvas.width = Math.min(180, innerWidth / 4);
+  const h = canvas.height = Math.min(100, innerHeight / 4);
   let n = 0;
   const tick = () => {
     staticFrame(ctx, w, h);
-    if (++n < 10) requestAnimationFrame(tick);
+    if (++n < 12) requestAnimationFrame(tick);
   };
   tick();
+  boom.staticBurst();
   if (kind === 'scratch') boom.scratch();
-  else boom.staticBurst();
   clearTimeout(wipe.t);
   wipe.t = setTimeout(() => { el.className = ''; }, 430);
 }
