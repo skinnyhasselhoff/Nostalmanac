@@ -20,6 +20,7 @@ html, body {
 #worlds {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   will-change: transform;
 }
 #parade {
@@ -27,53 +28,24 @@ html, body {
   z-index: 1;
   left: 0;
   width: 200%;
-  bottom: 16%;
-  height: 15%;
+  bottom: 9%;
+  height: 34px;
   display: flex;
-  align-items: flex-end;
-  gap: 4.2%;
-  padding: 0 3%;
+  align-items: center;
+  gap: 0;
   pointer-events: none;
-  animation: paradeScroll 34s linear infinite;
-  filter: drop-shadow(0 14px 10px rgba(0,0,0,.5));
-  opacity: .68;
+  background: #1a3a88;
+  box-shadow: 0 -4px 0 #ffe14a, 0 4px 0 #c0142c;
+  animation: paradeScroll 28s linear infinite;
 }
 #parade[hidden] { display: none !important; }
-.con { flex: 0 0 auto; position: relative; display: block; }
-.c-gb {
-  width: 28px; height: 50px;
-  background: linear-gradient(#9aaa52, #5a6a28);
-  border-radius: 5px 5px 7px 7px;
-  box-shadow: inset 0 10px 0 5px #3a4820, inset 0 -6px 0 #2a3418;
-}
-.c-snes {
-  width: 78px; height: 24px;
-  background: linear-gradient(#d0c0e0, #8a78b0);
-  border-radius: 12px;
-  box-shadow: inset 14px 0 0 #6a40b8, inset -14px 0 0 #c84070;
-}
-.c-gen {
-  width: 76px; height: 22px;
-  background: linear-gradient(#2e2e36, #111);
-  border-radius: 2px;
-  box-shadow: inset 0 -5px 0 #c0142c;
-}
-.c-n64 {
-  width: 38px; height: 38px;
-  background: radial-gradient(circle at 50% 42%, #c0142c 0 28%, #141414 30%);
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-}
-.c-ps {
-  width: 64px; height: 20px;
-  background: #d0d0d8;
-  border-radius: 2px;
-  box-shadow: inset 10px 0 0 #2de0c8, inset 20px 0 0 #ff4fd8, inset 30px 0 0 #ffe14a;
-}
-.c-dc {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: conic-gradient(#ff6a18 0 25%, #fff 25% 50%, #ff6a18 50% 75%, #111 75%);
-  box-shadow: 0 0 0 3px #ff6a18;
+#parade b {
+  flex: 0 0 auto;
+  padding: 0 2.4rem;
+  font: 800 .72rem var(--display);
+  letter-spacing: .22em;
+  color: #ffe14a;
+  white-space: nowrap;
 }
 @keyframes paradeScroll {
   from { transform: translateX(0); }
@@ -143,401 +115,462 @@ html, body {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity .12s linear;
+  transition: opacity .75s ease;
   overflow: hidden;
+  background: #111 center / cover no-repeat;
+  transform-origin: 50% 42%;
 }
-.world.is-on { opacity: 1; }
-.world .l {
+.world.is-on { opacity: 1; animation: ken 32s ease-in-out infinite alternate; }
+.world .l, .world .sign { display: none !important; }
+@keyframes ken {
+  from { transform: scale(1.06) translate3d(-1.4%, 0, 0); }
+  to { transform: scale(1.14) translate3d(1.4%, 0.8%, 0); }
+}
+.glass, #pixels, #grain, #chroma, #track, #parade { display: none !important; }
+#fxCanvas { opacity: 0; pointer-events: none; }
+.world .sign {
   position: absolute;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  font: 800 .78rem var(--display);
+  letter-spacing: .18em;
+  white-space: nowrap;
   pointer-events: none;
-  display: block;
+  padding: .42rem .95rem;
 }
 
-/* Green Hill — layered 16-bit landscape */
+/* Green Hill — loop, palms, checker, zone title */
 .world[data-world="sonic"] {
   background:
-    radial-gradient(ellipse 70% 55% at 82% 4%, #fff6d8 0 10%, #ffd56a 18%, transparent 48%),
-    linear-gradient(#5ec8ff 0%, #7ad8ff 28%, #9be8ff 36%, #4ecfff 36.4%);
+    radial-gradient(ellipse 70% 46% at 86% 0, #fff6d8 0 12%, #ffd56a 22%, transparent 52%),
+    linear-gradient(#4ecfff 0 40%, #3ad05c 40%);
 }
 .world[data-world="sonic"] .l1 {
-  left: -12%; right: -12%; top: 28%; height: 36%;
-  background:
-    radial-gradient(ellipse 48% 110% at 18% 110%, #7ad0e8 0 68%, transparent 70%),
-    radial-gradient(ellipse 56% 120% at 78% 120%, #5eb8d8 0 70%, transparent 72%);
-  opacity: .85;
+  right: 3%; top: 14%;
+  width: min(42vw, 320px);
+  height: min(42vw, 320px);
+  border: 26px solid #c0142c;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 12px #f4e7b4, 0 0 0 10px #1a7a38;
 }
 .world[data-world="sonic"] .l2 {
-  left: -10%; right: -10%; top: 34%; height: 38%;
+  left: -6%; right: -6%; bottom: 16%; height: 46%;
   background:
-    radial-gradient(ellipse 58% 100% at 24% 100%, #3ad05c 0 72%, transparent 73%),
-    radial-gradient(ellipse 64% 110% at 70% 108%, #2bb84a 0 74%, transparent 75%),
-    radial-gradient(ellipse 40% 90% at 94% 100%, #48dc68 0 68%, transparent 69%);
-  filter: drop-shadow(0 22px 20px rgba(0,40,0,.28));
+    radial-gradient(ellipse 38% 100% at 12% 100%, #2bb84a 0 72%, transparent 73%),
+    radial-gradient(ellipse 52% 120% at 48% 110%, #48dc68 0 74%, transparent 75%),
+    radial-gradient(ellipse 40% 90% at 88% 100%, #2bb84a 0 70%, transparent 71%);
 }
 .world[data-world="sonic"] .l3 {
-  left: -28%; right: -28%; bottom: -22%; height: 56%;
-  background:
-    repeating-conic-gradient(#c98912 0% 25%, #f6e7a8 0% 50%) 50% 0 / 56px 56px;
+  left: -28%; right: -28%; bottom: -24%; height: 44%;
+  background: repeating-conic-gradient(#c98912 0% 25%, #f6e7a8 0% 50%) 50% 0 / 64px 64px;
   transform: perspective(560px) rotateX(58deg);
   transform-origin: center bottom;
-  box-shadow: 0 -40px 80px rgba(255, 210, 80, .18);
 }
 .world[data-world="sonic"] .l4 {
-  inset: 0;
+  left: 3%; bottom: 22%;
+  width: 110px; height: 48%;
   background:
-    radial-gradient(ellipse 18px 28px at 8% 52%, #0a6a28 0 70%, transparent 71%),
-    radial-gradient(ellipse 26px 18px at 11% 48%, #148a38 0 70%, transparent 71%),
-    linear-gradient(#0a5a20, #0a5a20) 9.2% 62% / 7px 90px no-repeat,
-    radial-gradient(ellipse 16px 24px at 91% 50%, #0a6a28 0 70%, transparent 71%),
-    radial-gradient(ellipse 22px 16px at 94% 46%, #148a38 0 70%, transparent 71%),
-    linear-gradient(#0a5a20, #0a5a20) 92.4% 60% / 7px 86px no-repeat;
-  animation: drift 14s ease-in-out infinite;
+    radial-gradient(ellipse 130% 42% at 50% 6%, #0a5a20 0 72%, transparent 73%),
+    linear-gradient(#0a5a20, #0a5a20) 50% 100% / 16px 72% no-repeat;
+  filter: drop-shadow(16vw 18px 0 #0a6a28);
 }
 .world[data-world="sonic"] .l5 {
-  left: 42%; top: 22%;
-  width: 90px; height: 90px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 40%, #fff6d8, #ffd56a 40%, transparent 70%);
-  opacity: .55;
-  filter: blur(2px);
+  left: 10%; top: 7%;
+  width: 160px; height: 52px;
+  background: #fff;
+  border-radius: 40px;
+  box-shadow: 70px 22px 0 #fff, 32vw 8px 0 12px #fff;
+}
+.world[data-world="sonic"] .sign {
+  left: 6%; top: 11%;
+  background: #111;
+  color: #ffe14a;
+  box-shadow: 6px 6px 0 #c0142c;
 }
 
-/* Super Mario World — Mode 7 hills, SNES purple */
+/* Super Mario World — pipe curtains, question-block wall */
 .world[data-world="snes"] {
   background:
-    radial-gradient(ellipse 40% 28% at 78% 8%, #fff 0 18%, transparent 42%),
-    linear-gradient(#7ec8ff 0 34%, #5aa0e8 34% 38%, #3a8a48 38%);
+    radial-gradient(ellipse 50% 32% at 70% 0, #fff 0 14%, transparent 40%),
+    linear-gradient(#7ec8ff 0 38%, #48c060 38%);
 }
 .world[data-world="snes"] .l1 {
-  left: -8%; right: -8%; top: 22%; height: 28%;
-  background:
-    radial-gradient(ellipse 22% 90% at 18% 100%, #48c060 0 70%, transparent 71%),
-    radial-gradient(ellipse 28% 110% at 52% 110%, #2a9a40 0 72%, transparent 73%),
-    radial-gradient(ellipse 24% 95% at 86% 100%, #58d070 0 68%, transparent 69%);
+  left: 0; top: 16%; bottom: 10%; width: 22%;
+  background: linear-gradient(#1a7a30 0 12%, #48c060 12% 16%, #2a9a40 16%);
+  border-radius: 20px 20px 0 0;
+  box-shadow: inset -18px 0 0 #0a5a20, 14px 0 28px rgba(0,40,0,.35);
+}
+.world[data-world="snes"] .l1::after {
+  content: '';
+  position: absolute;
+  left: -10%; right: -10%; top: 0; height: 14%;
+  background: #58d070;
+  border-radius: 18px;
+  box-shadow: inset 0 -8px 0 #0a5a20;
 }
 .world[data-world="snes"] .l2 {
-  left: 10%; top: 36%; width: 42px; height: 54px;
+  right: 0; top: 8%; bottom: 18%; width: 24%;
   background:
-    radial-gradient(ellipse 90% 55% at 50% 18%, #f4e8dc 0 70%, transparent 71%),
-    radial-gradient(circle at 50% 62%, #c0142c 0 46%, transparent 47%);
-  filter: drop-shadow(70px 8px 0 #c0142c);
-  opacity: .92;
+    repeating-linear-gradient(#ffe14a 0 64px, #c47828 64px 70px),
+    repeating-linear-gradient(90deg, #ffe14a 0 64px, #c47828 64px 70px);
+  background-blend-mode: multiply;
+  box-shadow: -16px 0 28px rgba(60,40,0,.3);
+  image-rendering: pixelated;
 }
 .world[data-world="snes"] .l3 {
-  left: -30%; right: -30%; bottom: -24%; height: 52%;
-  background:
-    repeating-conic-gradient(#c47828 0% 25%, #f4d090 0% 50%) 50% 0 / 48px 48px;
+  left: -28%; right: -28%; bottom: -24%; height: 42%;
+  background: repeating-conic-gradient(#c47828 0% 25%, #f4d090 0% 50%) 50% 0 / 56px 56px;
   transform: perspective(560px) rotateX(58deg);
   transform-origin: center bottom;
-  box-shadow: 0 -36px 70px rgba(90, 60, 160, .22);
 }
 .world[data-world="snes"] .l4 {
-  inset: 0;
-  background:
-    radial-gradient(circle at 22% 28%, #6a48c8 0 18px, transparent 19px),
-    radial-gradient(circle at 28% 24%, #fff 0 10px, transparent 11px),
-    radial-gradient(circle at 74% 18%, #6a48c8 0 22px, transparent 23px),
-    radial-gradient(circle at 80% 14%, #fff 0 12px, transparent 13px);
-  animation: drift 16s ease-in-out infinite;
-  opacity: .8;
+  left: 30%; right: 30%; top: 10%; height: 36%;
+  background: linear-gradient(#6a48c8 0 22%, #f4e8dc 22%);
+  clip-path: polygon(6% 28%, 50% 0, 94% 28%, 94% 100%, 6% 100%);
+  box-shadow: 0 18px 30px rgba(40,20,80,.35);
 }
 .world[data-world="snes"] .l5 {
-  left: 44%; top: 26%;
-  width: 36px; height: 36px;
+  left: 12%; top: 8%;
+  width: 120px; height: 44px;
+  background: #fff;
+  border-radius: 40px;
+  box-shadow: 40px 16px 0 #fff;
+}
+.world[data-world="snes"] .sign {
+  left: 26%; top: 12%;
   background: #ffe14a;
-  box-shadow: inset 0 0 0 4px #c47828, 8px 10px 0 #5a38a8;
-  opacity: .7;
+  color: #5a38a8;
+  box-shadow: 6px 6px 0 #5a38a8;
 }
 
-/* Peach's courtyard — Mario 64 */
+/* Peach's castle — towers as curtains */
 .world[data-world="n64"] {
   background:
-    radial-gradient(ellipse 50% 40% at 50% 0, #fff 0 12%, transparent 40%),
-    linear-gradient(#4ab0ff 0 36%, #f4c878 36% 40%, #3aaa48 40%);
+    radial-gradient(ellipse 60% 40% at 50% 0, #fff 0 12%, transparent 42%),
+    linear-gradient(#4ab0ff 0 36%, #3aaa48 36%);
 }
 .world[data-world="n64"] .l1 {
-  left: 28%; right: 28%; top: 10%; height: 46%;
+  left: 0; top: 0; bottom: 12%; width: 28%;
   background:
-    linear-gradient(#c0142c 0 18%, #f4e8dc 18% 22%, #f4e8dc 22%);
-  clip-path: polygon(8% 22%, 50% 0, 92% 22%, 92% 100%, 8% 100%);
-  box-shadow: 0 24px 40px rgba(20,40,10,.3);
+    linear-gradient(#c0142c 0 16%, #f4e8dc 16%);
+  clip-path: polygon(0 0, 100% 10%, 82% 100%, 0 100%);
+  box-shadow: 20px 0 40px rgba(0,0,0,.4);
 }
 .world[data-world="n64"] .l2 {
-  left: 42%; right: 42%; top: 0; height: 18%;
-  background: #c0142c;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  right: 0; top: 0; bottom: 12%; width: 28%; left: auto;
+  background:
+    linear-gradient(#c0142c 0 16%, #f4e8dc 16%);
+  clip-path: polygon(0 10%, 100% 0, 100% 100%, 18% 100%);
+  box-shadow: -20px 0 40px rgba(0,0,0,.4);
 }
 .world[data-world="n64"] .l3 {
-  left: -16%; right: -16%; bottom: -18%; height: 44%;
-  background:
-    repeating-linear-gradient(#48c060 0 14px, #2a9a40 14px 28px);
+  left: 22%; right: 22%; top: 6%; height: 44%;
+  background: linear-gradient(#c0142c 0 20%, #f4e8dc 20%);
+  clip-path: polygon(8% 24%, 50% 0, 92% 24%, 92% 100%, 8% 100%);
+}
+.world[data-world="n64"] .l4 {
+  left: -16%; right: -16%; bottom: -18%; height: 40%;
+  background: repeating-linear-gradient(#48c060 0 16px, #2a9a40 16px 32px);
   transform: perspective(640px) rotateX(58deg);
   transform-origin: center bottom;
 }
-.world[data-world="n64"] .l4 {
-  inset: 0;
-  background:
-    radial-gradient(circle at 12% 22%, #ffe14a 0 6px, transparent 7px),
-    radial-gradient(circle at 88% 16%, #ffe14a 0 8px, transparent 9px),
-    radial-gradient(circle at 70% 28%, #ffe14a 0 5px, transparent 6px),
-    radial-gradient(circle at 18% 38%, #fff 0 4px, transparent 5px);
-  animation: drift 12s ease-in-out infinite;
-}
 .world[data-world="n64"] .l5 {
-  left: 8%; right: 8%; top: 48%; height: 10px;
-  background: repeating-linear-gradient(90deg, #8a5a28 0 18px, #f4e8dc 18px 28px);
-  opacity: .85;
+  left: 42%; top: 28%;
+  width: 16%; height: 14%;
+  background: radial-gradient(circle, #ffe14a, #c0142c 70%);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.world[data-world="n64"] .sign {
+  left: 50%; top: 10%;
+  transform: translateX(-50%);
+  background: #c0142c;
+  color: #ffe14a;
+  box-shadow: 6px 6px 0 #111;
 }
 
-/* PS1 fog city — industrial, warning tape */
+/* PS1 — industrial towers, hazard floor, fog */
 .world[data-world="ps1"] {
   background:
-    radial-gradient(ellipse at 50% 28%, #8a9aa8 0 18%, transparent 52%),
-    linear-gradient(#3a4850 0 38%, #1a2228 38%);
+    radial-gradient(ellipse at 50% 30%, #9aadb8 0 16%, transparent 48%),
+    linear-gradient(#3a4850 0 36%, #12181c 36%);
 }
 .world[data-world="ps1"] .l1 {
-  left: -6%; right: -6%; top: 18%; height: 40%;
+  left: 0; top: 0; bottom: 10%; width: 26%;
   background:
-    linear-gradient(#2a3238 0 40%, transparent 40%),
-    repeating-linear-gradient(90deg, #4a5860 0 48px, #1a2228 48px 56px);
-  clip-path: polygon(0 48%, 12% 18%, 28% 32%, 46% 8%, 62% 28%, 80% 4%, 100% 22%, 100% 100%, 0 100%);
-  opacity: .85;
-  filter: blur(0.4px);
+    repeating-linear-gradient(#2a3238 0 28px, #1a2228 28px 32px);
+  clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%);
+  box-shadow: 22px 0 40px rgba(0,0,0,.55);
 }
 .world[data-world="ps1"] .l2 {
-  left: -20%; right: -20%; bottom: -20%; height: 48%;
+  right: 0; top: 0; bottom: 10%; width: 26%; left: auto;
   background:
-    repeating-linear-gradient(-28deg, #111 0 16px, #ffe14a 16px 32px);
-  transform: perspective(620px) rotateX(58deg);
-  transform-origin: center bottom;
-  opacity: .7;
+    repeating-linear-gradient(#2a3238 0 28px, #1a2228 28px 32px);
+  clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow: -22px 0 40px rgba(0,0,0,.55);
 }
 .world[data-world="ps1"] .l3 {
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 42%, rgba(180,200,210,.35), transparent 58%);
-  animation: fogPulse 5s ease-in-out infinite;
+  left: -22%; right: -22%; bottom: -22%; height: 42%;
+  background: repeating-linear-gradient(-28deg, #111 0 18px, #ffe14a 18px 36px);
+  transform: perspective(620px) rotateX(58deg);
+  transform-origin: center bottom;
 }
 .world[data-world="ps1"] .l4 {
-  right: 10%; top: 22%; width: 90px; height: 120px;
-  background: linear-gradient(#5a6870, #2a3238);
-  box-shadow: -40px 20px 0 #3a4850, 28px 40px 0 #1a2228;
-  opacity: .55;
+  left: 18%; right: 18%; top: 8%; height: 28%;
+  background: repeating-linear-gradient(90deg, #4a5860 0 36px, #1a2228 36px 44px);
+  clip-path: polygon(0 70%, 12% 20%, 28% 48%, 46% 8%, 64% 40%, 82% 4%, 100% 30%, 100% 100%, 0 100%);
+  opacity: .9;
 }
 .world[data-world="ps1"] .l5 {
   inset: 0;
-  background: radial-gradient(ellipse at 50% 70%, transparent 20%, rgba(10,14,18,.55) 100%);
+  background: radial-gradient(ellipse at 50% 42%, rgba(200,220,230,.4), transparent 58%);
+  animation: fogPulse 5s ease-in-out infinite;
+}
+.world[data-world="ps1"] .sign {
+  left: 6%; top: 10%;
+  background: #111;
+  color: #2de0c8;
+  box-shadow: 6px 6px 0 #ffe14a;
 }
 
-/* Neon cabinet alley */
+/* Arcade — cabinet wall like a tape aisle */
 .world[data-world="arcade"] {
   background:
-    radial-gradient(ellipse at 18% 80%, #ff2bd6 0 10%, transparent 40%),
-    radial-gradient(ellipse at 88% 10%, #00e5ff 0 8%, transparent 36%),
+    radial-gradient(ellipse at 20% 80%, #ff2bd6 0 12%, transparent 42%),
     linear-gradient(#080410, #140818);
 }
 .world[data-world="arcade"] .l1 {
-  left: 4%; top: 18%; bottom: 22%; width: 16%;
+  left: -8%; right: -8%; top: 12%; height: 58%;
   background:
-    linear-gradient(#ff2bd6 0 8%, #1a0818 8% 14%, #111 14% 62%, #00e5ff 62% 70%, #111 70%);
-  box-shadow: 0 0 28px #ff2bd6aa;
-  opacity: .72;
+    repeating-linear-gradient(90deg,
+      #ff2bd6 0 14px, #111 14px 18px, #00e5ff 18px 22px,
+      #1a0818 22px 70px, #ffe14a 70px 74px, #1a0818 74px 120px);
+  transform: perspective(820px) rotateX(8deg);
+  transform-origin: center top;
+  box-shadow: inset 0 20px 40px rgba(0,0,0,.5);
 }
 .world[data-world="arcade"] .l2 {
-  right: 6%; top: 12%; bottom: 20%; width: 18%;
-  background:
-    linear-gradient(#00e5ff 0 8%, #081418 8% 14%, #111 14% 58%, #ffe14a 58% 66%, #111 66%);
-  box-shadow: 0 0 28px #00e5ffaa;
-  opacity: .72;
+  left: 0; top: 0; height: 12%; right: 0;
+  background: linear-gradient(#00e5ff, #ff2bd6);
+  opacity: .55;
+  box-shadow: 0 16px 40px rgba(255,43,214,.35);
 }
 .world[data-world="arcade"] .l3 {
-  left: -18%; right: -18%; bottom: -22%; height: 42%;
-  background:
-    repeating-linear-gradient(90deg, #1a0a18 0 40px, #0a0410 40px 44px);
+  left: -18%; right: -18%; bottom: -22%; height: 38%;
+  background: repeating-linear-gradient(90deg, #1a0a18 0 40px, #0a0410 40px 44px);
   transform: perspective(600px) rotateX(62deg);
   transform-origin: center bottom;
-  box-shadow: 0 -40px 80px rgba(255,43,214,.2);
 }
 .world[data-world="arcade"] .l4 {
-  left: 28%; right: 28%; top: 10%; height: 8px;
-  background: linear-gradient(90deg, #ff2bd6, #00e5ff, #ffe14a, #ff2bd6);
-  box-shadow: 0 0 24px #ff2bd6;
-  animation: neonSlide 3s linear infinite;
+  left: 18%; right: 18%; top: 6%; height: 36px;
+  background: #ffe14a;
+  box-shadow: 0 8px 0 #111;
 }
 .world[data-world="arcade"] .l5 {
   inset: 0;
   background: radial-gradient(ellipse at 50% 40%, transparent 22%, rgba(0,0,0,.5) 100%);
 }
+.world[data-world="arcade"] .sign {
+  left: 50%; top: 6%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #ffe14a;
+  box-shadow: 0 0 18px #ff2bd6;
+}
 
-/* Olive Game Boy LCD */
+/* Game Boy — the brick is the room */
 .world[data-world="gb"] {
-  background:
-    repeating-linear-gradient(0deg, rgba(15,56,15,.18) 0 2px, transparent 2px 8px),
-    repeating-linear-gradient(90deg, rgba(15,56,15,.12) 0 2px, transparent 2px 8px),
-    linear-gradient(#9bbc0f 0 36%, #8bac0f 36%);
+  background: #6a7a32;
 }
 .world[data-world="gb"] .l1 {
-  left: -10%; right: -10%; top: 24%; height: 32%;
+  inset: 6% 8% 18% 8%;
+  background:
+    repeating-linear-gradient(0deg, rgba(15,56,15,.22) 0 3px, transparent 3px 9px),
+    linear-gradient(#9bbc0f, #8bac0f);
+  box-shadow: inset 0 0 0 10px #0f380f, 0 0 0 18px #3a4820;
+}
+.world[data-world="gb"] .l2 {
+  left: 14%; right: 14%; top: 18%; height: 28%;
   background:
     radial-gradient(ellipse 40% 100% at 22% 100%, #306230 0 72%, transparent 73%),
     radial-gradient(ellipse 50% 110% at 70% 110%, #0f380f 0 74%, transparent 75%);
-  image-rendering: pixelated;
-}
-.world[data-world="gb"] .l2 {
-  left: -24%; right: -24%; bottom: -20%; height: 50%;
-  background:
-    repeating-conic-gradient(#306230 0% 25%, #9bbc0f 0% 50%) 50% 0 / 32px 32px;
-  transform: perspective(560px) rotateX(58deg);
-  transform-origin: center bottom;
 }
 .world[data-world="gb"] .l3 {
-  inset: 0;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 7px, rgba(15,56,15,.22) 7px 8px);
-  opacity: .7;
+  left: 12%; right: 12%; bottom: 26%; height: 22%;
+  background: repeating-conic-gradient(#306230 0% 25%, #9bbc0f 0% 50%) 50% 0 / 28px 28px;
+  transform: perspective(500px) rotateX(50deg);
+  transform-origin: center bottom;
 }
 .world[data-world="gb"] .l4 {
-  left: 12%; top: 14%; width: 48px; height: 48px;
+  left: 12%; bottom: 8%; width: 18%; height: 8%;
   background: #0f380f;
-  box-shadow: 56px 12px 0 #306230, 110px 4px 0 #0f380f;
-  opacity: .55;
+  border-radius: 8px;
+  box-shadow: 22vw 0 0 #0f380f;
 }
 .world[data-world="gb"] .l5 {
   inset: 0;
-  background: radial-gradient(ellipse at 50% 42%, transparent 28%, rgba(15,56,15,.45) 100%);
+  background: radial-gradient(ellipse at 50% 42%, transparent 30%, rgba(15,56,15,.4) 100%);
+}
+.world[data-world="gb"] .sign {
+  left: 50%; top: 8%;
+  transform: translateX(-50%);
+  background: #0f380f;
+  color: #9bbc0f;
+  font-family: var(--lcd);
+  font-size: 1.2rem;
+  letter-spacing: .2em;
 }
 
-/* DOS / beige-tower horizon */
+/* Windows 95 desktop */
 .world[data-world="pc"] {
   background:
-    repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.18) 3px 4px),
-    linear-gradient(#008080 0 38%, #c0c0c0 38% 42%, #808080 42%);
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.12) 3px 4px),
+    #008080;
 }
 .world[data-world="pc"] .l1 {
-  right: 8%; top: 16%; width: 70px; height: 48%;
-  background: linear-gradient(#e8dcc8, #c8bca8);
-  box-shadow: inset -10px 0 0 #a89880, 12px 16px 0 rgba(0,0,0,.25);
-  border-radius: 4px 4px 0 0;
+  left: 0; right: 0; bottom: 0; height: 12%;
+  background: linear-gradient(#c0c0c0, #a0a0a0);
+  box-shadow: inset 0 2px 0 #fff;
 }
 .world[data-world="pc"] .l1::after {
-  content: '';
+  content: 'Start';
   position: absolute;
-  left: 18%; right: 18%; top: 10%;
-  height: 28%;
-  background: #000;
-  box-shadow: 0 36px 0 0 #ff2bd6, inset 0 0 0 2px #00e5ff;
+  left: 8px; top: 18%; bottom: 18%;
+  width: 88px;
+  display: grid;
+  place-items: center;
+  background: #c0c0c0;
+  color: #111;
+  font: 800 .7rem var(--font);
+  border: 2px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
 }
 .world[data-world="pc"] .l2 {
-  left: 8%; top: 22%; width: 38%; height: 22%;
-  background: #000;
-  box-shadow: inset 0 0 0 3px #00e5ff, 8px 10px 0 #ff2bd6;
-  opacity: .7;
+  left: 8%; right: 28%; top: 10%; height: 58%;
+  background: #000080;
+  box-shadow: 8px 10px 0 #111, inset 0 28px 0 #000080;
+  border: 4px solid #c0c0c0;
+}
+.world[data-world="pc"] .l2::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0; height: 28px;
+  background: linear-gradient(90deg, #000080, #1084d0);
 }
 .world[data-world="pc"] .l3 {
-  left: -16%; right: -16%; bottom: -18%; height: 42%;
-  background: repeating-linear-gradient(90deg, #a8a8a8 0 36px, #909090 36px 40px);
-  transform: perspective(600px) rotateX(58deg);
-  transform-origin: center bottom;
+  right: 6%; top: 12%; width: 18%; height: 52%;
+  background: linear-gradient(#e8dcc8, #c8bca8);
+  box-shadow: inset -12px 0 0 #a89880, 10px 14px 0 rgba(0,0,0,.25);
 }
 .world[data-world="pc"] .l4 {
   inset: 0;
-  background: radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(0,0,0,.4) 100%);
+  background: radial-gradient(ellipse at 50% 40%, transparent 36%, rgba(0,0,0,.28) 100%);
 }
 .world[data-world="pc"] .l5 {
-  left: 10%; top: 26%;
-  width: 8px; height: 18px;
+  left: 12%; top: 22%;
+  width: 10px; height: 22px;
   background: #00e5ff;
   animation: blink 1.1s steps(2) infinite;
-  opacity: .8;
+}
+.world[data-world="pc"] .sign {
+  left: 10%; top: 11%;
+  background: #000;
+  color: #0f0;
+  font-family: var(--lcd);
+  font-size: 1.15rem;
+  letter-spacing: .08em;
 }
 
-/* Dreamcast Station Square swirl */
+/* Dreamcast Station Square */
 .world[data-world="dc"] {
   background:
-    radial-gradient(ellipse at 82% 8%, #fff 0 8%, transparent 28%),
-    conic-gradient(from 210deg at 80% 12%, #ff6a18 0 20%, transparent 20%),
-    linear-gradient(#4ab8ff 0 36%, #ff8a40 36% 40%, #2a8ad0 40%);
+    radial-gradient(ellipse 40% 30% at 86% 8%, #fff 0 10%, transparent 36%),
+    linear-gradient(#4ab8ff 0 36%, #2a8ad0 36%);
 }
 .world[data-world="dc"] .l1 {
-  left: 18%; right: 18%; top: 16%; height: 36%;
+  left: 10%; right: 10%; top: 14%; height: 42%;
   background: linear-gradient(#f4f0e8, #d8d0c4);
-  clip-path: polygon(0 28%, 18% 0, 82% 0, 100% 28%, 100% 100%, 0 100%);
-  box-shadow: 0 20px 36px rgba(0,40,80,.28);
+  clip-path: polygon(0 30%, 16% 0, 84% 0, 100% 30%, 100% 100%, 0 100%);
+  box-shadow: 0 22px 36px rgba(0,40,80,.3);
 }
 .world[data-world="dc"] .l2 {
-  left: 42%; top: 8%; width: 70px; height: 70px;
+  right: 6%; top: 4%;
+  width: min(28vw, 220px); height: min(28vw, 220px);
   border-radius: 50%;
   background: conic-gradient(#ff6a18, #fff, #ff6a18, #111, #ff6a18);
-  opacity: .55;
-  animation: swirlSpin 8s linear infinite;
+  box-shadow: 0 0 0 8px #ff6a18;
+  animation: swirlSpin 10s linear infinite;
 }
 .world[data-world="dc"] .l3 {
-  left: -18%; right: -18%; bottom: -20%; height: 46%;
-  background:
-    repeating-linear-gradient(#2a8ad0 0 16px, #1a6ab0 16px 32px);
+  left: -18%; right: -18%; bottom: -20%; height: 40%;
+  background: repeating-linear-gradient(#2a8ad0 0 16px, #1a6ab0 16px 32px);
   transform: perspective(620px) rotateX(58deg);
   transform-origin: center bottom;
 }
 .world[data-world="dc"] .l4 {
-  inset: 0;
-  background:
-    radial-gradient(circle at 12% 24%, #ff6a18 0 10px, transparent 11px),
-    radial-gradient(circle at 88% 20%, #fff 0 8px, transparent 9px);
+  left: 0; right: 0; top: 0; height: 10%;
+  background: #ff6a18;
+  box-shadow: 0 12px 28px rgba(255,106,24,.4);
 }
 .world[data-world="dc"] .l5 {
   inset: 0;
   background: radial-gradient(ellipse at 50% 42%, transparent 32%, rgba(20,40,80,.35) 100%);
 }
+.world[data-world="dc"] .sign {
+  left: 8%; top: 8%;
+  background: #111;
+  color: #ff6a18;
+  box-shadow: 6px 6px 0 #fff;
+}
 
-/* Nickelodeon slime set */
+/* Nickelodeon slime studio — slime as curtains */
 .world[data-world="nick"] {
   background:
-    radial-gradient(ellipse at 14% 12%, #ffe14a 0 10%, transparent 22%),
-    radial-gradient(ellipse at 88% 8%, #ff5ad8 0 8%, transparent 22%),
-    radial-gradient(ellipse at 50% 100%, #9ee000 0 18%, transparent 48%),
-    linear-gradient(#ff7a18 0%, #ff3b00 55%, #c20 100%);
+    radial-gradient(ellipse at 50% 0, #ffe14a 0 8%, transparent 28%),
+    linear-gradient(#ff7a18 0%, #ff3b00 100%);
 }
 .world[data-world="nick"] .l1 {
-  left: 0; right: 0; top: -8%; height: 42%;
+  left: 0; top: 0; bottom: 0; width: 28%;
   background:
-    radial-gradient(ellipse 90px 150px at 16% 0, #b6ff3a 0 58%, transparent 59%),
-    radial-gradient(ellipse 130px 190px at 46% -8%, #9ee000 0 56%, transparent 57%),
-    radial-gradient(ellipse 80px 140px at 74% 0, #7cff3a 0 54%, transparent 55%),
-    radial-gradient(ellipse 70px 120px at 92% 4%, #d8ff4a 0 52%, transparent 53%);
+    radial-gradient(ellipse 90% 40% at 50% 0, #b6ff3a 0 70%, transparent 71%),
+    linear-gradient(#9ee000, #7cff3a);
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
+  box-shadow: 18px 0 40px rgba(0,40,0,.25);
   animation: slimeDrip 3.6s linear infinite;
 }
 .world[data-world="nick"] .l2 {
-  inset: 18% 10% 26%;
-  border: 14px solid rgba(20,0,0,.16);
-  border-radius: 48% 34% 52% 38%;
-  box-shadow: inset 0 0 40px rgba(255,255,80,.12);
+  right: 0; top: 0; bottom: 0; width: 28%; left: auto;
+  background:
+    radial-gradient(ellipse 90% 40% at 50% 0, #d8ff4a 0 70%, transparent 71%),
+    linear-gradient(#b6ff3a, #9ee000);
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow: -18px 0 40px rgba(0,40,0,.25);
+  animation: slimeDrip 4.2s linear infinite reverse;
 }
 .world[data-world="nick"] .l3 {
-  left: -8%; right: -8%; bottom: -12%; height: 38%;
-  background:
-    radial-gradient(ellipse 40% 80% at 20% 0, #b6ff3a 0 50%, transparent 51%),
-    radial-gradient(ellipse 50% 90% at 70% 10%, #7cff3a 0 48%, transparent 49%),
-    #8fd000;
+  left: -8%; right: -8%; bottom: -8%; height: 32%;
+  background: #8fd000;
   border-radius: 80% 80% 0 0;
-  opacity: .88;
 }
 .world[data-world="nick"] .l4 {
-  inset: 0;
-  background:
-    radial-gradient(circle at 22% 62%, #fff 0 10px, transparent 11px),
-    radial-gradient(circle at 78% 28%, #ffe14a 0 14px, transparent 15px),
-    radial-gradient(circle at 64% 72%, #5ad0ff 0 8px, transparent 9px),
-    radial-gradient(circle at 12% 40%, #ff5ad8 0 12px, transparent 13px),
-    radial-gradient(circle at 90% 58%, #ffe14a 0 16px, transparent 17px);
-  opacity: .75;
+  left: 18%; right: 18%; top: 6%; height: 40px;
+  background: #ffe14a;
+  box-shadow: 0 8px 0 #c0142c;
 }
 .world[data-world="nick"] .l5 {
-  left: 6%; top: 8%;
-  width: 110px; height: 42px;
+  inset: 0;
+  background:
+    radial-gradient(circle at 22% 62%, #fff 0 12px, transparent 13px),
+    radial-gradient(circle at 78% 28%, #ff5ad8 0 16px, transparent 17px);
+  opacity: .7;
+}
+.world[data-world="nick"] .sign {
+  left: 50%; top: 6%;
+  transform: translateX(-50%);
   background: #ffe14a;
-  border-radius: 50% 50% 46% 46%;
-  box-shadow: 22px 8px 0 #ff5ad8, 0 18px 0 -8px #c0142c;
-  animation: drift 9s ease-in-out infinite;
-  opacity: .8;
+  color: #c0142c;
+  box-shadow: 6px 6px 0 #111;
 }
 
 /* Movie palace — velvet, beam, 16-bit screen */
@@ -597,6 +630,15 @@ html, body {
   background: radial-gradient(ellipse at 50% 40%, rgba(0,80,30,.4), transparent 55%);
 }
 
+.world[data-world="matrix"] .sign {
+  left: 8%; top: 10%;
+  background: #041;
+  color: #0f8;
+  box-shadow: 0 0 18px #0f8;
+  font-family: var(--lcd);
+  font-size: 1.2rem;
+}
+
 /* Saved by the Bell locker hall */
 .world[data-world="bayside"] {
   background:
@@ -642,72 +684,58 @@ html, body {
   animation: blink 1.6s steps(2) infinite;
 }
 
-/* Beastie / X-Men / Elfman carnival — not a nightclub */
+.world[data-world="bayside"] .sign {
+  left: 8%; top: 8%;
+  background: #111;
+  color: #ffe14a;
+  box-shadow: 6px 6px 0 #ff2bd6;
+}
+
+/* Beastie / X-Men / Elfman — Burton carnival, not a blob */
 .world[data-world="mtv"] {
   background:
-    repeating-linear-gradient(0deg, transparent 0 16px, rgba(0,229,255,.22) 16px 17px),
-    repeating-linear-gradient(90deg, transparent 0 16px, rgba(255,43,214,.16) 16px 17px),
-    radial-gradient(ellipse at 86% 6%, #ffe14a 0 10%, transparent 28%),
-    radial-gradient(ellipse at 8% 12%, #ff2bd6 0 12%, transparent 34%),
-    linear-gradient(#12063a 0 34%, #00e5ff 34% 37%, #ffe14a 37%);
+    repeating-linear-gradient(90deg, transparent 0 22px, rgba(255,225,74,.18) 22px 23px),
+    linear-gradient(#ffe14a 0 36%, #111 36%);
 }
 .world[data-world="mtv"] .l1 {
-  left: -18%; right: -18%; top: 28%; height: 44%;
-  background:
-    repeating-conic-gradient(from 0deg at 22% 80%, #ff2bd6 0 12deg, #ffe14a 12deg 24deg, #00e5ff 24deg 36deg),
-    repeating-conic-gradient(from 40deg at 78% 90%, #00e5ff 0 10deg, #ff2bd6 10deg 20deg, #ffe14a 20deg 30deg);
-  clip-path: polygon(0 38%, 18% 8%, 42% 28%, 62% 0, 88% 22%, 100% 10%, 100% 100%, 0 100%);
-  opacity: .82;
-  filter: saturate(1.2);
+  left: 0; top: 0; bottom: 0; width: 26%;
+  background: repeating-linear-gradient(90deg, #ff2bd6 0 14px, #00e5ff 14px 28px);
+  clip-path: polygon(0 0, 100% 0, 68% 100%, 0 100%);
+  box-shadow: 20px 0 40px rgba(0,0,0,.45);
 }
 .world[data-world="mtv"] .l2 {
-  left: 8%; top: 6%;
-  width: 0; height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 120px solid #ffe14a;
-  filter: drop-shadow(80px 10px 0 #00e5ff) drop-shadow(160px -8px 0 #ff2bd6);
-  transform: rotate(-12deg);
-  animation: boltFlash 1.4s steps(2) infinite;
-  opacity: .85;
+  right: 0; top: 0; bottom: 0; width: 26%; left: auto;
+  background: repeating-linear-gradient(90deg, #111 0 16px, #ffe14a 16px 32px);
+  clip-path: polygon(32% 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow: -20px 0 40px rgba(0,0,0,.45);
 }
 .world[data-world="mtv"] .l3 {
-  left: -22%; right: -22%; bottom: -24%; height: 48%;
-  background:
-    repeating-conic-gradient(#ff2bd6 0% 25%, #ffe14a 0% 50%) 50% 0 / 44px 44px;
+  left: -22%; right: -22%; bottom: -22%; height: 44%;
+  background: repeating-conic-gradient(#ff2bd6 0% 25%, #ffe14a 0% 50%) 50% 0 / 48px 48px;
   transform: perspective(640px) rotateX(60deg);
   transform-origin: center bottom;
-  box-shadow: 0 -40px 80px rgba(255,43,214,.35);
 }
 .world[data-world="mtv"] .l4 {
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 72%, #111 0 10px, transparent 11px),
-    radial-gradient(circle at 22% 68%, #111 0 6px, transparent 7px),
-    radial-gradient(circle at 14% 68%, #111 0 5px, transparent 6px),
-    radial-gradient(circle, #0000 0 40%, rgba(18,6,58,.45) 100%);
-  background-size: auto, auto, auto, auto;
-  opacity: .9;
-}
-.world[data-world="mtv"] .l4::after {
-  content: '';
-  position: absolute;
-  left: 7%; bottom: 28%;
-  width: 92px; height: 48px;
-  background:
-    linear-gradient(#111 0 18%, #ffe14a 18% 28%, #111 28% 72%, #ff2bd6 72% 82%, #111 82%);
-  border-radius: 8px;
-  box-shadow: 10px 0 0 #00e5ff, inset 0 0 0 3px #ffe14a;
+  left: 22%; right: 22%; top: 0; height: 42%;
+  background: #111;
+  clip-path: polygon(0 100%, 12% 40%, 28% 70%, 50% 8%, 72% 70%, 88% 40%, 100% 100%);
 }
 .world[data-world="mtv"] .l5 {
-  inset: 0;
-  background:
-    radial-gradient(circle at 30% 24%, #fff 0 3px, transparent 4px),
-    radial-gradient(circle at 70% 18%, #ff2bd6 0 5px, transparent 6px),
-    radial-gradient(circle at 52% 30%, #00e5ff 0 4px, transparent 5px);
-  background-size: 18px 18px, 22px 22px, 16px 16px;
-  opacity: .45;
-  mix-blend-mode: screen;
+  left: 8%; bottom: 28%;
+  width: 22%; height: 16%;
+  background: linear-gradient(#111 0 20%, #ffe14a 20% 30%, #111 30% 70%, #ff2bd6 70% 80%, #111 80%);
+  border-radius: 10px;
+  box-shadow: 8px 10px 0 #00e5ff, inset 0 0 0 4px #ffe14a;
+}
+.world[data-world="mtv"] .sign {
+  left: 50%; top: 8%;
+  transform: translateX(-50%);
+  font-family: var(--circus);
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  letter-spacing: .06em;
+  background: #111;
+  color: #ffe14a;
+  box-shadow: 8px 8px 0 #ff2bd6;
 }
 
 /* Product studio */
@@ -732,6 +760,12 @@ html, body {
   transform: perspective(560px) rotateX(62deg);
   transform-origin: center bottom;
   opacity: .45;
+}
+.world[data-world="studio"] .sign {
+  left: 8%; top: 8%;
+  background: #c0142c;
+  color: #fff;
+  box-shadow: 6px 6px 0 #ffe14a;
 }
 
 /* Gymnasium — NBA on NBC packed house */
@@ -775,12 +809,16 @@ html, body {
   box-shadow: 0 0 0 10px rgba(20,10,0,.2);
 }
 .world[data-world="court"] .l5 {
-  left: 8%; top: 4%;
-  width: 90px; height: 22px;
+  left: 16%; right: 16%; top: 6%; height: 40px;
   background: #ffe14a;
-  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
-  box-shadow: 0 0 16px #ffe14a;
-  opacity: .8;
+  box-shadow: 0 8px 0 #111;
+}
+.world[data-world="court"] .sign {
+  left: 50%; top: 6%;
+  transform: translateX(-50%);
+  background: #ffe14a;
+  color: #1a0828;
+  box-shadow: 6px 6px 0 #c0142c;
 }
 
 /* Newsroom — 90s CNN lower-third */
@@ -829,6 +867,12 @@ html, body {
   background: #fff;
   opacity: .85;
 }
+.world[data-world="news"] .sign {
+  left: 6%; top: 8%;
+  background: #c00;
+  color: #fff;
+  box-shadow: 6px 6px 0 #111;
+}
 
 /* Red carpet — step-and-repeat, velvet rope */
 .world[data-world="flash"] {
@@ -864,6 +908,13 @@ html, body {
 .world[data-world="flash"] .l5 {
   inset: 0;
   background: radial-gradient(ellipse at 50% 30%, transparent 24%, rgba(20,0,8,.45) 100%);
+}
+.world[data-world="flash"] .sign {
+  left: 50%; top: 8%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  box-shadow: 6px 6px 0 #e8c878;
 }
 
 /* Blockbuster aisle — Friday-night tapes */
@@ -933,10 +984,10 @@ html, body {
     linear-gradient(#5a3a78 0 18%, #b48cc8 18% 62%, #8a6848 62%);
 }
 .world[data-world="friends"] .l1 {
-  left: 8%; top: 16%; width: 28%; height: 48%;
+  left: 6%; top: 12%; width: 32%; height: 56%;
   background: #c45a20;
-  border: 10px solid #8a3a10;
-  box-shadow: 12px 18px 0 rgba(40,20,10,.25);
+  border: 14px solid #8a3a10;
+  box-shadow: 14px 18px 0 rgba(40,20,10,.28);
 }
 .world[data-world="friends"] .l1::after {
   content: '';
@@ -974,6 +1025,12 @@ html, body {
   box-shadow: 6px 8px 0 #3a2050;
   opacity: .8;
   animation: drift 10s ease-in-out infinite;
+}
+.world[data-world="friends"] .sign {
+  left: 40%; top: 8%;
+  background: #5a3a78;
+  color: #ffe14a;
+  box-shadow: 6px 6px 0 #111;
 }
 
 /* Monk's diner */
@@ -1088,58 +1145,78 @@ html, body {
   transform-origin: center bottom;
 }
 .world[data-world="belair"] .l5 {
-  right: 12%; top: 18%;
-  width: 42px; height: 32%;
+  left: 8%; right: 8%; top: 42%; height: 32%;
   background:
-    radial-gradient(ellipse 90% 36% at 50% 4%, #0a6a28 0 70%, transparent 71%),
-    linear-gradient(#5a3a18, #5a3a18) 50% 100% / 6px 70% no-repeat;
+    repeating-linear-gradient(90deg, transparent 0 22px, #111 22px 28px),
+    linear-gradient(#111, #111) 0 0 / 100% 10px no-repeat,
+    linear-gradient(#111, #111) 0 100% / 100% 12px no-repeat;
+}
+.world[data-world="monks"] .sign {
+  left: 8%; top: 8%;
+  background: #c45a48;
+  color: #f4e7b4;
+  box-shadow: 6px 6px 0 #111;
+}
+.world[data-world="zip"] .sign {
+  left: 8%; top: 8%;
+  background: #111;
+  color: #f6c8a0;
+  box-shadow: 6px 6px 0 #fff;
+}
+.world[data-world="belair"] .sign {
+  left: 50%; top: 8%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #ffe14a;
+  box-shadow: 6px 6px 0 #2a7a38;
 }
 
-/* Universal / Nick Studios midway — toys + food share the park */
+/* Nick Studios / CityWalk — storefront aisle */
 .world[data-world="park"] {
   background:
-    radial-gradient(ellipse 48% 32% at 78% 4%, #fff 0 14%, transparent 42%),
-    linear-gradient(#4ec8ff 0 34%, #ffe14a 34% 38%, #2aaa48 38%);
+    radial-gradient(ellipse at 80% 0, #fff 0 10%, transparent 32%),
+    linear-gradient(#4ec8ff 0 16%, #ff7a18 16%);
 }
 .world[data-world="park"] .l1 {
-  left: 6%; top: 14%; width: 64px; height: 46%;
-  background:
-    radial-gradient(ellipse 110% 38% at 50% 6%, #0a7a38 0 70%, transparent 71%),
-    linear-gradient(#8a5a28, #8a5a28) 50% 100% / 8px 68% no-repeat;
-  filter: drop-shadow(72px 10px 0 #0a6a30);
-  opacity: .92;
+  left: 0; top: 0; height: 16%; right: 0;
+  background: #c0142c;
+  box-shadow: 0 10px 0 #ffe14a;
 }
 .world[data-world="park"] .l2 {
-  left: -8%; right: -8%; top: 8%; height: 38%;
+  left: -8%; right: -8%; top: 18%; height: 52%;
   background:
-    radial-gradient(ellipse 80% 18% at 20% 40%, transparent 40%, #c0142c 41% 48%, transparent 49%),
-    radial-gradient(ellipse 70% 16% at 70% 28%, transparent 42%, #111 43% 50%, transparent 51%);
-  opacity: .8;
-  animation: coaster 6s ease-in-out infinite;
+    repeating-linear-gradient(90deg,
+      #ff7a18 0 16px, #ffe14a 16px 20px, #c0142c 20px 24px,
+      #1a3a88 24px 80px, #00e5ff 80px 84px, #1a3a88 84px 140px);
+  transform: perspective(820px) rotateX(8deg);
+  transform-origin: center top;
+  box-shadow: inset 0 20px 40px rgba(0,0,0,.35);
 }
 .world[data-world="park"] .l3 {
-  left: 8%; bottom: 28%; width: 22%; height: 22%;
-  background: #ff7a18;
-  clip-path: polygon(0 28%, 12% 0, 88% 0, 100% 28%, 100% 100%, 0 100%);
-  box-shadow: 28vw 8px 0 #ffe14a, 48vw -6px 0 #c0142c;
-  opacity: .88;
+  left: 4%; bottom: 22%;
+  width: 90px; height: 42%;
+  background:
+    radial-gradient(ellipse 140% 40% at 50% 6%, #0a7a38 0 72%, transparent 73%),
+    linear-gradient(#8a5a28, #8a5a28) 50% 100% / 14px 70% no-repeat;
+  filter: drop-shadow(18vw 10px 0 #0a6a30);
 }
 .world[data-world="park"] .l4 {
-  left: -14%; right: -14%; bottom: -16%; height: 40%;
-  background:
-    repeating-linear-gradient(90deg, #e8c090 0 36px, #d8b078 36px 40px);
+  left: -14%; right: -14%; bottom: -16%; height: 36%;
+  background: repeating-linear-gradient(90deg, #e8c090 0 36px, #d8b078 36px 40px);
   transform: perspective(640px) rotateX(58deg);
   transform-origin: center bottom;
 }
 .world[data-world="park"] .l5 {
-  right: 10%; top: 12%;
-  width: 70px; height: 70px;
-  border-radius: 50%;
-  background:
-    conic-gradient(#ff7a18 0 12%, #ffe14a 12% 24%, #ff2bd6 24% 36%, #00e5ff 36% 48%, #ff7a18 48% 60%, #ffe14a 60% 72%, #7cff3a 72% 84%, #ff7a18 84%);
-  box-shadow: 0 0 0 8px #c0142c, 0 16px 0 #1114;
-  animation: swirlSpin 12s linear infinite;
-  opacity: .75;
+  left: 18%; right: 18%; top: 5%; height: 40px;
+  background: #ffe14a;
+  box-shadow: 0 8px 0 #111;
+}
+.world[data-world="park"] .sign {
+  left: 50%; top: 5%;
+  transform: translateX(-50%);
+  background: #ffe14a;
+  color: #c0142c;
+  box-shadow: 6px 6px 0 #111;
 }
 
 /* Toys R Us catalog floor — product photo is the star */
@@ -1242,6 +1319,13 @@ html, body {
   inset: 0;
   background: radial-gradient(ellipse at 50% 40%, transparent 28%, rgba(0,0,0,.5) 100%);
 }
+.world[data-world="circuit"] .sign {
+  left: 50%; top: 6%;
+  transform: translateX(-50%);
+  background: #c0142c;
+  color: #ffe14a;
+  box-shadow: 6px 6px 0 #111;
+}
 
 @keyframes drift {
   0%, 100% { transform: translateX(0); }
@@ -1284,6 +1368,33 @@ html, body {
   0%, 100% { transform: translateX(0) rotate(-2deg); }
   50% { transform: translateX(3%) rotate(2deg); }
 }
+
+.world[data-world="sonic"] { background: url('../img/worlds/sonic.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="snes"] { background: url('../img/worlds/snes.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="n64"] { background: url('../img/worlds/n64.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="ps1"] { background: url('../img/worlds/ps1.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="arcade"] { background: url('../img/worlds/arcade.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="gb"] { background: url('../img/worlds/gb.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="pc"] { background: url('../img/worlds/pc.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="dc"] { background: url('../img/worlds/dc.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="nick"] { background: url('../img/worlds/nick.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="gotham"] { background: url('../img/worlds/gotham.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="matrix"] { background: url('../img/worlds/matrix.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="bayside"] { background: url('../img/worlds/bayside.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="mtv"] { background: url('../img/worlds/mtv.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="studio"] { background: url('../img/worlds/studio.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="court"] { background: url('../img/worlds/court.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="news"] { background: url('../img/worlds/news.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="flash"] { background: url('../img/worlds/flash.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="video"] { background: url('../img/worlds/video.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="friends"] { background: url('../img/worlds/friends.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="monks"] { background: url('../img/worlds/monks.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="zip"] { background: url('../img/worlds/zip.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="belair"] { background: url('../img/worlds/belair.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="park"] { background: url('../img/worlds/park.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="circular"] { background: url('../img/worlds/park.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="grocery"] { background: url('../img/worlds/park.jpg') center / cover no-repeat #123 !important; }
+.world[data-world="circuit"] { background: url('../img/worlds/circuit.jpg') center / cover no-repeat #123 !important; }
 
 .top {
   position: absolute;
@@ -1665,22 +1776,30 @@ html, body {
 }
 .tv-glass {
   position: relative;
-  background: radial-gradient(circle at 50% 40%, #3ecb7a, #0a2a14);
+  background: radial-gradient(circle at 50% 40%, #1a1a18, #050504);
   color: #c8ffd4;
-  min-height: 230px;
-  padding: 16px;
+  min-height: 250px;
+  padding: 0;
   overflow: hidden;
 }
 .tv-glass .face-img {
-  filter: contrast(1.08) saturate(1.12);
+  filter: contrast(1.12) saturate(1.08) brightness(1.02);
 }
 .tv-scan {
   position: absolute;
   inset: 0;
   z-index: 4;
   pointer-events: none;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+  background:
+    repeating-linear-gradient(to bottom, rgba(0,0,0,.28) 0 1px, transparent 1px 3px),
+    linear-gradient(to bottom, transparent 0%, rgba(255,255,255,.08) 50%, transparent 100%);
+  background-size: 100% 4px, 100% 140%;
   mix-blend-mode: multiply;
+  animation: tvSweep 5.5s linear infinite;
+}
+@keyframes tvSweep {
+  from { background-position: 0 0, 0 -40%; }
+  to { background-position: 0 0, 0 140%; }
 }
 .tv-rgb {
   position: absolute;
@@ -2642,7 +2761,7 @@ html, body {
   inset: 0;
   width: 100%;
   height: 100%;
-  image-rendering: pixelated;
+  image-rendering: auto;
   z-index: 2;
 }
 .bars {

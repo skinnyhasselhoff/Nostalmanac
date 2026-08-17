@@ -56,6 +56,12 @@ function themeFor(item) {
   return map[item.cat] || map.web;
 }
 
+const TUBE = new Set(['movie', 'game', 'tv', 'cartoon']);
+
+function faceKind(kind) {
+  return TUBE.has(kind) ? 'tv' : kind;
+}
+
 function shuffle(list) {
   const a = list.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -251,18 +257,18 @@ function dialFor(item) {
 const MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 
 const WIPE_MS = {
-  slime: 980,
+  slime: 1080,
   glitch: 980,
-  static: 820,
-  checker: 720,
-  tape: 720,
-  leader: 720,
-  neon: 720,
-  paparazzi: 720,
-  sitcom: 640,
-  splash: 560,
-  stadium: 560,
-  same: 420,
+  static: 920,
+  checker: 880,
+  tape: 900,
+  leader: 960,
+  neon: 920,
+  paparazzi: 880,
+  sitcom: 820,
+  stadium: 920,
+  splash: 860,
+  same: 360,
 };
 
 function playWipe(type, { fromCh, toCh, net, genreChange }) {
@@ -298,10 +304,11 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
     });
   }
 
-  hero.dataset.show = theme.kind;
+  const face = faceKind(theme.kind);
+  hero.dataset.show = face;
   hero.querySelectorAll('.obj').forEach((el) => {
     el.style.removeProperty('display');
-    const on = el.dataset.kind === theme.kind;
+    const on = el.dataset.kind === face;
     el.classList.toggle('is-on', on);
     if (on) {
       el.classList.remove('is-on');

@@ -134,9 +134,9 @@ export class NostalAudio {
       speechSynthesis.speak(u);
       setTimeout(resolve, after);
     });
-    await say("You've got", 0.92, 900);
-    await new Promise((r) => setTimeout(r, 220));
-    await say('nostalgia.', 0.84, 1600);
+    await say("You've got", 0.88, 1100);
+    await new Promise((r) => setTimeout(r, 380));
+    await say('nostalgia.', 0.72, 2200);
   }
 
   playLogon() {
@@ -144,7 +144,8 @@ export class NostalAudio {
       this.stopLogon();
       const el = new Audio('audio/youve-got-nostalgia.wav');
       el.preload = 'auto';
-      el.volume = 0.94;
+      el.volume = 0.92;
+      el.playbackRate = 0.96;
       this.logonEl = el;
       let settled = false;
       const done = (ok) => {
@@ -156,7 +157,7 @@ export class NostalAudio {
       el.onended = () => done(true);
       el.onerror = () => done(false);
       el.play().then(() => {
-        setTimeout(() => done(true), 3600);
+        setTimeout(() => done(true), 4200);
       }).catch(() => done(false));
     });
   }
@@ -210,75 +211,85 @@ export class NostalAudio {
     this.wipe('static', true);
   }
 
+  whoosh(when, dur = 0.28, vol = 0.05) {
+    this.noise(when, dur, vol, 700);
+    this.noise(when, dur * 0.7, vol * 0.6, 1800);
+    this.tone(140, when, dur, 'sine', vol * 0.45);
+    this.tone(90, when + 0.04, dur * 0.8, 'sine', vol * 0.3);
+  }
+
   wipe(type, genreChange) {
     if (!this.ctx || this.muted || this.ctx.state === 'closed') return;
     const t = this.ctx.currentTime;
     if (!genreChange) {
-      this.noise(t, 0.1, 0.035, 2600);
+      this.whoosh(t, 0.18, 0.04);
       return;
     }
     if (type === 'slime') {
-      this.noise(t, 0.22, 0.05, 900);
-      this.tone(180, t, 0.18, 'sine', 0.03);
-      this.tone(90, t + 0.08, 0.2, 'sine', 0.02);
+      this.whoosh(t, 0.22, 0.04);
+      this.noise(t, 0.28, 0.055, 700);
+      this.tone(160, t, 0.22, 'sine', 0.035);
+      this.tone(70, t + 0.1, 0.24, 'sine', 0.025);
       return;
     }
     if (type === 'checker') {
-      [392, 494, 587, 784].forEach((f, i) => this.tone(f, t + i * 0.05, 0.07, 'square', 0.018));
-      this.noise(t, 0.12, 0.03, 1800);
+      this.whoosh(t, 0.2, 0.04);
+      this.noise(t, 0.16, 0.04, 2200);
+      this.tone(420, t, 0.05, 'sine', 0.02);
+      this.tone(280, t + 0.08, 0.08, 'sine', 0.018);
       return;
     }
     if (type === 'leader') {
-      this.tone(1000, t, 0.08, 'sine', 0.04);
-      this.tone(1000, t + 0.22, 0.08, 'sine', 0.04);
-      this.tone(1000, t + 0.44, 0.12, 'sine', 0.045);
-      this.noise(t, 0.5, 0.02, 600);
+      this.tone(880, t, 0.07, 'sine', 0.035);
+      this.tone(880, t + 0.24, 0.07, 'sine', 0.035);
+      this.tone(880, t + 0.48, 0.14, 'sine', 0.04);
+      this.whoosh(t + 0.1, 0.35, 0.03);
       return;
     }
     if (type === 'tape') {
-      this.tone(240, t, 0.1, 'square', 0.02);
-      this.noise(t, 0.18, 0.04, 900);
-      this.tone(180, t + 0.08, 0.14, 'sawtooth', 0.016);
+      this.tone(90, t, 0.08, 'square', 0.018);
+      this.noise(t, 0.22, 0.05, 800);
+      this.tone(70, t + 0.1, 0.18, 'sawtooth', 0.014);
+      this.whoosh(t + 0.12, 0.2, 0.03);
       return;
     }
     if (type === 'neon') {
-      this.tone(220, t, 0.18, 'sawtooth', 0.03);
-      this.tone(880, t + 0.04, 0.12, 'square', 0.016);
-      this.noise(t, 0.16, 0.04, 3200);
+      this.tone(110, t, 0.22, 'sine', 0.04);
+      this.tone(220, t + 0.05, 0.16, 'triangle', 0.02);
+      this.whoosh(t, 0.24, 0.045);
       return;
     }
     if (type === 'paparazzi') {
-      this.noise(t, 0.04, 0.08, 4000);
-      this.noise(t + 0.12, 0.04, 0.07, 4200);
-      this.noise(t + 0.26, 0.05, 0.08, 3800);
-      this.tone(1800, t, 0.03, 'square', 0.02);
+      this.noise(t, 0.035, 0.09, 4200);
+      this.tone(1600, t, 0.025, 'square', 0.018);
+      this.noise(t + 0.14, 0.035, 0.08, 4000);
+      this.noise(t + 0.3, 0.04, 0.09, 3800);
       return;
     }
     if (type === 'glitch') {
-      this.noise(t, 0.2, 0.055, 5200);
-      this.tone(80, t, 0.1, 'square', 0.03);
-      this.tone(1400, t + 0.08, 0.04, 'square', 0.02);
+      this.handshake(t, 0.35);
+      this.whoosh(t + 0.1, 0.2, 0.04);
       return;
     }
     if (type === 'splash') {
-      this.noise(t, 0.18, 0.05, 1400);
-      this.tone(240, t, 0.12, 'sine', 0.03);
+      this.tone(784, t, 0.1, 'sine', 0.03);
+      this.tone(1046, t + 0.09, 0.16, 'sine', 0.028);
+      this.whoosh(t, 0.2, 0.035);
       return;
     }
     if (type === 'sitcom') {
-      this.tone(523, t, 0.08, 'triangle', 0.03);
-      this.tone(659, t + 0.07, 0.1, 'triangle', 0.03);
-      this.noise(t, 0.14, 0.03, 2000);
+      this.tone(392, t, 0.1, 'triangle', 0.03);
+      this.tone(523, t + 0.08, 0.14, 'triangle', 0.028);
+      this.whoosh(t, 0.18, 0.03);
       return;
     }
     if (type === 'stadium') {
-      this.noise(t, 0.22, 0.045, 800);
-      this.tone(196, t, 0.16, 'sawtooth', 0.025);
+      this.noise(t, 0.32, 0.055, 600);
+      this.tone(98, t, 0.22, 'sawtooth', 0.02);
+      this.whoosh(t, 0.28, 0.04);
       return;
     }
-    this.noise(t, 0.24, 0.072, 2400);
-    this.noise(t + 0.04, 0.16, 0.045, 5200);
-    this.tone(58, t, 0.08, 'sawtooth', 0.02);
-    this.tone(1400, t + 0.02, 0.05, 'square', 0.012);
+    this.whoosh(t, 0.26, 0.05);
+    this.noise(t, 0.22, 0.05, 2400);
   }
 }

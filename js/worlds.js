@@ -410,7 +410,7 @@ export class WipeFX {
     const mode = this.mode || 'static';
     if (mode === 'glitch') { this.nw = nw || 420; this.nh = nh || 240; this.canvas.style.imageRendering = 'auto'; }
     else if (mode === 'slime') { this.nw = nw || 320; this.nh = nh || 180; this.canvas.style.imageRendering = 'auto'; }
-    else { this.nw = nw || 160; this.nh = nh || 90; this.canvas.style.imageRendering = 'pixelated'; }
+    else { this.nw = nw || 280; this.nh = nh || 160; this.canvas.style.imageRendering = 'auto'; }
     this.canvas.width = this.nw;
     this.canvas.height = this.nh;
     this.ctx.imageSmoothingEnabled = mode === 'glitch' || mode === 'slime';
