@@ -19,11 +19,11 @@ function artQuality(url) {
 }
 
 async function itunesImage(item, signal) {
-  const entity = item.cat === 'music' ? 'album' : item.cat === 'tv' || item.cat === 'cartoon' ? 'tvSeason' : '';
+  const entity = item.cat === 'music' ? 'song' : item.cat === 'tv' || item.cat === 'cartoon' ? 'tvSeason' : item.cat === 'movie' ? 'movie' : '';
   if (!entity) return '';
   const q = item.cat === 'music'
     ? `${item.title} ${item.meta || ''}`
-    : `${item.title}`;
+    : `${item.title} ${item.year || ''}`;
   try {
     const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=${entity}&country=US&limit=8`;
     const res = await fetch(url, { signal });
@@ -37,11 +37,18 @@ async function itunesImage(item, signal) {
       if (name.includes(titleL.slice(0, 18))) score += 4;
       bits(item.title).forEach((w) => { if (name.includes(w)) score += 1; });
       if (item.meta && name.includes(String(item.meta).toLowerCase().slice(0, 12))) score += 2;
+      if (item.cat === 'music') {
+        const artist = String(item.meta || '').toLowerCase();
+        const an = String(r.artistName || '').toLowerCase();
+        if (artist && an.includes(artist.split(' ')[0])) score += 8;
+        else if (artist) score -= 5;
+        if (/hits \d|karaoke|tribute|now that|kidz bop/i.test(name)) score -= 12;
+      }
       const year = String(r.releaseDate || '').slice(0, 4);
       if (year && Math.abs(Number(year) - Number(item.year)) <= 1) score += 2;
       return { score, url: biggerItunes(r.artworkUrl100) };
     }).sort((a, b) => b.score - a.score);
-    return ranked[0]?.score > 2 ? ranked[0].url : (hits[0] ? biggerItunes(hits[0].artworkUrl100) : '');
+    return ranked[0]?.score > 2 ? ranked[0].url : (item.cat === 'music' ? '' : (hits[0] ? biggerItunes(hits[0].artworkUrl100) : ''));
   } catch (err) {
     if (err.name === 'AbortError') throw err;
     return '';
@@ -79,8 +86,11 @@ export async function portrait(item, signal) {
   if (cache.has(key)) return cache.get(key);
 
   const jobs = [];
-  if (item.cat === 'music') jobs.push(itunesImage(item, signal));
-  if (item.cat === 'tv' || item.cat === 'cartoon') jobs.push(tvmazeImage(item, signal));
+  if (item.cat === 'music' || item.cat === 'movie') jobs.push(itunesImage(item, signal));
+  if (item.cat === 'tv' || item.cat === 'cartoon') {
+    jobs.push(tvmazeImage(item, signal));
+    jobs.push(itunesImage(item, signal));
+  }
   jobs.push(coverImage(item, signal));
 
   try {

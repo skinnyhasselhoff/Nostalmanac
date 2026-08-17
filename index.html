@@ -3,301 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Nostalmanac</title>
-  <meta name="description" content="The 1990s, one object at a time.">
+  <title>NOSTALMANAC · 90s kid</title>
+  <meta name="description" content="Cartoons, movies, songs, and fads. Tap play and live in the 90s.">
+  <meta name="theme-color" content="#ff3d00">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://en.wikipedia.org">
   <link rel="preconnect" href="https://itunes.apple.com">
-  <link rel="preconnect" href="https://upload.wikimedia.org">
+  <link rel="preconnect" href="https://en.wikipedia.org">
   <link rel="preconnect" href="https://api.tvmaze.com">
-  <link rel="preconnect" href="https://static.tvmaze.com">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bangers&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=29">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bangers&family=Outfit:wght@600;800&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=32">
 </head>
-<body>
-  <div id="stage">
-    <div id="worlds" aria-hidden="true">
-      <div class="world is-on" data-world="sonic"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">GREEN HILL ZONE</b></div>
-      <div class="world" data-world="snes"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">WORLD 1</b></div>
-      <div class="world" data-world="n64"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">PEACH'S CASTLE</b></div>
-      <div class="world" data-world="ps1"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">DISC 1</b></div>
-      <div class="world" data-world="arcade"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">INSERT COIN</b></div>
-      <div class="world" data-world="gb"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">GAME BOY</b></div>
-      <div class="world" data-world="pc"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">C:\GAMES&gt;</b></div>
-      <div class="world" data-world="dc"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">SEGA</b></div>
-      <div class="world" data-world="nick"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">NICKELODEON</b></div>
-      <div class="world" data-world="gotham"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
-      <div class="world" data-world="matrix"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">WAKE UP</b></div>
-      <div class="world" data-world="bayside"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">BAYSIDE HIGH</b></div>
-      <div class="world" data-world="mtv"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">YO! MTV RAPS</b></div>
-      <div class="world" data-world="studio"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">ON AIR</b></div>
-      <div class="world" data-world="court"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">NBA ON NBC</b></div>
-      <div class="world" data-world="news"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">CNN</b></div>
-      <div class="world" data-world="flash"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">LIVE ON E!</b></div>
-      <div class="world" data-world="video"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
-      <div class="world" data-world="friends"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">CENTRAL PERK</b></div>
-      <div class="world" data-world="monks"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">MONK'S</b></div>
-      <div class="world" data-world="zip"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">90210</b></div>
-      <div class="world" data-world="belair"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">BEL-AIR</b></div>
-      <div class="world" data-world="park"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">NICK STUDIOS</b></div>
-      <div class="world" data-world="circular"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
-      <div class="world" data-world="grocery"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i></div>
-      <div class="world" data-world="circuit"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="l l4"></i><i class="l l5"></i><b class="sign">CIRCUIT CITY</b></div>
+<body data-vibe="toon">
+  <audio id="bed" playsinline webkit-playsinline loop preload="auto" src="audio/silence.wav"></audio>
+
+  <div id="worlds" aria-hidden="true">
+    <div class="world is-on" data-vibe="toon">
+      <i class="slime"></i><i class="slime s2"></i><i class="splat a"></i><i class="splat b"></i><i class="splat c"></i>
+      <b class="sign">SATURDAY MORNING</b>
     </div>
-    <div id="parade" hidden aria-hidden="true">
-      <b>GAME BOY</b><b>SNES</b><b>GENESIS</b><b>N64</b><b>PLAYSTATION</b><b>DREAMCAST</b>
-      <b>GAME BOY</b><b>SNES</b><b>GENESIS</b><b>N64</b><b>PLAYSTATION</b><b>DREAMCAST</b>
+    <div class="world" data-vibe="movie">
+      <i class="sprocket"></i><i class="marquee"></i>
+      <b class="sign">BE KIND REWIND</b>
     </div>
-    <canvas id="fxCanvas"></canvas>
-    <div class="glass"></div>
-    <div id="pixels" aria-hidden="true"></div>
-    <div id="grain" aria-hidden="true"></div>
-    <div id="chroma" aria-hidden="true"></div>
-    <div id="track" aria-hidden="true"></div>
-
-    <header class="top">
-      <strong>NOSTALMANAC</strong>
-      <span id="ch">CH 33</span>
-      <span class="top-btns">
-        <button type="button" id="btnSearch">Search</button>
-        <button type="button" id="btnMute">Sound</button>
-      </span>
-    </header>
-
-    <div id="hero" data-show="game">
-      <div class="obj cartbox is-on" data-kind="game">
-        <div class="rig">
-          <div class="box3d" id="gameBox" data-plat="16BIT">
-            <div class="box-front">
-              <img class="face-img" alt="" referrerpolicy="no-referrer">
-              <span class="box-sheen"></span>
-              <span class="box-plat" id="gamePlat">16-BIT</span>
-              <b class="obj-title"></b>
-            </div>
-            <div class="box-spine"><i></i></div>
-            <div class="box-side"></div>
-            <div class="box-top"></div>
-            <div class="box-bot"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj vhs" data-kind="movie">
-        <div class="rig">
-          <div class="clam" id="vhsClam" data-label="hit">
-            <div class="clam-spine">
-              <span class="spine-win"></span>
-              <span class="spine-mark" id="vhsSpine">HOME VIDEO</span>
-            </div>
-            <div class="clam-lid">
-              <div class="clam-banner" id="vhsBanner">NOW ON VIDEO</div>
-              <div class="clam-art">
-                <img class="face-img" alt="" referrerpolicy="no-referrer">
-                <span class="clam-sheen"></span>
-              </div>
-              <div class="clam-sticker">ORIGINAL</div>
-              <div class="clam-foot">
-                <span class="clam-studio" id="vhsStudio">HOME VIDEO</span>
-                <span class="tiny" id="vhsRating">PG</span>
-              </div>
-            </div>
-            <div class="clam-edge"></div>
-            <div class="clam-top"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj tvset" data-kind="tv">
-        <div class="rig">
-          <div class="tv-body">
-            <div class="tv-bezel">
-              <div class="tv-crt">
-                <div class="tv-glass">
-                  <img class="face-img" alt="" referrerpolicy="no-referrer">
-                  <span class="tv-scan"></span>
-                  <span class="tv-rgb"></span>
-                  <span class="tv-bloom"></span>
-                  <span class="tiny">STEREO</span>
-                  <b class="obj-title"></b>
-                </div>
-              </div>
-              <i class="tv-led"></i>
-            </div>
-            <div class="tv-grill"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="tv-base"><i></i><i></i></div>
-        </div>
-      </div>
-
-      <div class="obj tama" data-kind="cartoon">
-        <div class="rig">
-          <div class="tama-ring"></div>
-          <div class="tama-lcd">
-            <img class="face-img" alt="" referrerpolicy="no-referrer">
-            <span class="tama-scan"></span>
-            <span class="tiny">SATURDAY</span>
-            <b class="obj-title"></b>
-          </div>
-          <div class="tama-btns"><i></i><i></i><i></i></div>
-        </div>
-      </div>
-
-      <div class="obj walkman" data-kind="music">
-        <div class="rig">
-          <div class="jewel">
-            <div class="jewel-lid">
-              <img class="face-img" alt="" referrerpolicy="no-referrer">
-              <span class="jewel-plastic"></span>
-            </div>
-            <div class="jewel-disc" aria-hidden="true"></div>
-            <div class="jewel-tray">
-              <span class="tiny">COMPACT DISC</span>
-              <b class="obj-title"></b>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj ticket" data-kind="sport">
-        <div class="rig">
-          <div class="ticket-face">
-            <img class="face-img" alt="" referrerpolicy="no-referrer">
-            <span class="ticket-perf"></span>
-            <span class="tiny">ADMIT ONE</span>
-            <b class="obj-title"></b>
-            <span class="tiny">NOISE · LIGHTS · GAME</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj zine" data-kind="person">
-        <div class="rig">
-          <div class="zine-stack"></div>
-          <div class="zine-pages"></div>
-          <div class="zine-spine"></div>
-          <div class="zine-cover">
-            <span class="zine-date">AUGUST 1996</span>
-            <div class="zine-logo">PEOPLE</div>
-            <div class="zine-photo">
-              <img class="face-img" alt="" referrerpolicy="no-referrer">
-            </div>
-            <span class="zine-kicker">EXCLUSIVE</span>
-            <b class="obj-title"></b>
-            <span class="zine-issue">THE 90s ISSUE</span>
-            <span class="zine-bar"></span>
-          </div>
-          <div class="zine-sheen"></div>
-        </div>
-      </div>
-
-      <div class="obj brick" data-kind="tech">
-        <div class="rig">
-          <div class="zack-ant"><i class="zack-whip"></i><i class="zack-tip"></i></div>
-          <div class="zack-ear"></div>
-          <div class="zack-body">
-            <div class="brick-screen">
-              <img class="face-img" alt="" referrerpolicy="no-referrer">
-              <span class="tiny">BAYSIDE</span>
-              <b class="obj-title"></b>
-            </div>
-            <div class="zack-pad">
-              <i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>*</i><i>0</i><i>#</i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj disk" data-kind="web">
-        <div class="rig">
-          <div class="aol-face">
-            <span class="aol-foil"></span>
-            <img class="face-img" alt="" referrerpolicy="no-referrer">
-            <span class="tiny">100 FREE HOURS</span>
-            <b class="obj-title"></b>
-            <span class="tiny">AOL · TRIAL CD</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj shot" data-kind="ad">
-        <div class="rig">
-          <div class="shot-card">
-            <p class="shot-kicker" id="shotKicker">NEW FOR 1996</p>
-            <div class="shot-frame">
-              <img class="face-img" alt="" referrerpolicy="no-referrer">
-              <span class="shot-glare"></span>
-            </div>
-            <b class="obj-title"></b>
-            <p class="shot-tag" id="shotTag">THE TOY AISLE</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="obj paper" data-kind="event">
-        <div class="rig">
-          <div class="paper-sheet">
-            <span class="tiny">EXTRA · EXTRA</span>
-            <div class="paper-art"><img class="face-img" alt="" referrerpolicy="no-referrer"></div>
-            <b class="obj-title"></b>
-            <span class="tiny">ALL THE NEWS THAT FITS</span>
-          </div>
-        </div>
-      </div>
+    <div class="world" data-vibe="jam">
+      <i class="vinyl"></i><i class="vinyl v2"></i>
+      <b class="sign">YO! MTV RAPS</b>
     </div>
+    <div class="world" data-vibe="fad">
+      <i class="star a"></i><i class="star b"></i><i class="star c"></i><i class="star d"></i>
+      <b class="sign">THE TOY AISLE</b>
+    </div>
+  </div>
 
-    <button type="button" class="hitbox left" id="prev" aria-label="Previous"></button>
-    <button type="button" class="hitbox right" id="next" aria-label="Next"></button>
+  <header class="top">
+    <strong>NOSTALMANAC</strong>
+    <span class="top-btns">
+      <button type="button" id="btnSearch">Search</button>
+      <button type="button" id="btnMute">SOUND ON</button>
+    </span>
+  </header>
 
+  <main id="stage">
+    <figure id="sticker">
+      <img id="art" alt="" referrerpolicy="no-referrer">
+      <span id="stickerTag">CARTOON</span>
+    </figure>
     <footer class="copy">
-      <p id="tag">1991 · GAME</p>
+      <p id="tag">1994 · CARTOON</p>
       <h1 id="title">Nostalmanac</h1>
-      <p id="meta">Tap through the 1990s.</p>
+      <p id="note">Push play.</p>
       <div class="links">
         <a id="ytLink" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
         <a id="wikiLink" href="https://en.wikipedia.org/" target="_blank" rel="noopener">Wikipedia</a>
       </div>
-      <p id="nowplay" hidden></p>
+      <p id="nowplay"></p>
       <p id="pos">1 / 1</p>
-      <p class="hint">Tap the right side · swipe up for more</p>
     </footer>
-  </div>
+  </main>
+
+  <button type="button" class="hit left" id="prev" aria-label="Previous"></button>
+  <button type="button" class="hit right" id="next" aria-label="Next"></button>
 
   <div id="wipe" aria-hidden="true">
     <canvas id="wipeFx"></canvas>
-    <div class="bars"></div>
-    <div class="wipe-roll"></div>
-    <div class="wipe-flash"></div>
-    <div class="wipe-goo"></div>
-    <div class="wipe-check"></div>
-    <div class="wipe-leader"><span></span></div>
-    <div class="wipe-iris"></div>
-    <div class="wipe-tape"></div>
-    <b id="wipeFrom">CH 33</b>
-    <b id="wipeCh">CH 07</b>
-    <span id="wipeNet">HBO</span>
+    <div class="scratch-disc"></div>
+    <b id="wipeWord">STATIC</b>
   </div>
 
-  <div id="connect">
-    <canvas id="bootFx"></canvas>
-    <div class="connect-card">
-      <p>WELCOME</p>
-      <h1>Nostalmanac</h1>
-      <div class="modem-line">
-        <span id="bootStatus">Tap to connect at 28,800 bps</span>
-        <i class="modem-bar"><i id="bootFill"></i></i>
-      </div>
-      <b>Tap anywhere to enter</b>
-    </div>
+  <div id="boot">
+    <button type="button" id="playBtn">
+      <span class="tri"></span>
+      <b>PUSH PLAY</b>
+      <small>cartoons · movies · songs · fads</small>
+    </button>
   </div>
 
   <div id="drawer" hidden inert>
     <div class="sheet">
       <div class="sheet-head">
-        <strong>Search the 90s</strong>
+        <strong>Dig the crates</strong>
         <button type="button" id="btnClose">Done</button>
       </div>
-      <input id="search" type="search" placeholder="Sonic, Friends, Surge…" autocomplete="off">
+      <input id="search" type="search" placeholder="Beastie Boys, Rugrats, Pogs…" autocomplete="off">
       <div class="chips" id="years"></div>
       <div class="chips" id="cats"></div>
       <p class="drawer-count" id="dbCount"></p>
@@ -305,6 +93,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=29"></script>
+  <script type="module" src="js/app.js?v=32"></script>
 </body>
 </html>

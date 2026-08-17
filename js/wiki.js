@@ -9,6 +9,7 @@ const HINT = {
   tv: 'TV series',
   cartoon: 'TV series',
   music: 'song',
+  fad: 'toy',
   person: '',
   tech: '',
   web: 'website',
@@ -24,6 +25,7 @@ const YT_EXTRA = {
   game: 'gameplay',
   tv: 'intro theme',
   cartoon: 'theme song',
+  fad: 'commercial',
   sport: 'highlights',
   person: '1990s interview',
   tech: 'demo',
@@ -99,6 +101,7 @@ function scoreHit(hit, item) {
   if (item.cat === 'movie' && /\bfilm\b|\bmovie\b/i.test(hit)) n += 5;
   if ((item.cat === 'tv' || item.cat === 'cartoon') && /tv series|television|cartoon/i.test(hit)) n += 5;
   if (item.cat === 'music' && /song|single|album/i.test(hit)) n += 3;
+  if (item.cat === 'fad' && /toy|game|food|brand|product/i.test(hit)) n += 3;
   if (item.query && hitL === item.query.toLowerCase()) n += 12;
   if (String(item.year) && hit.includes(String(item.year))) n += 2;
   if (/^list of |disambiguation|filmography/i.test(hit)) n -= 8;
