@@ -134,9 +134,7 @@ export class NostalAudio {
       speechSynthesis.speak(u);
       setTimeout(resolve, after);
     });
-    await say("You've got", 0.88, 1100);
-    await new Promise((r) => setTimeout(r, 380));
-    await say('nostalgia.', 0.72, 2200);
+    await say("You've got nostalgia.", 1, 2800);
   }
 
   playLogon() {
@@ -144,8 +142,10 @@ export class NostalAudio {
       this.stopLogon();
       const el = new Audio('audio/youve-got-nostalgia.wav');
       el.preload = 'auto';
-      el.volume = 0.92;
-      el.playbackRate = 0.96;
+      el.volume = 0.95;
+      el.playbackRate = 1;
+      el.playsInline = true;
+      el.setAttribute('playsinline', '');
       this.logonEl = el;
       let settled = false;
       const done = (ok) => {
@@ -157,7 +157,10 @@ export class NostalAudio {
       el.onended = () => done(true);
       el.onerror = () => done(false);
       el.play().then(() => {
-        setTimeout(() => done(true), 4200);
+        const wait = Number.isFinite(el.duration) && el.duration > 0
+          ? el.duration * 1000 + 180
+          : 2600;
+        setTimeout(() => done(true), wait);
       }).catch(() => done(false));
     });
   }

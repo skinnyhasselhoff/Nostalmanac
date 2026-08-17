@@ -20,7 +20,7 @@ export const GAMES = `
 1995|game|Chrono Trigger|SNES|New game plus. Time travel you still replay.|Chrono Trigger
 1995|game|Yoshi's Island|SNES|Baby Mario. The crayon world.|Super Mario World 2: Yoshi's Island
 1995|game|Twisted Metal|PlayStation|Sweet Tooth. The car-combat playground.|Twisted Metal (1995 video game)
-1995|game|Command & Conquer|PC|You must construct additional pylons. Wait — that's the other one. Tiberium.|Command & Conquer (1995 video game)
+1995|game|Command & Conquer|PC|Tiberium. The sidebar. The RTS that ate whole weekends.|Command & Conquer (1995 video game)
 1996|game|Super Mario 64|N64|The analog stick. The courtyard. 3D is born with a hat.|Super Mario 64
 1996|game|Quake|PC|Online deathmatch. The LAN party religion.|Quake (video game)
 1996|game|Pokémon Red and Blue|Game Boy|Gotta catch 'em all. A brick in your pocket that ate recess.|Pokémon Red and Blue

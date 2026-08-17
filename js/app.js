@@ -71,9 +71,28 @@ function shuffle(list) {
   return a;
 }
 
+const KIDCAT = new Set(['cartoon', 'toy', 'food', 'game', 'music']);
+const KIDSHOW = /simpsons|fresh prince|saved by the bell|friends|seinfeld|90210|home improvement|power ranger|pokemon|nintendo|blockbuster|saturday|recess|rugrats|hey arnold|spongebob|magic school|animaniacs|tiny toon|doug|rocko|dexter|catdog|nanny|full house|boy meets world|clarissa|are you afraid|goosebumps|wishbone|bill nye|zoom/i;
+
+function kidish(item) {
+  if (KIDCAT.has(item.cat)) return true;
+  if (item.cat === 'tv' && KIDSHOW.test(`${item.title} ${item.note}`)) return true;
+  return /school bus|recess|lunchbox|saturday morning|living room|sleepover|mall|arcade/i.test(item.note || '');
+}
+
 function mixDeck(list, pin) {
-  const rest = shuffle(list.filter((x) => x !== pin));
-  return pin ? [pin, ...rest] : rest;
+  const rest = list.filter((x) => x !== pin);
+  const kids = shuffle(rest.filter(kidish));
+  const rest2 = shuffle(rest.filter((x) => !kidish(x)));
+  const out = [];
+  let i = 0;
+  let j = 0;
+  while (i < kids.length || j < rest2.length) {
+    if (i < kids.length) out.push(kids[i++]);
+    if (i < kids.length) out.push(kids[i++]);
+    if (j < rest2.length) out.push(rest2[j++]);
+  }
+  return pin ? [pin, ...out] : out;
 }
 
 const audio = new NostalAudio();
@@ -119,6 +138,8 @@ function setWorld(name) {
   });
   const parade = document.getElementById('parade');
   if (parade) parade.hidden = !GAME_WORLDS.has(name);
+  const standees = document.getElementById('standees');
+  if (standees) standees.dataset.world = name;
   fx.setWorld(name);
 }
 
@@ -338,9 +359,7 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
   }
   document.getElementById('tag').textContent = `${item.year}  ·  ${item.cat}`;
   document.getElementById('title').textContent = item.title;
-  metaEl.textContent = item.cat === 'person' || item.cat === 'event' || item.cat === 'sport'
-    ? item.note
-    : fallbackBlurb(item);
+  metaEl.textContent = item.note || fallbackBlurb(item);
   document.getElementById('pos').textContent = `${index + 1} / ${pool.length}`;
   ytLink.href = youtubeUrl(item);
   wikiLink.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(item.title)}`;
@@ -364,8 +383,6 @@ function loadCard(item) {
   setFaces('');
   describe(item, signal).then((info) => {
     if (token !== wikiToken) return;
-    const keepOurs = item.cat === 'person' || item.cat === 'event' || item.cat === 'sport';
-    if (!keepOurs) metaEl.textContent = info.text;
     if (info.wiki) wikiLink.href = info.wiki;
     apply(info.image);
   }).catch((err) => {
@@ -395,7 +412,7 @@ function step(dir) {
 }
 
 function startDeck() {
-  pool = shuffle(ITEMS);
+  pool = mixDeck(ITEMS);
   show(0);
 }
 
@@ -481,6 +498,7 @@ connect.addEventListener('click', async () => {
   const fill = document.getElementById('bootFill');
   connect.classList.add('booting');
   if (fill) fill.style.width = '100%';
+  try { await tunes.prime(); } catch {}
   try {
     await audio.dialUp((s) => { if (status) status.textContent = s; });
   } catch {}
@@ -491,6 +509,13 @@ connect.addEventListener('click', async () => {
   bootFx.setWorld('');
   tunes.play(pool[index]);
 }, { once: true });
+
+const kickAudio = () => {
+  if (!entered || tunes.muted) return;
+  tunes.kick();
+};
+window.addEventListener('pointerdown', kickAudio, { passive: true });
+window.addEventListener('touchend', kickAudio, { passive: true });
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {

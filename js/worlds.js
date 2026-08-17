@@ -47,7 +47,7 @@ export class WorldFX {
     if (this.world === 'sonic') this.drawRings(t);
     else if (this.world === 'snes') this.drawCoins(t);
     else if (this.world === 'n64') this.drawStars(t);
-    else if (this.world === 'ps1') this.drawFog(t);
+    else if (this.world === 'ps1') this.drawOrbs(t);
     else if (this.world === 'arcade') this.drawCabinets(t);
     else if (this.world === 'gb') this.drawPixels(t);
     else if (this.world === 'pc') this.drawCursor(t);
@@ -66,19 +66,19 @@ export class WorldFX {
     else if (this.world === 'circular') this.drawSparkle(t);
     else if (this.world === 'grocery') this.drawSparkle(t);
     else if (this.world === 'circuit') this.drawScreens(t);
-    else if (this.world === 'video') this.drawCinema(t);
+    else if (this.world === 'video') this.drawTickets(t);
     else if (this.world === 'flash') this.drawPaparazzi(t);
-    else if (this.world === 'news') this.drawBats(t);
+    else if (this.world === 'news') this.drawSparkle(t);
   }
 
   drawMatrix() {
     const { ctx, w, h, font, drops } = this;
-    ctx.fillStyle = 'rgba(0, 12, 4, 0.18)';
-    ctx.fillRect(0, 0, w, h);
+    ctx.clearRect(0, 0, w, h);
     ctx.font = `${font}px monospace`;
     drops.forEach((y, i) => {
       const ch = KATA[Math.floor(Math.random() * KATA.length)];
       const x = i * font;
+      ctx.globalAlpha = 0.55;
       ctx.fillStyle = '#b6ffce';
       ctx.fillText(ch, x, y * font);
       ctx.fillStyle = '#00c853';
@@ -86,6 +86,7 @@ export class WorldFX {
       if (y * font > h && Math.random() > 0.975) drops[i] = 0;
       else drops[i] = y + 0.85;
     });
+    ctx.globalAlpha = 1;
   }
 
   drawRings(t) {
@@ -135,17 +136,19 @@ export class WorldFX {
   drawSplat(t) {
     const { ctx, w, h } = this;
     const colors = ['#b6ff3a', '#9ee000', '#ffe14a', '#7cff3a'];
-    for (let i = 0; i < 9; i++) {
-      const x = (0.08 + i * 0.11) * w;
-      const fall = ((t * 55 + i * 70) % (h * 0.72));
+    ctx.globalAlpha = 0.72;
+    for (let i = 0; i < 11; i++) {
+      const x = (0.06 + i * 0.09) * w;
+      const fall = ((t * 70 + i * 70) % (h * 0.85));
       ctx.fillStyle = colors[i % colors.length];
       ctx.beginPath();
-      ctx.ellipse(x, fall, 10 + (i % 3) * 4, 18 + (i % 4) * 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(x, fall, 12 + (i % 3) * 5, 22 + (i % 4) * 6, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(x, fall + 16, 7 + (i % 2) * 3, 0, Math.PI * 2);
+      ctx.arc(x, fall + 18, 8 + (i % 2) * 3, 0, Math.PI * 2);
       ctx.fill();
     }
+    ctx.globalAlpha = 1;
   }
 
   drawSparkle(t) {
@@ -391,6 +394,27 @@ export class WorldFX {
       ctx.arc(x, y, 70, 0, Math.PI * 2);
       ctx.fill();
     }
+  }
+
+  drawTickets(t) {
+    const { ctx, w, h } = this;
+    const colors = ['#ffe14a', '#c0142c', '#1a3a88', '#fff'];
+    for (let i = 0; i < 10; i++) {
+      const x = ((i * 0.13 + t * 0.05) % 1.1 - 0.05) * w;
+      const y = (0.18 + (i % 4) * 0.16) * h + Math.sin(t * 2 + i) * 8;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(Math.sin(t + i) * 0.25);
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fillRect(-14, -8, 28, 16);
+      ctx.globalAlpha = 0.8;
+      ctx.fillStyle = '#111';
+      ctx.fillRect(-10, -2, 20, 3);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+    this.drawSparkle(t);
   }
 }
 
