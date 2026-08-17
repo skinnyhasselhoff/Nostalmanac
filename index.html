@@ -10,8 +10,10 @@
   <link rel="preconnect" href="https://en.wikipedia.org">
   <link rel="preconnect" href="https://itunes.apple.com">
   <link rel="preconnect" href="https://upload.wikimedia.org">
+  <link rel="preconnect" href="https://api.tvmaze.com">
+  <link rel="preconnect" href="https://static.tvmaze.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bangers&family=Outfit:wght@500;800&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=21">
+  <link rel="stylesheet" href="css/style.css?v=23">
 </head>
 <body>
   <div id="stage">
@@ -39,6 +41,8 @@
     <div class="glass"></div>
     <div id="pixels" aria-hidden="true"></div>
     <div id="grain" aria-hidden="true"></div>
+    <div id="chroma" aria-hidden="true"></div>
+    <div id="track" aria-hidden="true"></div>
 
     <header class="top">
       <strong>NOSTALMANAC</strong>
@@ -52,14 +56,17 @@
     <div id="hero" data-show="game">
       <div class="obj cartbox is-on" data-kind="game">
         <div class="rig">
-          <div class="box3d">
-            <div class="box-spine"></div>
+          <div class="box3d" id="gameBox" data-plat="16BIT">
             <div class="box-front">
-              <img class="face-img" alt="">
+              <img class="face-img" alt="" referrerpolicy="no-referrer">
+              <span class="box-sheen"></span>
               <span class="box-plat" id="gamePlat">16-BIT</span>
               <b class="obj-title"></b>
             </div>
+            <div class="box-spine"><i></i></div>
             <div class="box-side"></div>
+            <div class="box-top"></div>
+            <div class="box-bot"></div>
           </div>
         </div>
       </div>
@@ -68,31 +75,44 @@
         <div class="rig">
           <div class="clam" id="vhsClam" data-label="hit">
             <div class="clam-spine">
+              <span class="spine-win"></span>
               <span class="spine-mark" id="vhsSpine">HOME VIDEO</span>
             </div>
             <div class="clam-lid">
               <div class="clam-banner" id="vhsBanner">NOW ON VIDEO</div>
               <div class="clam-art">
-                <img class="face-img" alt="">
+                <img class="face-img" alt="" referrerpolicy="no-referrer">
+                <span class="clam-sheen"></span>
               </div>
+              <div class="clam-sticker">ORIGINAL</div>
               <div class="clam-foot">
                 <span class="clam-studio" id="vhsStudio">HOME VIDEO</span>
                 <span class="tiny" id="vhsRating">PG</span>
               </div>
             </div>
             <div class="clam-edge"></div>
+            <div class="clam-top"></div>
           </div>
         </div>
       </div>
 
       <div class="obj tvset" data-kind="tv">
         <div class="rig">
-          <div class="tv-bezel">
-            <div class="tv-screen">
-              <img class="face-img" alt="">
-              <span class="tiny">STEREO</span>
-              <b class="obj-title"></b>
+          <div class="tv-body">
+            <div class="tv-bezel">
+              <div class="tv-crt">
+                <div class="tv-glass">
+                  <img class="face-img" alt="" referrerpolicy="no-referrer">
+                  <span class="tv-scan"></span>
+                  <span class="tv-rgb"></span>
+                  <span class="tv-bloom"></span>
+                  <span class="tiny">STEREO</span>
+                  <b class="obj-title"></b>
+                </div>
+              </div>
+              <i class="tv-led"></i>
             </div>
+            <div class="tv-grill"><i></i><i></i><i></i><i></i><i></i><i></i></div>
           </div>
           <div class="tv-base"><i></i><i></i></div>
         </div>
@@ -102,7 +122,8 @@
         <div class="rig">
           <div class="tama-ring"></div>
           <div class="tama-lcd">
-            <img class="face-img" alt="">
+            <img class="face-img" alt="" referrerpolicy="no-referrer">
+            <span class="tama-scan"></span>
             <span class="tiny">SATURDAY</span>
             <b class="obj-title"></b>
           </div>
@@ -114,8 +135,10 @@
         <div class="rig">
           <div class="jewel">
             <div class="jewel-lid">
-              <img class="face-img" alt="">
+              <img class="face-img" alt="" referrerpolicy="no-referrer">
+              <span class="jewel-plastic"></span>
             </div>
+            <div class="jewel-disc" aria-hidden="true"></div>
             <div class="jewel-tray">
               <span class="tiny">COMPACT DISC</span>
               <b class="obj-title"></b>
@@ -127,7 +150,8 @@
       <div class="obj ticket" data-kind="sport">
         <div class="rig">
           <div class="ticket-face">
-            <img class="face-img" alt="">
+            <img class="face-img" alt="" referrerpolicy="no-referrer">
+            <span class="ticket-perf"></span>
             <span class="tiny">ADMIT ONE</span>
             <b class="obj-title"></b>
             <span class="tiny">NOISE · LIGHTS · GAME</span>
@@ -144,7 +168,7 @@
             <span class="zine-date">AUGUST 1996</span>
             <div class="zine-logo">PEOPLE</div>
             <div class="zine-photo">
-              <img class="face-img" alt="">
+              <img class="face-img" alt="" referrerpolicy="no-referrer">
             </div>
             <span class="zine-kicker">EXCLUSIVE</span>
             <b class="obj-title"></b>
@@ -159,13 +183,15 @@
         <div class="rig">
           <div class="zack-ant"><i class="zack-whip"></i><i class="zack-tip"></i></div>
           <div class="zack-ear"></div>
-          <div class="brick-screen">
-            <img class="face-img" alt="">
-            <span class="tiny">BAYSIDE</span>
-            <b class="obj-title"></b>
-          </div>
-          <div class="zack-pad">
-            <i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>*</i><i>0</i><i>#</i>
+          <div class="zack-body">
+            <div class="brick-screen">
+              <img class="face-img" alt="" referrerpolicy="no-referrer">
+              <span class="tiny">BAYSIDE</span>
+              <b class="obj-title"></b>
+            </div>
+            <div class="zack-pad">
+              <i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>*</i><i>0</i><i>#</i>
+            </div>
           </div>
         </div>
       </div>
@@ -173,7 +199,8 @@
       <div class="obj disk" data-kind="web">
         <div class="rig">
           <div class="aol-face">
-            <img class="face-img" alt="">
+            <span class="aol-foil"></span>
+            <img class="face-img" alt="" referrerpolicy="no-referrer">
             <span class="tiny">100 FREE HOURS</span>
             <b class="obj-title"></b>
             <span class="tiny">AOL · TRIAL CD</span>
@@ -186,7 +213,7 @@
           <div class="shot-card">
             <p class="shot-kicker" id="shotKicker">NEW FOR 1996</p>
             <div class="shot-frame">
-              <img class="face-img" alt="">
+              <img class="face-img" alt="" referrerpolicy="no-referrer">
               <span class="shot-glare"></span>
             </div>
             <b class="obj-title"></b>
@@ -199,7 +226,7 @@
         <div class="rig">
           <div class="paper-sheet">
             <span class="tiny">EXTRA · EXTRA</span>
-            <div class="paper-art"><img class="face-img" alt=""></div>
+            <div class="paper-art"><img class="face-img" alt="" referrerpolicy="no-referrer"></div>
             <b class="obj-title"></b>
             <span class="tiny">ALL THE NEWS THAT FITS</span>
           </div>
@@ -266,6 +293,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?v=21"></script>
+  <script type="module" src="js/app.js?v=23"></script>
 </body>
 </html>

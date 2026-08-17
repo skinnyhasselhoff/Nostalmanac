@@ -16,6 +16,9 @@ $mime = @{
   '.svg'  = 'image/svg+xml'
   '.png'  = 'image/png'
   '.jpg'  = 'image/jpeg'
+  '.jpeg' = 'image/jpeg'
+  '.wav'  = 'audio/wav'
+  '.mp3'  = 'audio/mpeg'
 }
 
 try {

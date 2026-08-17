@@ -3,7 +3,7 @@ import { NostalAudio } from './audio.js';
 import { WorldFX, WipeFX } from './worlds.js';
 import { describe, youtubeUrl, fallbackBlurb } from './wiki.js';
 import { TuneBed } from './tunes.js';
-import { portrait } from './art.js';
+import { portrait, artQuality } from './art.js';
 
 const NICKISH = /nick|toon|animaniacs|rugrats|ren & stimpy|doug|cartoon|fox kids|saturday morning|disney afternoon|warner|simpsons|batman: the animated|gargoyles|reboot|aeon flux/i;
 const PHONE = /nokia|motorola|startac|star tac|microtac|blackberry|pager|communicator|cell phone|flip phone|mobile phone/i;
@@ -188,19 +188,32 @@ function dressVhs(item) {
 }
 
 function setFaces(url) {
-  document.querySelectorAll('.face-img').forEach((img) => {
-    const host = img.closest('.obj');
-    img.onload = () => host?.classList.add('has-art');
-    img.onerror = () => {
+  const active = document.querySelector('.obj.is-on') || document.querySelector('.obj');
+  document.querySelectorAll('.obj').forEach((host) => {
+    const img = host.querySelector('.face-img');
+    if (!img) return;
+    img.referrerPolicy = 'no-referrer';
+    if (host !== active) {
       img.removeAttribute('src');
-      host?.classList.remove('has-art');
+      host.classList.remove('has-art');
+      return;
+    }
+    img.onload = () => host.classList.add('has-art');
+    img.onerror = () => {
+      if (img.dataset.art === url) {
+        img.removeAttribute('src');
+        host.classList.remove('has-art');
+      }
     };
     if (!url) {
       img.removeAttribute('src');
-      host?.classList.remove('has-art');
+      delete img.dataset.art;
+      host.classList.remove('has-art');
       return;
     }
+    img.dataset.art = url;
     img.src = url;
+    if (img.complete && img.naturalWidth) host.classList.add('has-art');
   });
 }
 
@@ -210,9 +223,24 @@ function dialFor(item) {
 
 const MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 
+const WIPE_MS = {
+  slime: 980,
+  glitch: 980,
+  static: 820,
+  checker: 720,
+  tape: 720,
+  leader: 720,
+  neon: 720,
+  paparazzi: 720,
+  sitcom: 640,
+  splash: 560,
+  stadium: 560,
+  same: 420,
+};
+
 function playWipe(type, { fromCh, toCh, net, genreChange }) {
   const mode = genreChange ? (type || 'static') : 'same';
-  const dur = genreChange ? 720 : 240;
+  const dur = WIPE_MS[mode] || (genreChange ? 720 : 420);
   wipe.className = '';
   wipe.dataset.wipe = mode;
   wipe.classList.toggle('swap', !!genreChange);
@@ -222,6 +250,7 @@ function playWipe(type, { fromCh, toCh, net, genreChange }) {
   void wipe.offsetWidth;
   wipe.className = genreChange ? 'on swap' : 'on';
   wipe.dataset.wipe = mode;
+  wipe.style.setProperty('--wipe-ms', `${dur}ms`);
   wipeFx.burst(dur, mode);
   setTimeout(() => { wipe.className = ''; }, dur + 40);
 }
@@ -259,11 +288,12 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
   const dateEl = document.querySelector('.zine-date');
   if (dateEl) dateEl.textContent = `${MONTHS[item.year % 12]} ${item.year}`;
   const plat = document.getElementById('gamePlat');
+  const box = document.getElementById('gameBox');
   if (plat) plat.textContent = platformFor(item);
+  if (box) box.dataset.plat = platformFor(item).replace(/\s+/g, '');
   setWorld(theme.world);
   if (theme.kind === 'ad') dressShot(item, theme.world);
   if (theme.kind === 'movie') dressVhs(item);
-  setFaces('');
   const ch = document.getElementById('ch');
   const nextCh = `CH ${dial.ch}`;
   if (ch.textContent !== nextCh) {
@@ -274,7 +304,9 @@ function show(i, { wipeType, fromCh, genreChange } = {}) {
   }
   document.getElementById('tag').textContent = `${item.year}  ·  ${item.cat}`;
   document.getElementById('title').textContent = item.title;
-  metaEl.textContent = fallbackBlurb(item);
+  metaEl.textContent = item.cat === 'person' || item.cat === 'event' || item.cat === 'sport'
+    ? item.note
+    : fallbackBlurb(item);
   document.getElementById('pos').textContent = `${index + 1} / ${pool.length}`;
   ytLink.href = youtubeUrl(item);
   wikiLink.href = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(item.title)}`;
@@ -287,15 +319,25 @@ function loadCard(item) {
   wikiAbort = new AbortController();
   const token = ++wikiToken;
   const signal = wikiAbort.signal;
-  describe(item, signal).then(async (info) => {
+  let best = 0;
+  const apply = (url) => {
+    if (token !== wikiToken || !url) return;
+    const q = artQuality(url);
+    if (q < best) return;
+    best = q;
+    setFaces(url);
+  };
+  setFaces('');
+  describe(item, signal).then((info) => {
     if (token !== wikiToken) return;
-    metaEl.textContent = info.text;
+    const keepOurs = item.cat === 'person' || item.cat === 'event' || item.cat === 'sport';
+    if (!keepOurs) metaEl.textContent = info.text;
     if (info.wiki) wikiLink.href = info.wiki;
-    if (info.image) setFaces(info.image);
-    const url = await portrait(item, info.image, signal);
-    if (token !== wikiToken) return;
-    if (url) setFaces(url);
+    apply(info.image);
   }).catch((err) => {
+    if (err?.name === 'AbortError') return;
+  });
+  portrait(item, signal).then(apply).catch((err) => {
     if (err?.name === 'AbortError') return;
   });
 }
@@ -314,7 +356,8 @@ function step(dir) {
     genreChange,
   });
   audio.wipe(theme.wipe, genreChange);
-  setTimeout(() => { lock = false; }, genreChange ? 760 : 280);
+  const wait = genreChange ? (WIPE_MS[theme.wipe] || 720) : WIPE_MS.same;
+  setTimeout(() => { lock = false; }, wait + 40);
 }
 
 function startDeck() {
@@ -443,8 +486,10 @@ const worldsEl = document.getElementById('worlds');
 function parallax(x, y) {
   const nx = x / innerWidth - 0.5;
   const ny = y / innerHeight - 0.5;
-  hero.style.transform = `rotateY(${nx * 11}deg) rotateX(${-ny * 6}deg)`;
-  worldsEl.style.transform = `translate(${nx * -16}px, ${ny * -10}px) scale(1.04)`;
+  hero.style.transform = `rotateY(${nx * 8}deg) rotateX(${-ny * 5}deg)`;
+  worldsEl.style.transform = `translate(${nx * -18}px, ${ny * -12}px) scale(1.05)`;
+  const rig = document.querySelector('.obj.is-on .rig');
+  if (rig) rig.style.transform = `rotateY(${-18 + nx * 22}deg) rotateX(${7 - ny * 10}deg)`;
 }
 window.addEventListener('pointermove', (e) => {
   if (busy()) return;

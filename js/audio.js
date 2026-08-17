@@ -36,6 +36,7 @@ export class NostalAudio {
 
   silence() {
     this.stopAll();
+    this.stopLogon();
     try { speechSynthesis.cancel(); } catch {}
     if (this.master && this.ctx && this.ctx.state !== 'closed') {
       this.master.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
@@ -100,7 +101,10 @@ export class NostalAudio {
   }
 
   async speakNostalgia() {
-    if (this.muted || typeof speechSynthesis === 'undefined') return;
+    if (this.muted) return;
+    const played = await this.playLogon();
+    if (played) return;
+    if (typeof speechSynthesis === 'undefined') return;
     try { speechSynthesis.cancel(); } catch {}
     const waitVoices = () => new Promise((resolve) => {
       const ready = speechSynthesis.getVoices();
@@ -112,24 +116,56 @@ export class NostalAudio {
       }, { once: true });
     });
     const voices = await waitVoices();
-    const prefer = [/david/i, /mark/i, /alex/i, /daniel/i, /guy/i, /fred/i, /microsoft.*english/i, /google us/i];
+    const prefer = [/mark/i, /guy/i, /davis/i, /andrew/i, /aaron/i, /david/i, /alex/i, /daniel/i, /samantha/i, /google us english/i];
     let voice = null;
     for (const re of prefer) {
       voice = voices.find((v) => re.test(v.name) && /^en/i.test(v.lang));
       if (voice) break;
     }
     if (!voice) voice = voices.find((v) => /^en[-_]?US/i.test(v.lang)) || voices.find((v) => /^en/i.test(v.lang));
-    const u = new SpeechSynthesisUtterance("You've got nostalgia.");
-    u.rate = 0.9;
-    u.pitch = 0.78;
-    u.volume = 0.92;
-    if (voice) u.voice = voice;
-    await new Promise((resolve) => {
+    const say = (text, rate, after) => new Promise((resolve) => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = rate;
+      u.pitch = 0.97;
+      u.volume = 0.95;
+      if (voice) u.voice = voice;
       u.onend = resolve;
       u.onerror = resolve;
       speechSynthesis.speak(u);
-      setTimeout(resolve, 2800);
+      setTimeout(resolve, after);
     });
+    await say("You've got", 0.92, 900);
+    await new Promise((r) => setTimeout(r, 220));
+    await say('nostalgia.', 0.84, 1600);
+  }
+
+  playLogon() {
+    return new Promise((resolve) => {
+      this.stopLogon();
+      const el = new Audio('audio/youve-got-nostalgia.wav');
+      el.preload = 'auto';
+      el.volume = 0.94;
+      this.logonEl = el;
+      let settled = false;
+      const done = (ok) => {
+        if (settled) return;
+        settled = true;
+        el.onended = el.onerror = null;
+        resolve(ok);
+      };
+      el.onended = () => done(true);
+      el.onerror = () => done(false);
+      el.play().then(() => {
+        setTimeout(() => done(true), 3600);
+      }).catch(() => done(false));
+    });
+  }
+
+  stopLogon() {
+    if (!this.logonEl) return;
+    try { this.logonEl.pause(); } catch {}
+    try { this.logonEl.removeAttribute('src'); this.logonEl.load(); } catch {}
+    this.logonEl = null;
   }
 
   async dialUp(onStatus) {

@@ -219,22 +219,29 @@ export class WipeFX {
     this.ctx = canvas.getContext('2d');
     this.until = 0;
     this.dur = 560;
-    this.resize();
+    this.mode = 'static';
+    this.drops = [];
+    this.resize(160, 90);
     window.addEventListener('resize', () => this.resize());
   }
 
-  resize() {
-    this.nw = 160;
-    this.nh = 90;
+  resize(nw, nh) {
+    const mode = this.mode || 'static';
+    if (mode === 'glitch') { this.nw = nw || 420; this.nh = nh || 240; this.canvas.style.imageRendering = 'auto'; }
+    else if (mode === 'slime') { this.nw = nw || 320; this.nh = nh || 180; this.canvas.style.imageRendering = 'auto'; }
+    else { this.nw = nw || 160; this.nh = nh || 90; this.canvas.style.imageRendering = 'pixelated'; }
     this.canvas.width = this.nw;
     this.canvas.height = this.nh;
-    this.ctx.imageSmoothingEnabled = false;
+    this.ctx.imageSmoothingEnabled = mode === 'glitch' || mode === 'slime';
+    this.font = Math.max(10, Math.floor(this.nw / 28));
+    this.drops = Array.from({ length: Math.ceil(this.nw / this.font) }, () => Math.random() * -20);
   }
 
   burst(ms = 560, mode = 'static') {
     this.dur = ms;
     this.mode = mode;
     this.until = performance.now() + ms;
+    this.resize();
   }
 
   tick() {
@@ -249,17 +256,55 @@ export class WipeFX {
     if (mode === 'leader') this.drawFilm(elapsed);
     else if (mode === 'checker') this.drawChecker(elapsed);
     else if (mode === 'tape') this.drawChecker(elapsed);
-    else if (mode === 'slime') this.drawTintSnow('#9ee000', '#ff7a00');
+    else if (mode === 'slime') this.drawSlime(elapsed);
     else if (mode === 'neon') this.drawTintSnow('#ff2bd6', '#2de0c8');
-    else if (mode === 'glitch') this.drawGlitch();
+    else if (mode === 'glitch') this.drawMatrixWipe();
     else if (mode === 'paparazzi') this.drawWhite(elapsed);
     else if (mode === 'sitcom') {
       if (elapsed < 180) this.drawBars();
       else this.drawSnow();
     }
-    else if (mode === 'same') this.drawSnow();
+    else if (mode === 'same' || mode === 'static') this.drawSnow();
     else if (elapsed < 90 && mode !== 'splash' && mode !== 'stadium') this.drawBars();
     else this.drawSnow();
+  }
+
+  drawMatrixWipe() {
+    const { ctx, nw, nh, font, drops } = this;
+    const kata = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ012345789Z';
+    ctx.fillStyle = 'rgba(0, 8, 2, 0.28)';
+    ctx.fillRect(0, 0, nw, nh);
+    ctx.font = `700 ${font}px monospace`;
+    drops.forEach((y, i) => {
+      const x = i * font;
+      ctx.fillStyle = '#d4ffe4';
+      ctx.fillText(kata[Math.floor(Math.random() * kata.length)], x, y * font);
+      ctx.fillStyle = '#00c853';
+      ctx.fillText(kata[Math.floor(Math.random() * kata.length)], x, (y - 1) * font);
+      ctx.fillStyle = '#086';
+      ctx.fillText(kata[Math.floor(Math.random() * kata.length)], x, (y - 2) * font);
+      if (y * font > nh && Math.random() > 0.86) drops[i] = 0;
+      else drops[i] = y + 1.15;
+    });
+  }
+
+  drawSlime(elapsed) {
+    const { ctx, nw, nh } = this;
+    ctx.fillStyle = '#041';
+    ctx.fillRect(0, 0, nw, nh);
+    const colors = ['#b6ff3a', '#9ee000', '#7cff3a', '#ff7a00', '#ffe14a'];
+    const t = elapsed / 70;
+    for (let i = 0; i < 14; i++) {
+      const x = ((i * 0.09 + 0.04) % 1) * nw;
+      const fall = ((t * 18 + i * 22) % (nh + 80)) - 20;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.beginPath();
+      ctx.ellipse(x, fall, 16 + (i % 4) * 8, 28 + (i % 3) * 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, fall + 22, 10 + (i % 3) * 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   drawFilm() {

@@ -226,7 +226,7 @@ export function pickTrack(results, item) {
   scored.sort((a, b) => b.score - a.score);
   const best = scored[0];
   if (!best) return null;
-  if (item.cat === 'music') return best.score >= 4 ? best.t : null;
+  if (item.cat === 'music') return best.score >= 3 ? best.t : null;
   if (cue) return best.score >= 4 ? best.t : null;
   return best.score >= 3 ? best.t : null;
 }

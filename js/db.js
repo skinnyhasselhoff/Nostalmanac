@@ -34,6 +34,7 @@ function parse(src) {
       title: p[2].trim(),
       meta: (p[3] || '').trim(),
       note: (p[4] || '').trim(),
+      query: (p[5] || '').trim(),
     });
   }
   return out;

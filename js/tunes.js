@@ -11,9 +11,8 @@ export class TuneBed {
     this.el.loop = true;
     this.el.hidden = true;
     this.el.setAttribute('playsinline', '');
-    this.el.crossOrigin = 'anonymous';
     document.body.appendChild(this.el);
-    this.volume = 0.12;
+    this.volume = 0.18;
     this.el.volume = this.volume;
     this.muted = false;
     this.token = 0;
